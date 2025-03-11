@@ -7,7 +7,7 @@ public class Ambiente {
         this.altura = altura;
     }
 
-    public dentroDosLimites(int x, int y) {
+    public boolean dentroDosLimites(int x, int y) {
         return x < this.largura && y < this.altura; 
     }
 

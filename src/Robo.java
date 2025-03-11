@@ -3,22 +3,30 @@ public class Robo {
     private int posicaoX;
     private int posicaoY;
 
-    public Robo(String nome, int posicaoX, int posicaoY)
-    {
+    public String getNome() {
+        return nome;
+    }
+    
+    public int getPosicaoY() {
+        return posicaoY;
+    }
+
+    public int getPosicaoX() {
+        return posicaoX;
+    }
+
+    public Robo(String nome, int posicaoX, int posicaoY) {
         this.nome = nome;
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
     }
 
-    public void mover(int deltaX, int deltaY)
-    {
+    public void mover(int deltaX, int deltaY) {
         this.posicaoX += deltaX;
         this.posicaoY += deltaY;
     }
 
-    public int exibirPosicao()
-    {
-        return this.posicaoX;
-        return this.posicaoY;
+    public void exibirPosicao() {
+        System.out.println(nome + " está na posição (" + this.posicaoX + ", " + this.posicaoY + ")");
     }
 }
