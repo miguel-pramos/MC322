@@ -1,12 +1,17 @@
 package com.robotsim;
+
 import com.robotsim.environment.Ambiente;
 import com.robotsim.robots.Robo;
 
-public class Main {
-    public static void main(String[] args) {
-        Robo robson = new Robo("Robson", 5, 5);
-        Ambiente ambiente = new Ambiente(10, 10);
+public class Controller {
+    public static final int deltaTime = 1; // Tempo arbitrário de execução em segundos
 
+    public static void main(String[] args) {
+        final int COMPRIMENTO = 1920; // Pixels
+        final int LARGURA = 1080; // Pixels
+
+        Ambiente ambiente = new Ambiente(COMPRIMENTO, LARGURA);
+        Robo robson = new Robo("Robson", COMPRIMENTO/2, LARGURA/2); 
 
         int deltaX = Integer.parseInt(System.console().readLine("Digite o quanto " + robson.getNome() + " deve se mover no eixo X: "));
         int deltaY = Integer.parseInt(System.console().readLine("Digite o quanto " + robson.getNome() + " deve se mover no eixo Y: "));
