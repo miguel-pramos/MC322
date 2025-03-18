@@ -1,10 +1,22 @@
 package com.robotsim.robots;
 
-public class RoboTerrestre extends Robo {
+import com.robotsim.Controller;
+import com.robotsim.util.GeometryMath;
 
-    public RoboTerrestre(String nome, int posicaoX, int posicaoY) {
+public class RoboTerrestre extends Robo {
+    private int velocidadeMaxima; // Pixels por segundo 
+
+    public RoboTerrestre(String nome, int posicaoX, int posicaoY, int velocidadeMaxima) {
+        this.velocidadeMaxima = velocidadeMaxima;
         super(nome, posicaoX, posicaoY);
-        //TODO Auto-generated constructor stub
+    }
+
+    public void mover(int deltaX, int deltaY) {
+        double distancia = GeometryMath.distanciaEuclidiana(deltaX, deltaY);
+        if (distancia / Controller.deltaTime > this.velocidadeMaxima) {
+            return; // TODO: implementar interação
+        }
+        super.mover(deltaX, deltaY);
     }
     
 }

@@ -2,7 +2,7 @@ package com.robotsim.robots;
 
 public class Robo {
     private String nome;
-    private int HP;
+    private int HP = 10;
     private int posicaoX;
     private int posicaoY;
 
@@ -27,6 +27,13 @@ public class Robo {
     public void mover(int deltaX, int deltaY) {
         this.posicaoX += deltaX;
         this.posicaoY += deltaY;
+    }
+
+    public void tomarDano(int dano) {
+        this.HP -= dano;
+        if (this.HP < 0) {
+            // TODO: matar robo
+        }
     }
 
     public void exibirPosicao() {
