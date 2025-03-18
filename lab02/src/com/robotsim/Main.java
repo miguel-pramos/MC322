@@ -1,3 +1,7 @@
+package com.robotsim;
+import com.robotsim.environment.Ambiente;
+import com.robotsim.robots.Robo;
+
 public class Main {
     public static void main(String[] args) {
         Robo robson = new Robo("Robson", 5, 5);
