@@ -1,5 +1,7 @@
 package com.robotsim.robots;
 
+import com.robotsim.Controlador;
+
 public class Robo {
     private String nome;
     private int HP = 10;
@@ -32,7 +34,7 @@ public class Robo {
     public void tomarDano(int dano) {
         this.HP -= dano;
         if (this.HP < 0) {
-            // TODO: matar robo
+            Controlador.ambiente.matarRobo(this);
         }
     }
 

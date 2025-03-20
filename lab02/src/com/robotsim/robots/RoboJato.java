@@ -1,8 +1,10 @@
+package com.robotsim.robots;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-package com.robotsim.robots;
+import com.robotsim.robots.RoboAereo;
 
 public class RoboJato extends RoboAereo {
 

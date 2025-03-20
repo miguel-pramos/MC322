@@ -15,15 +15,16 @@ public class Ambiente {
     }
 
     public boolean dentroDosLimites(int x, int y) {
-        return x < this.largura && y < this.altura;
+        return (x < this.largura && y < this.altura)
+                && (x >= 0 && y >= 0);
     }
 
     public void adicionarRobo(Robo robo) {
         this.robos.add(robo);
     }
 
-    public void matarRobo(Robo robo) {
-        this.robos.remove(robo);
+    public boolean matarRobo(Robo robo) {
+        return this.robos.remove(robo);
     }
 
 }

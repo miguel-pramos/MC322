@@ -13,7 +13,8 @@ public class RoboAntiAereo extends RoboTerrestre {
 
     public void atirar(RoboAereo alvo) {
         if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance) 
-            alvo.tomarDano(this.dano);   
+            alvo.tomarDano(this.dano);
+        this.balasRestantes--;   
     }
     
 }
