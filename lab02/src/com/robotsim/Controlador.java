@@ -2,6 +2,7 @@ package com.robotsim;
 
 import com.robotsim.environment.Ambiente;
 import com.robotsim.robots.Robo;
+import com.robotsim.robots.RoboTanque;
 
 enum GAME_STATUS {
     GAMEON,
@@ -20,8 +21,7 @@ public class Controlador {
 
         ambiente = new Ambiente(COMPRIMENTO, LARGURA);
         
-        ambiente.adicionarRobo(new Robo("Robson", COMPRIMENTO / 2, LARGURA / 2));
-
+        ambiente.adicionarRobo(new RoboTanque("Robson", COMPRIMENTO / 2, LARGURA / 2));
 
         while (gameStatus != GAME_STATUS.GAMEOVER) {
             // TODO: tudo

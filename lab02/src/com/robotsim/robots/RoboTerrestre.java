@@ -3,12 +3,12 @@ package com.robotsim.robots;
 import com.robotsim.Controlador;
 import com.robotsim.util.GeometryMath;
 
-public class RoboTerrestre extends Robo {
+public abstract class RoboTerrestre extends Robo {
     private int velocidadeMaxima; // Pixels por segundo
 
-    public RoboTerrestre(String nome, int posicaoX, int posicaoY, int velocidadeMaxima) {
+    public RoboTerrestre(String nome, int posicaoX, int posicaoY, int HP, int velocidadeMaxima) {
         this.velocidadeMaxima = velocidadeMaxima;
-        super(nome, posicaoX, posicaoY);
+        super(nome, posicaoX, posicaoY, HP);
     }
 
     public void mover(int deltaX, int deltaY) {

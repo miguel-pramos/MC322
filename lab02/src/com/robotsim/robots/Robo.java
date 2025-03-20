@@ -2,28 +2,17 @@ package com.robotsim.robots;
 
 import com.robotsim.Controlador;
 
-public class Robo {
+public abstract class Robo {
     private String nome;
-    private int HP = 10;
+    private int HP;
     private int posicaoX;
     private int posicaoY;
 
-    public String getNome() {
-        return nome;
-    }
-    
-    public int getPosicaoY() {
-        return posicaoY;
-    }
-
-    public int getPosicaoX() {
-        return posicaoX;
-    }
-
-    public Robo(String nome, int posicaoX, int posicaoY) {
+    public Robo(String nome, int posicaoX, int posicaoY, int HP) {
         this.nome = nome;
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
+        this.HP = HP;
     }
 
     public void mover(int deltaX, int deltaY) {
@@ -40,5 +29,13 @@ public class Robo {
 
     public void exibirPosicao() {
         System.out.println(nome + " está na posição (" + this.posicaoX + ", " + this.posicaoY + ")");
+    }
+
+    public int getPosicaoX() {
+        return posicaoX;
+    }
+
+    public int getPosicaoY() {
+        return posicaoY;
     }
 }
