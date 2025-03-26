@@ -7,10 +7,11 @@ public abstract class RoboTerrestre extends Robo {
     private int velocidadeMaxima; // Pixels por segundo
 
     public RoboTerrestre(String nome, int posicaoX, int posicaoY, int HP, int velocidadeMaxima) {
-        this.velocidadeMaxima = velocidadeMaxima;
         super(nome, posicaoX, posicaoY, HP);
+        this.velocidadeMaxima = velocidadeMaxima;
     }
 
+    @Override
     public void mover(int deltaX, int deltaY) {
         double distancia = GeometryMath.distanciaEuclidiana(deltaX, deltaY);
         if (distancia / Controlador.deltaTime > this.velocidadeMaxima) {

@@ -1,11 +1,14 @@
 package com.robotsim.robots;
 
+
+
+import com.robotsim.Controlador;
 import com.robotsim.util.GeometryMath;
 
 public class RoboAntiAereo extends RoboTerrestre {
     private int balasRestantes = 10;
     private int dano = 4;
-    private int alcance = 200;
+    private int alcance = Controlador.ambiente.getLargura() / 5;
     
     public RoboAntiAereo(String nome, int posicaoX, int posicaoY) {
         final int HP = 15;

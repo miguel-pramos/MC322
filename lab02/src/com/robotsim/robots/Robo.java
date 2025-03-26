@@ -38,4 +38,8 @@ public abstract class Robo {
     public int getPosicaoY() {
         return posicaoY;
     }
+
+    public String getNome() {
+        return nome;
+    }
 }

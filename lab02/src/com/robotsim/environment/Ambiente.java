@@ -5,17 +5,17 @@ import java.util.ArrayList;
 import com.robotsim.robots.Robo;
 
 public class Ambiente {
+    private int comprimento;
     private int largura;
-    private int altura;
     private ArrayList<Robo> robos = new ArrayList<>();
 
-    public Ambiente(int largura, int altura) {
+    public Ambiente(int comprimento, int largura) {
+        this.comprimento = comprimento;
         this.largura = largura;
-        this.altura = altura;
     }
 
     public boolean dentroDosLimites(int x, int y) {
-        return (x < this.largura && y < this.altura)
+        return (x < this.comprimento && y < this.largura)
                 && (x >= 0 && y >= 0);
     }
 
@@ -23,8 +23,20 @@ public class Ambiente {
         this.robos.add(robo);
     }
 
+    public int getLargura() {
+        return largura;
+    }
+
+    public int getComprimento() {
+        return comprimento;
+    }
+
     public boolean matarRobo(Robo robo) {
         return this.robos.remove(robo);
+    }
+
+    public ArrayList<Robo> getRobos() {
+        return robos;
     }
 
 }
