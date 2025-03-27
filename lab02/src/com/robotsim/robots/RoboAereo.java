@@ -1,8 +1,8 @@
 package com.robotsim.robots;
 
 public class RoboAereo extends Robo {
-    private int posicaoZ;
-    private int posicaoZMaxima;
+    protected int posicaoZ;
+    protected int posicaoZMaxima;
 
     public RoboAereo(String nome, int posicaoX, int posicaoY, int HP, int posicaoZ, int posicaoZMaxima) {
         super(nome, posicaoX, posicaoY, HP);

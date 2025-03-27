@@ -8,19 +8,16 @@ public class RoboJato extends RoboAereo{
     private int misseisRestantes = 2;
     private int rajadasRestantes = 10;
     private final int alcanceMissil = 1;
-    private final int alcanceMetralhadora = 1;
+    private final int alcanceMetralhadora = Controlador.ambiente.;
     private final int danoMissil = 200;
     private final int danoMetralhadora = 20;
 
-    public RoboJato(String nome, int posicaoX, int posicaoY, int posicaoZ, int HP, int altitudeMaxima, int misseisRestantes, int rajadasRestantes) {
-        super(nome, posicaoX, posicaoY, posicaoZ, HP, altitudeMaxima);
-        this.HP = HP;
-        this.misseisRestantes = misseisRestantes;
-        this.rajadasRestantes = rajadasRestantes;
+    public RoboJato(String nome, int posicaoX, int posicaoY, int posicaoZ, int HP, int altitudeMaxima) {
+        super(nome, posicaoX, posicaoY, posicaoZ,  20, 200);
     }
 
     public void lancarMissil(RoboAereo alvo){
-        if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), getPosicaoY(), getPosicaoZ()) < alcanceMissil){
+        if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), alvo.getPosicaoY(), alvo.getPosicaoZ()) < alcanceMissil){
             alvo.tomarDano(danoMissil);
         }
         misseisRestantes --;

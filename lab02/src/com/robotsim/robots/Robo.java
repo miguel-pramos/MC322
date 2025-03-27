@@ -5,8 +5,8 @@ import com.robotsim.Controlador;
 public abstract class Robo {
     private String nome;
     private int HP;
-    private int posicaoX;
-    private int posicaoY;
+    protected int posicaoX;
+    protected int posicaoY;
 
     public Robo(String nome, int posicaoX, int posicaoY, int HP) {
         this.nome = nome;
