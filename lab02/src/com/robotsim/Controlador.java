@@ -5,9 +5,9 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import com.robotsim.environment.Ambiente;
-import com.robotsim.robots.Robo;
-import com.robotsim.robots.RoboTanque;
 import com.robotsim.etc.CatalogoRobos;
+import com.robotsim.robots.*;
+
 
 enum GAME_STATUS {
     GAMEON,
@@ -23,6 +23,7 @@ public class Controlador {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        inicializarRobos();
         inicialzizarSim();
 
         while (gameStatus != GAME_STATUS.GAMEOVER) {
@@ -52,7 +53,7 @@ public class Controlador {
 
             int quantidade;
             do {
-                System.out.print("\n\nQuantos robôs você deseja controlar?");
+                System.out.print("\nQuantos robôs você deseja controlar? ");
                 quantidade = scanner.nextInt();
 
                 if (quantidade > 10) {
@@ -64,8 +65,10 @@ public class Controlador {
             for (int i = 0; i < quantidade; i++) {
                 System.out.print("\n\nQual será o tipo escolhido para o seu robô " + (i + 1) + "? ");
                 TimeUnit.MILLISECONDS.sleep(1600);
+                
                 ArrayList<String> categorias = CatalogoRobos.getCategorias();
                 System.out.print(categorias);
+                
                 for (int j = 1; j <= categorias.size(); j++) {
                     System.out.print(j + " " + categorias.get(j - 1) + "   ");
                 }
@@ -119,5 +122,14 @@ public class Controlador {
             }
             System.out.println("");
         }
+    }
+
+    private static void inicializarRobos() {
+        Class<?>[] robos = {
+            RoboAereo.class,
+            RoboAntiAereo.class,
+            RoboTanque.class,
+            RoboJato.class
+        };
     }
 }
