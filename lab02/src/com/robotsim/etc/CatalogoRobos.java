@@ -35,8 +35,8 @@ public class CatalogoRobos {
      * @param categoria Categoria desejada
      * @return Lista de classes de robôs
      */
-    public static ArrayList<Class<? extends Robo>> getRobosPorCategoria(String categoria) {
-        return new ArrayList<>(catalogo.getOrDefault(categoria, new HashMap<>()).values());
+    public static ArrayList<String> getRobosPorCategoria(String categoria) {
+        return new ArrayList<>(catalogo.getOrDefault(categoria, new HashMap<>()).keySet());
     }
 
     /**
