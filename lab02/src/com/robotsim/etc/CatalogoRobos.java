@@ -51,7 +51,7 @@ public class CatalogoRobos {
      */
     public static Robo criarRobo(String categoria, String nomeClasse, String nome, int posicaoX, int posicaoY) {
         try {
-            Class<? extends Robo> classe = catalogo.get(categoria).get(posicaoY);
+            Class<? extends Robo> classe = catalogo.get(categoria).get(nomeClasse);
             return classe.getConstructor(String.class, int.class, int.class, int.class)
                     .newInstance(nome, posicaoX, posicaoY);
         } catch (Exception e) {

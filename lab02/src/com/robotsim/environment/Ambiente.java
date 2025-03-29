@@ -3,7 +3,6 @@ package com.robotsim.environment;
 import java.util.ArrayList;
 
 import com.robotsim.robots.Robo;
-import com.sun.source.doctree.ValueTree;
 
 public class Ambiente {
     private int comprimento;
@@ -14,7 +13,6 @@ public class Ambiente {
     public Ambiente(int comprimento, int largura) {
         this.comprimento = comprimento;
         this.largura = largura;
-        this.altura = altura;
     }
 
     public boolean dentroDosLimites(int x, int y) {

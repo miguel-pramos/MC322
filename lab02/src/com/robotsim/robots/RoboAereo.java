@@ -1,35 +1,84 @@
 package com.robotsim.robots;
 
-public class RoboAereo extends Robo {
-    protected int posicaoZ;
-    protected int posicaoZMaxima;
+import com.robotsim.etc.Acao;
 
-    public RoboAereo(String nome, int posicaoX, int posicaoY, int HP, int posicaoZ, int posicaoZMaxima) {
-        super(nome, posicaoX, posicaoY, HP);
+public abstract class RoboAereo extends Robo {
+    protected static int altitudeMaxima;
+    protected int altitude;
 
-        this.posicaoZ = posicaoZ;
-        this.posicaoZMaxima = posicaoZMaxima;
+    public RoboAereo(String nome, int posicaoX, int posicaoY) {
+        super(nome, posicaoX, posicaoY);
     }
 
-    public void subir(int posicaoZ, int deltaZ){
-        if(posicaoZ + deltaZ < posicaoZMaxima){
-            posicaoZ += deltaZ;
-        }
-        else {
-            posicaoZ = posicaoZMaxima;
-        }
+    @Override
+    protected void inicializarAcoes() {
+        super.inicializarAcoes();
+        acoes.add(new Subir(this));
+        acoes.add(new Descer(this));
     }
 
-    public void descer(int posicaoZ, int deltaZ){
-        if(posicaoZ - deltaZ > 0){
-            posicaoZ -= deltaZ;
-        }
-        else {
-            posicaoZ = 0;
+    public void subir(int deltaZ) {
+        if (this.altitude + deltaZ < altitudeMaxima) {
+            this.altitude += deltaZ;
+        } else {
+            this.altitude = altitudeMaxima;
         }
     }
 
-    public int getPosicaoZ() { return(posicaoZ);}
+    public void descer(int deltaZ) {
+        if (this.altitude - deltaZ > 0) {
+            this.altitude -= deltaZ;
+        } else {
+            this.altitude = 0;
+        }
+    }
 
+    public int getAltitude() {
+        return (altitude);
+    }
+
+    private class Descer implements Acao {
+        RoboAereo robo;
+
+        public Descer(RoboAereo robo) {
+            this.robo = robo;
+        }
+
+        @Override
+        public String getNome() {
+            return "Descer";
+        }
+
+        @Override
+        public void executar(Object... args) {
+            if (args.length != 1 || !(args[0] instanceof Integer)) {
+                throw new IllegalArgumentException("Descer requer um inteiro representando a altura a descer."); // Estudar necessidade disso
+            }
+            int deltaZ = (int) args[0];
+            robo.descer(deltaZ);
+        }
+    }
+    
+    private class Subir implements Acao {
+        RoboAereo robo;
+
+        public Subir(RoboAereo robo) {
+            this.robo = robo;
+        }
+
+        @Override
+        public String getNome() {
+            return "Subir";
+        }
+        
+        @Override
+        public void executar(Object... args) {
+            if (args.length != 1 || !(args[0] instanceof Integer)) {
+                throw new IllegalArgumentException("Subir requer um inteiro representando a altura a subir."); // Estudar necessidade disso
+            }
+            int deltaZ = (int) args[0];
+            robo.subir(deltaZ);
+        }
+    }
 
 }

@@ -43,7 +43,7 @@ public abstract class Robo {
         System.out.println("Ação indisponível para este robô: " + nomeAcao);
     }
 
-    public void mover(int deltaX, int deltaY) {
+    protected void mover(int deltaX, int deltaY) {
         this.posicaoX += deltaX;
         this.posicaoY += deltaY;
     }
