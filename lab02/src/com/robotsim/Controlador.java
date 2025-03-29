@@ -1,11 +1,13 @@
 package com.robotsim;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import com.robotsim.environment.Ambiente;
 import com.robotsim.robots.Robo;
 import com.robotsim.robots.RoboTanque;
+import com.robotsim.etc.CatalogoRobos;
 
 enum GAME_STATUS {
     GAMEON,
@@ -42,27 +44,65 @@ public class Controlador {
             ambiente = new Ambiente(COMPRIMENTO, LARGURA);
 
             System.out.println("====================== SIMULADOR DE ROBÔS ======================");
-            System.out.println("Nesse simulador, você controlará um robô de combate...");
+            System.out.println("Nesse simulador, você controlará robôs de combate...");
             TimeUnit.MILLISECONDS.sleep(1600);
 
             System.out.println("O simulador funciona por turnos, nos quais algumas ações serão disponíveis.");
             TimeUnit.MILLISECONDS.sleep(1600);
 
-            System.out.print("\n\nEscolha um nome para o seu robô: ");
-            String nome = scanner.nextLine();
+            int quantidade;
+            do {
+                System.out.print("\n\nQuantos robôs você deseja controlar?");
+                quantidade = scanner.nextInt();
+
+                if (quantidade > 10) {
+                    System.out.println("O número escolhido é muito grande!");
+                }
+            } while (quantidade > 10);
             TimeUnit.MILLISECONDS.sleep(1600);
 
-            System.out
-                    .println("\nO mapa tem tamanho (%d, %d)".formatted(ambiente.getComprimento(),
-                            ambiente.getLargura()));
-            TimeUnit.MILLISECONDS.sleep(1600);
-            
-            System.out.print("Escolha uma posição inicial para %s no formato [x y]: ".formatted(nome));
-            int x = scanner.nextInt();
-            int y = scanner.nextInt();
-            System.out.println();
+            for (int i = 0; i < quantidade; i++) {
+                System.out.print("\n\nQual será o tipo escolhido para o seu robô " + (i + 1) + "? ");
+                TimeUnit.MILLISECONDS.sleep(1600);
+                ArrayList<String> categorias = CatalogoRobos.getCategorias();
+                System.out.print(categorias);
+                for (int j = 1; j <= categorias.size(); j++) {
+                    System.out.print(j + " " + categorias.get(j - 1) + "   ");
+                }
 
-            ambiente.adicionarRobo(new RoboTanque(nome, x, y));
+                String tipo = scanner.nextLine();
+
+                int idxCategoria = scanner.nextInt() - 1;
+                String categoriaEscolhida = categorias.get(idxCategoria);
+                TimeUnit.MILLISECONDS.sleep(1600);
+
+                ArrayList<String> classes = CatalogoRobos.getRobosPorCategoria(categorias.get(idxCategoria));
+                for (int j = 1; j <= classes.size(); j++) {
+                    System.out.print(j + " " + classes.get(j) + "    ");
+                }
+                int idxClasse = scanner.nextInt() - 1;
+                String classeEscolhida = classes.get(idxClasse);
+                TimeUnit.MILLISECONDS.sleep(1600);
+
+                System.out.print("\n\nEscolha um nome para o seu robô " + (i + 1) +
+                        " do tipo" + classes.get(idxClasse) + ": ");
+                String nome = scanner.nextLine();
+                TimeUnit.MILLISECONDS.sleep(1600);
+
+
+                System.out
+                        .println("\nO mapa tem tamanho (%d, %d)".formatted(ambiente.getComprimento(),
+                                ambiente.getLargura()));
+                TimeUnit.MILLISECONDS.sleep(1600);
+
+                System.out.print("Escolha uma posição inicial para %s no formato [x y]: ".formatted(nome));
+                int x = scanner.nextInt();
+                int y = scanner.nextInt();
+                System.out.println();
+
+                Robo novoRobo = CatalogoRobos.criarRobo(categoriaEscolhida, classeEscolhida, nome, x, y);
+                ambiente.adicionarRobo(novoRobo);
+            }
         } catch (Exception e) {
             System.err.println(e);
         }
