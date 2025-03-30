@@ -1,4 +1,3 @@
-
 package com.robotsim.robots;
 
 import java.util.ArrayList;
@@ -8,29 +7,16 @@ import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 
 /**
- * Classe abstrata que representa um robô no simulador.
- * Cada robô possui um nome, pontos de vida (HP), posição no ambiente (X, Y)
- * e uma lista de ações que pode executar.
- * <p>
- * Métodos principais incluem movimentação, execução de ações, exibição de
- * posição
- * e manipulação de pontos de vida.
+ * A classe Robo é a classe base para todos os tipos de robôs no simulador.
+ * Ela define propriedades e comportamentos comuns, como posição, nome e ações.
  */
 public abstract class Robo {
-    private String nome;
-    private int HP;
-    private int posicaoX;
-    private int posicaoY;
-    protected ArrayList<Acao> acoes;
+    protected String nome; // Nome do robô.
+    protected int HP; // Pontos de vida do robô.
+    protected int posicaoX; // Posição atual no eixo X.
+    protected int posicaoY; // Posição atual no eixo Y.
+    protected ArrayList<Acao> acoes; // Lista de ações disponíveis para o robô.
 
-    /**
-     * Inicializa o robô com um nome e em uma posição. Também inicializa as
-     * ações disponíveis da classe.
-     * 
-     * @param nome     Nome do robô
-     * @param posicaoX Posição horizontal inicial
-     * @param posicaoY Posição vertical inicial
-     */
     public Robo(String nome, int posicaoX, int posicaoY) {
         this.nome = nome;
         this.posicaoX = posicaoX;
@@ -40,12 +26,13 @@ public abstract class Robo {
     }
 
     /**
-     * Método que adiciona as ações de cada classe. Deve ser sobrescrito
-     * pelas classes filhas.
+     * Método responsável por inicializar as ações do robô.
+     * Este método deve ser sobrescrito pelas subclasses para adicionar ações
+     * específicas.
      */
     protected void inicializarAcoes() {
         acoes.add(new Mover(this));
-    };
+    }
 
     /**
      * Tenta executar uma ação.
@@ -61,21 +48,37 @@ public abstract class Robo {
     }
 
     /**
-     * Altera posição do robô, deslocando-o .
-     * @param nomeAcao Nome da ação buscada
+     * Método responsável por mover o robô para uma nova posição.
+     * 
+     * @param deltaX Deslocamento no eixo X.
+     * @param deltaY Deslocamento no eixo Y.
      */
     protected void mover(int deltaX, int deltaY) {
-        this.posicaoX += deltaX;
-        this.posicaoY += deltaY;
+        if (Controlador.getAmbiente()
+                .dentroDosLimites(this.posicaoX + deltaX, this.posicaoY + deltaY)) {
+            this.posicaoX += deltaX;
+            this.posicaoY += deltaY;
+        }
+
     }
 
+    /**
+     * Método que aplica dano ao robô.
+     * Este método pode ser sobrescrito por subclasses para implementar
+     * comportamentos específicos.
+     * 
+     * @param dano Quantidade de dano a ser aplicada.
+     */
     public void tomarDano(int dano) {
         this.HP -= dano;
         if (this.HP < 0) {
-            Controlador.getAmbiente().matarRobo(this);
+            Controlador.getAmbiente().destruirRobo(this);
         }
     }
 
+    /**
+     * Método que exibe a posição atual do robô.
+     */
     public void exibirPosicao() {
         System.out.println(nome + " está na posição (" + this.posicaoX + ", " + this.posicaoY + ")");
     }
@@ -96,6 +99,9 @@ public abstract class Robo {
         return nome;
     }
 
+    /**
+     * Classe interna que representa a ação de mover o robô.
+     */
     private class Mover implements Acao {
         Robo robo;
 
@@ -108,6 +114,9 @@ public abstract class Robo {
             return "Mover";
         }
 
+        /**
+         * Método que executa a ação de mover o robô.
+         */
         @Override
         public void executar() {
             Scanner scanner = Controlador.getScanner();

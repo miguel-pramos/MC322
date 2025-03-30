@@ -7,6 +7,14 @@ import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.util.GeometryMath;
 
+/**
+ * A classe RoboAntiAereo representa um robô terrestre fixo especializado em
+ * atacar robôs aéreos. Este robô possui munição limitada e um alcance
+ * específico
+ * para seus ataques.
+ * 
+ * @see RoboTerrestre
+ */
 public class RoboAntiAereo extends RoboTerrestre {
     private int balasRestantes = 10;
     private int dano = 4;
@@ -14,9 +22,18 @@ public class RoboAntiAereo extends RoboTerrestre {
 
     public RoboAntiAereo(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY);
-        this.velocidadeMaxima = 0; // Robo AntiAéreo é fixo
+        this.velocidadeMaxima = 0; // Robo AntiAéreo é fixo.
     }
 
+    /**
+     * Método responsável por atirar em um alvo aéreo.
+     * <p>
+     * O ataque só é realizado se houver balas restantes e se o alvo estiver dentro
+     * do alcance.
+     * 
+     * @param alvo O alvo aéreo (RoboAereo) que será atacado.
+     * @throws IllegalStateException Se não houver balas restantes.
+     */
     public void atirar(RoboAereo alvo) {
         if (balasRestantes <= 0)
             throw new IllegalStateException("Nenhuma bala restante");
@@ -26,12 +43,22 @@ public class RoboAntiAereo extends RoboTerrestre {
         this.balasRestantes--;
     }
 
+    /**
+     * Método responsável por inicializar as ações do RoboAntiAereo.
+     * Adiciona a ação de "Atirar" à lista de ações e chama o método
+     * da superclasse para inicializar outras ações.
+     */
     @Override
     protected void inicializarAcoes() {
         acoes.add(new Atirar(this));
         super.inicializarAcoes();
     }
 
+    /**
+     * Classe interna que representa a ação de atirar de um RoboAntiAereo.
+     * Implementa a interface Acao, permitindo que o robô execute a ação de ataque
+     * contra robôs aéreos no ambiente.
+     */
     private class Atirar implements Acao {
         RoboAntiAereo robo;
 
@@ -44,6 +71,20 @@ public class RoboAntiAereo extends RoboTerrestre {
             return "Atirar";
         }
 
+        /**
+         * Método sobrescrito que executa a ação do RoboAntiAereo.
+         * Este método permite ao RoboTanque atacar um robô terrestre presente no
+         * ambiente.
+         * 
+         * Regras e comportamentos:
+         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e
+         * a execução será encerrada.
+         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso
+         * contrário, uma mensagem de erro será exibida.
+         * 
+         * Caso não haja robôs aéreos no ambiente, ou o índice fornecido seja
+         * inválido, mensagens apropriadas serão exibidas ao usuário.
+         */
         @Override
         public void executar() {
             ArrayList<RoboAereo> robosAlvos = new ArrayList<>();
@@ -80,5 +121,4 @@ public class RoboAntiAereo extends RoboTerrestre {
             }
         }
     }
-
 }

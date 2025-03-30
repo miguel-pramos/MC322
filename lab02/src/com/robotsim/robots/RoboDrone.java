@@ -6,7 +6,14 @@ import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.util.GeometryMath;
 
-
+/**
+ * A classe RoboDrone representa um robô aéreo com a capacidade de detectar
+ * outros robôs
+ * no ambiente. Este robô possui uma bateria limitada e um alcance específico
+ * para detecção.
+ * 
+ * @see RoboAereo
+ */
 public class RoboDrone extends RoboAereo {
     private int bateria = 200;
     private final int alcanceDeteccao = 50;
@@ -15,50 +22,66 @@ public class RoboDrone extends RoboAereo {
         super(nome, posicaoX, posicaoY);
     }
 
-    protected void detectarRobos(){
+    /**
+     * Método responsável por detectar outros robôs no ambiente.
+     * <p>
+     * Detecta robôs terrestres e aéreos dentro do alcance de detecção e exibe a
+     * posição dos robôs detectados.
+     * <p>
+     * Ignora a si mesmo durante o processo de detecção.
+     */
+    protected void detectarRobos() {
         System.out.println("Iniciando o processo de detecção...");
 
         try {
-            TimeUnit.MILLISECONDS.sleep(1600);
+            TimeUnit.MILLISECONDS.sleep(1600); // Simula o tempo necessário para detecção.
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt(); // Boa prática: reinterromper a thread
+            Thread.currentThread().interrupt(); // Boa prática: reinterromper a thread.
             System.out.println("A execução foi interrompida.");
         }
+
         double distancia;
         for (Robo robo : Controlador.getAmbiente().getRobos()) {
-            if (robo instanceof RoboAereo && robo != this){
-                distancia = (GeometryMath.distanciaEuclidiana(this, robo.getPosicaoX(),
-                        robo.getPosicaoY(), ((RoboAereo) robo).getAltitude()));
+            if (robo instanceof RoboAereo && robo != this) {
+                // Calcula a distância considerando a altitude.
+                distancia = GeometryMath.distanciaEuclidiana(this, robo.getPosicaoX(),
+                        robo.getPosicaoY(), ((RoboAereo) robo).getAltitude());
 
                 if (distancia < alcanceDeteccao) {
-                    System.out.printf("O robô %s está na posição (%d, %d, %d)", robo.getNome(),
+                    System.out.printf("O robô %s está na posição (%d, %d, %d)%n", robo.getNome(),
                             robo.getPosicaoX(), robo.getPosicaoY(), ((RoboAereo) robo).getAltitude());
                 }
-            }
-            else if (robo instanceof RoboTerrestre) {
-                distancia = (GeometryMath.distanciaEuclidiana(this, robo.getPosicaoX(),
-                        robo.getPosicaoY(), 0));
+            } else if (robo instanceof RoboTerrestre) {
+                // Calcula a distância considerando altitude zero para robôs terrestres.
+                distancia = GeometryMath.distanciaEuclidiana(this, robo.getPosicaoX(),
+                        robo.getPosicaoY(), 0);
 
                 if (distancia < alcanceDeteccao) {
-                    System.out.printf("O robô %s está na posição (%d, %d, %d)", robo.getNome(),
+                    System.out.printf("O robô %s está na posição (%d, %d, %d)%n", robo.getNome(),
                             robo.getPosicaoX(), robo.getPosicaoY(), 0);
                 }
-
-            }
-            else {
+            } else {
                 System.out.println("Tipo desconhecido");
             }
         }
-
     }
 
+    /**
+     * Método responsável por mover o RoboDrone.
+     * <p>
+     * A cada movimento, a bateria é reduzida proporcionalmente ao deslocamento.
+     * Caso a bateria chegue a zero ou menos, o robô é removido do ambiente.
+     * 
+     * @param deltaX Deslocamento no eixo X.
+     * @param deltaY Deslocamento no eixo Y.
+     */
     protected void mover(int deltaX, int deltaY) {
         this.bateria -= deltaX + deltaY;
 
         if (this.bateria <= 0) {
-            Controlador.getAmbiente().matarRobo(this);
+            Controlador.getAmbiente().destruirRobo(this); // Remove o robô do ambiente.
         } else {
-            super.mover(deltaX, deltaY);
+            super.mover(deltaX, deltaY); // Chama o método da superclasse para movimentação.
             System.out.printf("Sua bateria está em %d%n", this.bateria);
         }
     }
@@ -67,10 +90,13 @@ public class RoboDrone extends RoboAereo {
     protected void inicializarAcoes() {
         acoes.add(new DetectarRobos(this));
         super.inicializarAcoes();
-
     }
 
-
+    /**
+     * Classe interna que representa a ação de detectar robôs de um RoboDrone.
+     * Implementa a interface Acao, permitindo que o robô execute a ação de detecção
+     * no ambiente.
+     */
     private class DetectarRobos implements Acao {
         RoboDrone robo;
 
@@ -83,6 +109,10 @@ public class RoboDrone extends RoboAereo {
             return "Detectar robôs";
         }
 
+        /**
+         * Método que executa a ação de detecção.
+         * Chama o método `detectarRobos` do RoboDrone.
+         */
         @Override
         public void executar() {
             robo.detectarRobos();

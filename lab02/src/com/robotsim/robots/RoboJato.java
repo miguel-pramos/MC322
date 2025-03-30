@@ -7,6 +7,14 @@ import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.util.GeometryMath;
 
+/**
+ * A classe RoboJato representa um robô aéreo especializado que possui a
+ * capacidade
+ * de lançar mísseis e atirar rajadas de metralhadora, a depender do tipo de
+ * alvo.
+ * 
+ * @see RoboAereo
+ */
 public class RoboJato extends RoboAereo {
     private int misseisRestantes = 2;
     private int rajadasRestantes = 10;
@@ -15,18 +23,18 @@ public class RoboJato extends RoboAereo {
     private final int danoMissil = 200;
     private final int danoMetralhadora = 20;
 
-    @Override
-    protected void inicializarAcoes() {
-        super.inicializarAcoes();
-        acoes.add(new AtirarRajada(this));
-        acoes.add(new LancarMissil(this));
-    }
-
     public RoboJato(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY);
         this.altitude = 2;
     }
 
+    /**
+     * Lança um míssil em direção a um alvo aéreo, causando dano se o alvo estiver
+     * dentro do alcance do míssil.
+     *
+     * @param alvo O alvo aéreo (RoboAereo) que será atacado.
+     * @throws IllegalStateException Se não houver mísseis restantes para lançar.
+     */
     protected void lancarMissil(RoboAereo alvo) {
         if (misseisRestantes <= 0)
             throw new IllegalStateException("Nenhum míssil restante");
@@ -38,6 +46,14 @@ public class RoboJato extends RoboAereo {
         misseisRestantes--;
     }
 
+    /**
+     * Lança uma rajada em direção a um alvo terrestre, causando dano se o alvo
+     * estiver
+     * dentro do alcance do míssil.
+     *
+     * @param alvo O alvo aéreo (RoboAereo) que será atacado.
+     * @throws IllegalStateException Se não houver mísseis restantes para lançar.
+     */
     protected void atirarRajada(RoboTerrestre alvo) {
         if (rajadasRestantes <= 0)
             throw new IllegalStateException("Nenhuma rajada restante");
@@ -48,6 +64,16 @@ public class RoboJato extends RoboAereo {
         rajadasRestantes--;
     }
 
+    @Override
+    protected void inicializarAcoes() {
+        super.inicializarAcoes();
+        acoes.add(new AtirarRajada(this));
+        acoes.add(new LancarMissil(this));
+    }
+
+    /**
+     * Classe interna que representa a ação de lançar um míssil por um RoboJato.
+     */
     private class LancarMissil implements Acao {
         RoboJato robo;
 
@@ -60,6 +86,17 @@ public class RoboJato extends RoboAereo {
             return "Lançar míssil";
         }
 
+        /**
+         * Método que executa a ação de ataque de um robô aéreo utilizando um míssil.
+         * O método apresenta uma lista de robôs disponíveis no ambiente para serem atacados,
+         * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil no robô escolhido.
+         * 
+         * Regras e comportamentos:
+         * - O robô não pode atacar a si mesmo.
+         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e a execução será encerrada.
+         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida.
+         * 
+         */
         @Override
         public void executar() {
             ArrayList<RoboAereo> robosAlvos = new ArrayList<>();
@@ -97,6 +134,9 @@ public class RoboJato extends RoboAereo {
         }
     }
 
+    /**
+     * Classe interna que representa a ação de lançar uma rajada por um RoboJato.
+     */
     private class AtirarRajada implements Acao {
         RoboJato robo;
 
@@ -109,6 +149,16 @@ public class RoboJato extends RoboAereo {
             return "Atirar Rajada";
         }
 
+        /**
+         * Método que executa a ação de ataque de um robô aéreo utilizando uma rajada.
+         * O método apresenta uma lista de robôs disponíveis no ambiente para serem atacados,
+         * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil no robô escolhido.
+         * 
+         * Regras e comportamentos:
+         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e a execução será encerrada.
+         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida.
+         * 
+         */
         @Override
         public void executar() {
             ArrayList<RoboTerrestre> robosAlvos = new ArrayList<>();

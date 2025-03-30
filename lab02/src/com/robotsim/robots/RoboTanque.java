@@ -7,6 +7,13 @@ import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.util.GeometryMath;
 
+/**
+ * A classe RoboTanque representa um robô terrestre com a capacidade de atirar
+ * em outros robôs terrestres.
+ * Este robô possui munição limitada e um alcance específico para seus ataques.
+ * 
+ * @see RoboTerrestre
+ */
 public class RoboTanque extends RoboTerrestre {
     private int balasRestantes = 10;
     private final int dano = 8;
@@ -16,7 +23,15 @@ public class RoboTanque extends RoboTerrestre {
         super(nome, posicaoX, posicaoY);
     }
 
-    public void atirar(RoboTerrestre alvo) {
+    /**
+     * Função que atira em um alvo que seja um robô terrestre, causando dano se o
+     * alvo estiver
+     * dentro do alcance do míssil.
+     * 
+     * @param alvo
+     * @throws IllegalStateException
+     */
+    protected void atirar(RoboTerrestre alvo) {
         if (this.balasRestantes <= 0)
             throw new IllegalStateException("Nenhuma bala restante");
         if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance)
@@ -30,6 +45,9 @@ public class RoboTanque extends RoboTerrestre {
         super.inicializarAcoes();
     }
 
+    /**
+     * Classe interna que representa a ação de atirar de um RoboTanque.
+     */
     private class Atirar implements Acao {
         RoboTanque robo;
 
@@ -42,13 +60,26 @@ public class RoboTanque extends RoboTerrestre {
             return "Atirar";
         }
 
+        /**
+         * Método sobrescrito que executa a ação do RoboTanque.
+         * Este método permite ao RoboTanque atacar um robô terrestre presente no
+         * ambiente.
+         * 
+         * Regras e comportamentos:
+         * - O robô não pode atacar a si mesmo.
+         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e a execução será encerrada.
+         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida. 
+         * 
+         * Caso não haja robôs terrestres no ambiente, ou o índice fornecido seja
+         * inválido, mensagens apropriadas serão exibidas ao usuário.
+         */
         @Override
         public void executar() {
             ArrayList<RoboTerrestre> robosTerrestres = new ArrayList<>();
             int i = 0;
 
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
-                if (robo instanceof RoboTerrestre) {
+                if (robo instanceof RoboTerrestre && robo != this.robo) {
                     robosTerrestres.add((RoboTerrestre) robo);
                     System.out.printf("[%d] %s\n", i, robo.getNome());
                     i++;

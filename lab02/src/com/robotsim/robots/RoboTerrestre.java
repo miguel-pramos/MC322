@@ -6,6 +6,14 @@ import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.util.GeometryMath;
 
+/**
+ * A classe RoboTerrestre representa um robô terrestre genérico que se move em
+ * duas dimensões.
+ * Robôs terrestres possuem velocidade máxima e podem ser danificados por
+ * ataques.
+ * 
+ * @see Robo
+ */
 public abstract class RoboTerrestre extends Robo {
     protected int velocidadeMaxima; // Pixels por segundo
 
@@ -18,15 +26,29 @@ public abstract class RoboTerrestre extends Robo {
         acoes.add(new Mover(this));
     }
 
+    /**
+     * Método responsável por mover o RoboTerrestre.
+     * <p>
+     * O robô não pode se mover além de sua velocidade máxima.
+     * Caso o deslocamento exceda a velocidade máxima, ele será ajustado para o
+     * limite permitido.
+     * 
+     * @param deltaX Deslocamento no eixo X.
+     * @param deltaY Deslocamento no eixo Y.
+     */
     @Override
     protected void mover(int deltaX, int deltaY) {
         double distancia = GeometryMath.distanciaEuclidiana(this, deltaX, deltaY);
         if (distancia / Controlador.DELTA_TIME > this.velocidadeMaxima) {
-            return; // TODO: implementar interação
+            System.out.printf("%s tentou se mover rápido demais!", this.nome);
+            return;
         }
         super.mover(deltaX, deltaY);
     }
 
+    /**
+     * Classe interna que representa a ação de mover o RoboTerrestre.
+     */
     private class Mover implements Acao {
         RoboTerrestre robo;
 
@@ -39,6 +61,10 @@ public abstract class RoboTerrestre extends Robo {
             return "Mover";
         }
 
+        /**
+         * Executa a ação de mover o RoboTerrestre.
+         * Solicita ao usuário os deslocamentos nos eixos X e Y.
+         */
         @Override
         public void executar() {
             Scanner scanner = Controlador.getScanner();
