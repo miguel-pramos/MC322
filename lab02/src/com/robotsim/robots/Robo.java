@@ -60,6 +60,10 @@ public abstract class Robo {
         }
     }
 
+    /**
+     * Altera posição do robô, deslocando-o .
+     * @param nomeAcao Nome da ação buscada
+     */
     protected void mover(int deltaX, int deltaY) {
         this.posicaoX += deltaX;
         this.posicaoY += deltaY;

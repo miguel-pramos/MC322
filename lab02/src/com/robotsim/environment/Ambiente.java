@@ -38,6 +38,7 @@ public class Ambiente {
     }
 
     public boolean matarRobo(Robo robo) {
+        System.out.printf("O robo %s foi morto\n", robo.getNome());
         return this.robos.remove(robo);
     }
 

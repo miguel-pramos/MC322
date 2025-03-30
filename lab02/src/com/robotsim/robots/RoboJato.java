@@ -63,24 +63,24 @@ public class RoboJato extends RoboAereo {
         @Override
         public void executar() {
             ArrayList<RoboAereo> robosAlvos = new ArrayList<>();
-            int i = 0;
+            int i = 1;
 
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
                 if (robo != this.robo) { // Não permitir atacar a si mesmo
                     robosAlvos.add((RoboAereo) robo);
-                    System.out.printf("[%d] %s\n", i, robo.getNome());
+                    System.out.printf("\n[%d] %s", i, robo.getNome());
                     i++;
                 }
             }
 
             if (robosAlvos.isEmpty()) {
-                System.out.println("Não há robôs para atacar.");
+                System.out.println("\nNão há robôs para atacar.");
                 return;
             }
 
             Scanner scanner = Controlador.getScanner();
             System.out.print("Escolha o índice do robô para atacar com míssil: ");
-            int indice = scanner.nextInt();
+            int indice = scanner.nextInt() - 1;
 
             if (indice < 0 || indice >= robosAlvos.size()) {
                 System.out.println("Índice inválido.");
