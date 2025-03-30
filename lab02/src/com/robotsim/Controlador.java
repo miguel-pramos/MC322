@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import com.robotsim.environment.Ambiente;
+import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
 import com.robotsim.robots.*;
 
@@ -40,16 +41,54 @@ public class Controlador {
         inicializarRobos();
         inicialzizarSim();
 
+        // Loop principal do simulador
         while (gameStatus != GAME_STATUS.GAMEOVER) {
             imprimirAmbiente();
+            for (Robo robo : ambiente.getRobos()) {
+                interagir(robo);
+                imprimirAmbiente();
+            }
 
             System.out.print("Digite 1 para continuar: ");
-            scanner.nextInt();
+            scanner.nextLine();
         }
 
         System.out.println("============= GAME OVER =============");
+        scanner.close();
+    }
+
+    // EXECUÇÃO NO LOOP
+
+    private static void interagir(Robo robo) {
+        System.out.printf("\n\nAÇÕES DISPONÍVEIS PARA %s:\n", robo.getNome().toUpperCase());
+        int i = 1;
+        for (Acao acao : robo.getAcoes()) {
+            System.out.printf("[%d] %s\n", i, acao.getNome());
+            i++;
+        }
+
+        System.out.printf("O que %s deseja fazer? ", robo.getNome());
+        robo.executarAcao(robo.getAcoes().get(scanner.nextInt() - 1));
 
     }
+
+    /**
+     * TODO: documentar
+     */
+    private static void imprimirAmbiente() {
+        for (int i = 0; i < ambiente.getLargura(); i++) {
+            for (int j = 0; j < ambiente.getComprimento(); j++) {
+                for (Robo robo : ambiente.getRobos())
+                    if (robo.getPosicaoX() == j && robo.getPosicaoY() == i)
+                        System.out.print(robo.getNome().charAt(0));
+                    else
+                        System.out.print(".");
+            }
+            System.out.println("");
+        }
+    }
+
+    // INICIALIZAÇÃO
 
     /**
      * Método responsável por inicializar a simulação do simulador de robôs.
@@ -141,22 +180,6 @@ public class Controlador {
             }
         } catch (Exception e) {
             System.err.println(e);
-        }
-    }
-
-    /**
-     * TODO: documentar
-     */
-    private static void imprimirAmbiente() {
-        for (int i = 0; i < ambiente.getLargura(); i++) {
-            for (int j = 0; j < ambiente.getComprimento(); j++) {
-                for (Robo robo : ambiente.getRobos())
-                    if (robo.getPosicaoX() == j && robo.getPosicaoY() == i)
-                        System.out.print(robo.getNome().charAt(0));
-                    else
-                        System.out.print(".");
-            }
-            System.out.println("");
         }
     }
 

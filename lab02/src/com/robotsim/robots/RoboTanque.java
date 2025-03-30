@@ -5,7 +5,6 @@ import java.util.Scanner;
 
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
-import com.robotsim.etc.CatalogoRobos;
 import com.robotsim.util.GeometryMath;
 
 public class RoboTanque extends RoboTerrestre {

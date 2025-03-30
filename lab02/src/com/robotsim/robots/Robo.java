@@ -50,14 +50,9 @@ public abstract class Robo {
      * Busca uma ação pelo nome e executa-a, se existir.
      * @param nomeAcao Nome da ação buscada
      */
-    public void executarAcao(String nomeAcao) {
-        for (Acao acao : acoes) {
-            if (acao.getNome().equalsIgnoreCase(nomeAcao)) {
-                acao.executar();
-                return;
-            }
-        }
-        System.out.println("Ação indisponível para este robô: " + nomeAcao);
+    public void executarAcao(Acao acao) {
+        acao.executar();
+        System.out.println("Ação indisponível para este robô: " + acao.getNome());
     }
 
     protected void mover(int deltaX, int deltaY) {
@@ -108,10 +103,10 @@ public abstract class Robo {
         public void executar() {
             Scanner scanner = new Scanner(System.in);
             
-            System.out.print("O quento quer andar no eixo X?");
+            System.out.print("O quento quer andar no eixo X? ");
             int deltaX = scanner.nextInt();
 
-            System.out.print("O quento quer andar no eixo Y?");
+            System.out.print("O quento quer andar no eixo Y? ");
             int deltaY = scanner.nextInt();
             scanner.close();
             robo.mover(deltaX, deltaY);
