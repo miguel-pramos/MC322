@@ -30,8 +30,7 @@ enum GAME_STATUS {
  * controlar os robôs e visualizar o progresso da simulação.
  */
 public class Controlador {
-    public static final int deltaTime = 1; // Tempo arbitrário de execução em segundos
-    private static GAME_STATUS gameStatus = GAME_STATUS.GAMEON;
+    public static final int DELTA_TIME = 1; // Tempo arbitrário de execução em segundos
 
     private static Ambiente ambiente;
 
@@ -42,14 +41,16 @@ public class Controlador {
         inicialzizarSim();
 
         // Loop principal do simulador
-        while (gameStatus != GAME_STATUS.GAMEOVER) {
+        while (ambiente.getRobos().size() > 1) {
             for (Robo robo : ambiente.getRobos()) {
                 interagir(robo);
                 imprimirAmbiente(robo);
             }
+
         }
 
-        System.out.println("============= GAME OVER =============");
+        System.out.printf("\nParabéns, %s! Você foi o único robô a sobreviver!\n",
+                ambiente.getRobos().get(0).getNome());
         scanner.close();
     }
 
@@ -65,7 +66,8 @@ public class Controlador {
 
         int escolha = -1;
         while (escolha < 1 || escolha > robo.getAcoes().size()) {
-            System.out.printf("O que %s deseja fazer? (Escolha entre 1 e %d): ", robo.getNome(), robo.getAcoes().size());
+            System.out.printf("O que %s deseja fazer? (Escolha entre 1 e %d): ", robo.getNome(),
+                    robo.getAcoes().size());
             if (scanner.hasNextInt()) {
                 escolha = scanner.nextInt();
                 if (escolha < 1 || escolha > robo.getAcoes().size()) {
@@ -132,15 +134,18 @@ public class Controlador {
             TimeUnit.MILLISECONDS.sleep(1600);
 
             // Seleção de quantidade de robôs
-            int quantidade;
-            do {
+            int quantidade = -1;
+            while (quantidade > 10 || quantidade <= 1) {
                 System.out.print("\nQuantos robôs você deseja controlar? ");
                 quantidade = scanner.nextInt();
 
-                if (quantidade > 10) {
+                if (quantidade > 10)
                     System.out.println("O número escolhido é muito grande!");
-                }
-            } while (quantidade > 10);
+
+                else if (quantidade <= 1)
+                    System.out.println("O número escolhido é muito pequeno!");
+
+            }
             TimeUnit.MILLISECONDS.sleep(1600);
 
             // Loop de configuração de cada robô
@@ -218,10 +223,8 @@ public class Controlador {
         return scanner;
     }
 
-
     public static Ambiente getAmbiente() {
         return ambiente;
     }
-
 
 }
