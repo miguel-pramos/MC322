@@ -32,7 +32,7 @@ public class RoboJato extends RoboAereo {
         if (misseisRestantes <= 0)
             throw new IllegalStateException("Nenhum míssil restante");
 
-        if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), alvo.getPosicaoY(),
+        if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY(),
                 alvo.getAltitude()) < alcanceMissil) {
             alvo.tomarDano(danoMissil);
         }
@@ -43,7 +43,7 @@ public class RoboJato extends RoboAereo {
         if (rajadasRestantes <= 0)
             throw new IllegalStateException("Nenhuma rajada restante"); 
 
-        if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), alvo.getPosicaoY(), 0) < alcanceMetralhadora) {
+        if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY(), 0) < alcanceMetralhadora) {
             alvo.tomarDano(danoMetralhadora);
         }
         rajadasRestantes--;

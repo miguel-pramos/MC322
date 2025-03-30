@@ -13,11 +13,6 @@ public class RoboDrone extends RoboAereo {
     private int bateria = 200;
     private final int alcanceDeteccao = 50;
 
-    static {
-        // Registro do robô no catálogo
-        CatalogoRobos.registrarRobo("Robo Aéreo", RoboDrone.class);
-    }
-
     public RoboDrone(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY);
     }

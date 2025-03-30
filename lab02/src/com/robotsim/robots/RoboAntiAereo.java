@@ -22,7 +22,7 @@ public class RoboAntiAereo extends RoboTerrestre {
         if (balasRestantes <= 0)
             throw new IllegalStateException("Nenhuma bala restante"); 
 
-        if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance)
+        if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance)
             alvo.tomarDano(this.dano);
         this.balasRestantes--;
     }
