@@ -62,14 +62,14 @@ public class Controlador {
             TimeUnit.MILLISECONDS.sleep(1600);
 
             for (int i = 0; i < quantidade; i++) {
-                System.out.print("\n\nQual será o tipo escolhido para o seu robô " + (i + 1) + "? ");
+                System.out.printf("\n\nQual será o tipo escolhido para o seu robô %d? ", (i + 1));
                 TimeUnit.MILLISECONDS.sleep(1600);
                 
                 ArrayList<String> categorias = CatalogoRobos.getCategorias();
                 System.out.print(categorias);
                 
                 for (int j = 1; j <= categorias.size(); j++) {
-                    System.out.print(j + " " + categorias.get(j - 1) + "   ");
+                    System.out.printf("%d - %s ", j, categorias.get(j - 1));
                 }
 
                 String tipo = scanner.nextLine();
@@ -123,5 +123,14 @@ public class Controlador {
         }
     }
 
-    
+    private static void inicializarRobos() {
+        Class<?>[] robos = {
+                RoboAereo.class,
+                RoboAntiAereo.class,
+                RoboTanque.class,
+                RoboJato.class
+                };
+        }
+
+
 }

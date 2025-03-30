@@ -1,6 +1,7 @@
 package com.robotsim.robots;
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
@@ -39,19 +40,6 @@ public class RoboDrone extends RoboAereo {
         }
     }
 
-    public void detectarRobo(RoboAereo alvo) {
-        if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), getPosicaoY(), getAltitude()) < alcanceDeteccao) {
-            System.out.print("O robo " + alvo.getNome() + " está na posição:");
-            System.out.println("(%d, %d, %d)".formatted(alvo.getPosicaoX(), alvo.getPosicaoY(), alvo.getAltitude()));
-        }
-    }
-
-    public void detectarRobo(RoboTerrestre alvo) {
-        if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), getPosicaoY(), 0) < alcanceDeteccao) {
-            System.out.print("O robo " + alvo.getNome() + " está na posição:");
-            System.out.println("(%d, %d, 0)".formatted(alvo.getPosicaoX(), alvo.getPosicaoY()));
-        }
-    }
 
     private class DetectarRobo implements Acao {
         RoboDrone robo;
@@ -67,40 +55,37 @@ public class RoboDrone extends RoboAereo {
 
         @Override
         public void executar() {
-            System.out.println("Robôs disponíveis para detecção:");
-            int i = 0;
+            System.out.println("Iniciando o processo de detecção...");
 
+            try {
+                TimeUnit.MILLISECONDS.sleep(1600);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Boa prática: reinterromper a thread
+                System.out.println("A execução foi interrompida.");
+            }
+            double distancia;
             for (Robo robo : Controlador.ambiente.getRobos()) {
-                if (robo != this.robo) { // Não permitir detectar a si mesmo
-                    System.out.printf("[%d] %s\n", i, robo.getNome());
-                    i++;
+                if (robo instanceof RoboAereo){
+                    distancia = (GeometryMath.distanciaEuclidiana(robo.getPosicaoX(),
+                            robo.getPosicaoY(), ((RoboAereo) robo).getAltitude());
+
+                    if (distancia < alcanceDeteccao) {
+                        System.out.printf("O robô %s está na posição (%d, %d, %d)", robo.getNome(),
+                                robo.getPosicaoX(), robo.getPosicaoY(), ((RoboAereo) robo).getAltitude());
+                    }
+                }else if (robo instanceof RoboTerrestre) {
+                    distancia = (GeometryMath.distanciaEuclidiana(robo.getPosicaoX(),
+                            robo.getPosicaoY(), 0));
+
+                    if (distancia < alcanceDeteccao) {
+                        System.out.printf("O robô %s está na posição (%d, %d, %d)", robo.getNome(),
+                                robo.getPosicaoX(), robo.getPosicaoY(), 0);
+                    }
+
+                    }
+                else {
+                    System.out.println("Tipo desconhecido");
                 }
-            }
-
-            if (i == 0) {
-                System.out.println("Não há robôs para detectar.");
-                return;
-            }
-
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Escolha o índice do robô para detectar: ");
-            int indice = scanner.nextInt();
-
-            scanner.close();
-
-            if (indice < 0 || indice >= Controlador.ambiente.getRobos().size()) {
-                System.out.println("Índice inválido.");
-                return;
-            }
-
-            Robo alvo = Controlador.ambiente.getRobos().get(indice);
-
-            if (alvo instanceof RoboAereo) {
-                robo.detectarRobo((RoboAereo) alvo);
-            } else if (alvo instanceof RoboTerrestre) {
-                robo.detectarRobo((RoboTerrestre) alvo);
-            } else {
-                System.out.println("Tipo de robô desconhecido.");
             }
         }
     }
