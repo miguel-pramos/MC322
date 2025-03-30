@@ -2,6 +2,7 @@ package com.robotsim.robots;
 
 import java.util.Scanner;
 
+import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 
 public abstract class RoboAereo extends Robo {
@@ -53,11 +54,9 @@ public abstract class RoboAereo extends Robo {
 
         @Override
         public void executar() {
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = Controlador.getScanner();
             System.out.print("Digite a altitude a descer: ");
             int deltaZ = scanner.nextInt();
-
-            scanner.close();
 
             if (deltaZ <= 0) {
                 System.out.println("A altitude deve ser um valor positivo.");
@@ -82,13 +81,11 @@ public abstract class RoboAereo extends Robo {
 
         @Override
         public void executar() {
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = Controlador.getScanner();
             System.out.print("Digite a altitude a subir: ");
             int deltaZ = scanner.nextInt();
 
             scanner.nextLine(); // Consumir \n
-
-            scanner.close();
 
             if (deltaZ <= 0) {
                 System.out.println("A altitude deve ser um valor positivo.");

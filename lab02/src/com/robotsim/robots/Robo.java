@@ -68,7 +68,7 @@ public abstract class Robo {
     public void tomarDano(int dano) {
         this.HP -= dano;
         if (this.HP < 0) {
-            Controlador.ambiente.matarRobo(this);
+            Controlador.getAmbiente().matarRobo(this);
         }
     }
 
@@ -106,7 +106,7 @@ public abstract class Robo {
 
         @Override
         public void executar() {
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = Controlador.getScanner();
 
             System.out.print("O quento quer andar no eixo X? ");
             int deltaX = scanner.nextInt();
@@ -115,7 +115,6 @@ public abstract class Robo {
             int deltaY = scanner.nextInt();
             scanner.nextLine(); // Consumir \n
 
-            scanner.close();
             robo.mover(deltaX, deltaY);
         }
     }

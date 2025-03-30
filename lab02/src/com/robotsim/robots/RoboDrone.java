@@ -25,7 +25,7 @@ public class RoboDrone extends RoboAereo {
             System.out.println("A execução foi interrompida.");
         }
         double distancia;
-        for (Robo robo : Controlador.ambiente.getRobos()) {
+        for (Robo robo : Controlador.getAmbiente().getRobos()) {
             if (robo instanceof RoboAereo && robo != this){
                 distancia = (GeometryMath.distanciaEuclidiana(this, robo.getPosicaoX(),
                         robo.getPosicaoY(), ((RoboAereo) robo).getAltitude()));
@@ -56,7 +56,7 @@ public class RoboDrone extends RoboAereo {
         this.bateria -= deltaX + deltaY;
 
         if (this.bateria <= 0) {
-            Controlador.ambiente.matarRobo(this);
+            Controlador.getAmbiente().matarRobo(this);
         } else {
             super.mover(deltaX, deltaY);
             System.out.printf("Sua bateria está em %d%n", this.bateria);

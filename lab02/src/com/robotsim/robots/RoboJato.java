@@ -11,7 +11,7 @@ public class RoboJato extends RoboAereo {
     private int misseisRestantes = 2;
     private int rajadasRestantes = 10;
     private final int alcanceMissil = 1;
-    private final int alcanceMetralhadora = Controlador.ambiente.getComprimento() / 12;
+    private final int alcanceMetralhadora = Controlador.getAmbiente().getComprimento() / 12;
     private final int danoMissil = 200;
     private final int danoMetralhadora = 20;
 
@@ -40,7 +40,7 @@ public class RoboJato extends RoboAereo {
 
     protected void atirarRajada(RoboTerrestre alvo) {
         if (rajadasRestantes <= 0)
-            throw new IllegalStateException("Nenhuma rajada restante"); 
+            throw new IllegalStateException("Nenhuma rajada restante");
 
         if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY(), 0) < alcanceMetralhadora) {
             alvo.tomarDano(danoMetralhadora);
@@ -65,8 +65,8 @@ public class RoboJato extends RoboAereo {
             ArrayList<RoboAereo> robosAlvos = new ArrayList<>();
             int i = 0;
 
-            for (Robo robo : Controlador.ambiente.getRobos()) {
-                if (robo != this.robo) {  // Não permitir atacar a si mesmo
+            for (Robo robo : Controlador.getAmbiente().getRobos()) {
+                if (robo != this.robo) { // Não permitir atacar a si mesmo
                     robosAlvos.add((RoboAereo) robo);
                     System.out.printf("[%d] %s\n", i, robo.getNome());
                     i++;
@@ -78,11 +78,9 @@ public class RoboJato extends RoboAereo {
                 return;
             }
 
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = Controlador.getScanner();
             System.out.print("Escolha o índice do robô para atacar com míssil: ");
             int indice = scanner.nextInt();
-
-            scanner.close();
 
             if (indice < 0 || indice >= robosAlvos.size()) {
                 System.out.println("Índice inválido.");
@@ -98,7 +96,7 @@ public class RoboJato extends RoboAereo {
 
         }
     }
-    
+
     private class AtirarRajada implements Acao {
         RoboJato robo;
 
@@ -116,8 +114,8 @@ public class RoboJato extends RoboAereo {
             ArrayList<RoboTerrestre> robosAlvos = new ArrayList<>();
             int i = 0;
 
-            for (Robo robo : Controlador.ambiente.getRobos()) {
-                if (robo instanceof RoboTerrestre) {  // Não permitir atacar a si mesmo
+            for (Robo robo : Controlador.getAmbiente().getRobos()) {
+                if (robo instanceof RoboTerrestre) { // Não permitir atacar a si mesmo
                     robosAlvos.add((RoboTerrestre) robo);
                     System.out.printf("[%d] %s\n", i, robo.getNome());
                     i++;
@@ -129,19 +127,16 @@ public class RoboJato extends RoboAereo {
                 return;
             }
 
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = Controlador.getScanner();
             System.out.print("Escolha o índice do robô para atacar com rajada: ");
             int indice = scanner.nextInt();
 
             scanner.nextLine(); // Consumir \n
 
-            scanner.close();
-
             if (indice < 0 || indice >= robosAlvos.size()) {
                 System.out.println("Índice inválido.");
                 return;
             }
-            
 
             RoboTerrestre alvo = robosAlvos.get(indice);
             try {

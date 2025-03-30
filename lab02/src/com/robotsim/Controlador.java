@@ -31,9 +31,9 @@ enum GAME_STATUS {
  */
 public class Controlador {
     public static final int deltaTime = 1; // Tempo arbitrário de execução em segundos
-    public static GAME_STATUS gameStatus = GAME_STATUS.GAMEON;
+    private static GAME_STATUS gameStatus = GAME_STATUS.GAMEON;
 
-    public static Ambiente ambiente;
+    private static Ambiente ambiente;
 
     private static Scanner scanner = new Scanner(System.in);
 
@@ -43,14 +43,10 @@ public class Controlador {
 
         // Loop principal do simulador
         while (gameStatus != GAME_STATUS.GAMEOVER) {
-            imprimirAmbiente();
             for (Robo robo : ambiente.getRobos()) {
                 interagir(robo);
-                imprimirAmbiente();
+                imprimirAmbiente(robo);
             }
-
-            System.out.print("Digite 1 para continuar: ");
-            scanner.nextLine();
         }
 
         System.out.println("============= GAME OVER =============");
@@ -67,22 +63,41 @@ public class Controlador {
             i++;
         }
 
-        System.out.printf("O que %s deseja fazer? ", robo.getNome());
-        robo.executarAcao(robo.getAcoes().get(scanner.nextInt() - 1));
+        int escolha = -1;
+        while (escolha < 1 || escolha > robo.getAcoes().size()) {
+            System.out.printf("O que %s deseja fazer? (Escolha entre 1 e %d): ", robo.getNome(), robo.getAcoes().size());
+            if (scanner.hasNextInt()) {
+                escolha = scanner.nextInt();
+                if (escolha < 1 || escolha > robo.getAcoes().size()) {
+                    System.out.println("Escolha inválida. Tente novamente.");
+                }
+            } else {
+                System.out.println("Entrada inválida. Por favor, insira um número.");
+                scanner.next(); // Consumir entrada inválida
+            }
+        }
+        scanner.nextLine(); // Consumir \n
+        robo.executarAcao(robo.getAcoes().get(escolha - 1));
 
     }
 
     /**
      * TODO: documentar
      */
-    private static void imprimirAmbiente() {
+    private static void imprimirAmbiente(Robo robo) {
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("\n\n=============== MAPA DO JOGO ===============");
         for (int i = 0; i < ambiente.getLargura(); i++) {
             for (int j = 0; j < ambiente.getComprimento(); j++) {
-                for (Robo robo : ambiente.getRobos())
-                    if (robo.getPosicaoX() == j && robo.getPosicaoY() == i)
-                        System.out.print(robo.getNome().charAt(0));
-                    else
-                        System.out.print(".");
+                if (robo.getPosicaoX() == j && robo.getPosicaoY() == i)
+                    System.out.print(robo.getNome().charAt(0));
+                else
+                    System.out.print(".");
             }
             System.out.println("");
         }
@@ -198,5 +213,15 @@ public class Controlador {
         CatalogoRobos.registrarRobo("Robô Terrestre", RoboTanque.class);
         CatalogoRobos.registrarRobo("Robô Terrestre", RoboAntiAereo.class);
     }
+
+    public static Scanner getScanner() {
+        return scanner;
+    }
+
+
+    public static Ambiente getAmbiente() {
+        return ambiente;
+    }
+
 
 }

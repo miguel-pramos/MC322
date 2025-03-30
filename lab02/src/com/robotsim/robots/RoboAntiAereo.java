@@ -10,7 +10,7 @@ import com.robotsim.util.GeometryMath;
 public class RoboAntiAereo extends RoboTerrestre {
     private int balasRestantes = 10;
     private int dano = 4;
-    private int alcance = Controlador.ambiente.getLargura() / 5;
+    private int alcance = Controlador.getAmbiente().getLargura() / 5;
 
     public RoboAntiAereo(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY);
@@ -19,19 +19,19 @@ public class RoboAntiAereo extends RoboTerrestre {
 
     public void atirar(RoboAereo alvo) {
         if (balasRestantes <= 0)
-            throw new IllegalStateException("Nenhuma bala restante"); 
+            throw new IllegalStateException("Nenhuma bala restante");
 
         if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance)
             alvo.tomarDano(this.dano);
         this.balasRestantes--;
     }
-    
+
     @Override
     protected void inicializarAcoes() {
         acoes.add(new Atirar(this));
         super.inicializarAcoes();
     }
-    
+
     private class Atirar implements Acao {
         RoboAntiAereo robo;
 
@@ -49,8 +49,8 @@ public class RoboAntiAereo extends RoboTerrestre {
             ArrayList<RoboAereo> robosAlvos = new ArrayList<>();
             int i = 0;
 
-            for (Robo robo : Controlador.ambiente.getRobos()) {
-                if (robo instanceof RoboAereo) {  // Apenas atacar robôs aéreos
+            for (Robo robo : Controlador.getAmbiente().getRobos()) {
+                if (robo instanceof RoboAereo) { // Apenas atacar robôs aéreos
                     robosAlvos.add((RoboAereo) robo);
                     System.out.printf("[%d] %s\n", i, robo.getNome());
                     i++;
@@ -62,12 +62,10 @@ public class RoboAntiAereo extends RoboTerrestre {
                 return;
             }
 
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = Controlador.getScanner();
             System.out.print("Escolha o índice do robô aéreo para atacar: ");
             int indice = scanner.nextInt();
             scanner.nextLine(); // Consumir \n
-            
-            scanner.close();
 
             if (indice < 0 || indice >= robosAlvos.size()) {
                 System.out.println("Índice inválido.");

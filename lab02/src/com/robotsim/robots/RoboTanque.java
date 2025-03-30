@@ -10,7 +10,7 @@ import com.robotsim.util.GeometryMath;
 public class RoboTanque extends RoboTerrestre {
     private int balasRestantes = 10;
     private final int dano = 8;
-    private final int alcance = Controlador.ambiente.getLargura() / 6;
+    private final int alcance = Controlador.getAmbiente().getLargura() / 6;
 
     public RoboTanque(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY);
@@ -47,7 +47,7 @@ public class RoboTanque extends RoboTerrestre {
             ArrayList<RoboTerrestre> robosTerrestres = new ArrayList<>();
             int i = 0;
 
-            for (Robo robo : Controlador.ambiente.getRobos()) {
+            for (Robo robo : Controlador.getAmbiente().getRobos()) {
                 if (robo instanceof RoboTerrestre) {
                     robosTerrestres.add((RoboTerrestre) robo);
                     System.out.printf("[%d] %s\n", i, robo.getNome());
@@ -60,12 +60,10 @@ public class RoboTanque extends RoboTerrestre {
                 return;
             }
 
-            Scanner scanner = new Scanner(System.in);
+            Scanner scanner = Controlador.getScanner();
             System.out.print("Escolha o índice do robô terrestre para atacar: ");
             int indice = scanner.nextInt();
             scanner.nextLine(); // Consumir \n
-
-            scanner.close();
 
             if (indice < 0 || indice >= robosTerrestres.size()) {
                 System.out.println("Índice inválido.");
