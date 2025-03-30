@@ -13,12 +13,6 @@ public class RoboTanque extends RoboTerrestre {
     private final int dano = 8;
     private final int alcance = Controlador.ambiente.getLargura() / 6;
 
-    static {
-        // Registro do robô no catálogo
-        System.out.println("Chamado");
-        CatalogoRobos.registrarRobo("Robo Terrestre", RoboTanque.class);
-    }
-
     public RoboTanque(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY);
     }

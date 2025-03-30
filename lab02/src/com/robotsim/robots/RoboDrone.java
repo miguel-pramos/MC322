@@ -1,6 +1,5 @@
 package com.robotsim.robots;
 
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import com.robotsim.Controlador;
@@ -11,11 +10,6 @@ import com.robotsim.util.GeometryMath;
 public class RoboDrone extends RoboAereo {
     private int bateria = 200;
     private final int alcanceDeteccao = 50;
-
-    static {
-        // Registro do robô no catálogo
-        CatalogoRobos.registrarRobo("Robo Aéreo", RoboDrone.class);
-    }
 
     public RoboDrone(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY);
@@ -67,7 +61,7 @@ public class RoboDrone extends RoboAereo {
             for (Robo robo : Controlador.ambiente.getRobos()) {
                 if (robo instanceof RoboAereo){
                     distancia = (GeometryMath.distanciaEuclidiana(robo.getPosicaoX(),
-                            robo.getPosicaoY(), ((RoboAereo) robo).getAltitude());
+                            robo.getPosicaoY(), ((RoboAereo) robo).getAltitude()));
 
                     if (distancia < alcanceDeteccao) {
                         System.out.printf("O robô %s está na posição (%d, %d, %d)", robo.getNome(),
