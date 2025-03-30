@@ -16,12 +16,6 @@ public class RoboJato extends RoboAereo {
     private final int danoMissil = 200;
     private final int danoMetralhadora = 20;
 
-    static {
-        // Registro do robô no catálogo
-        altitudeMaxima = 10;
-        CatalogoRobos.registrarRobo("Robo Aéreo", RoboJato.class);
-    }
-
     @Override
     protected void inicializarAcoes() {
         super.inicializarAcoes();

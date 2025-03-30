@@ -12,12 +12,6 @@ public class RoboAntiAereo extends RoboTerrestre {
     private int balasRestantes = 10;
     private int dano = 4;
     private int alcance = Controlador.ambiente.getLargura() / 5;
-    
-    static {
-        // Registro do robô no catálogo
-        CatalogoRobos.registrarRobo("Robo Terrestre", RoboAntiAereo.class);
-    }
-
 
     public RoboAntiAereo(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY);

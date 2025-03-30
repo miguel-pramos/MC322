@@ -8,12 +8,26 @@ import com.robotsim.environment.Ambiente;
 import com.robotsim.etc.CatalogoRobos;
 import com.robotsim.robots.*;
 
-
 enum GAME_STATUS {
     GAMEON,
     GAMEOVER
 }
 
+/**
+ * A classe Controlador é responsável por gerenciar a execução principal do
+ * simulador de robôs.
+ * Ela inicializa o ambiente, registra as classes de robôs disponíveis no
+ * catálogo e permite
+ * que o usuário configure e controle os robôs durante a simulação.
+ * <p>
+ * A classe Controlador possui o <i>entry point</i> do simulador, no método Main
+ * e gerencia
+ * o loop principal da execução deste.
+ * <p>
+ * O simulador funciona em turnos, onde o usuário pode interagir com o sistema
+ * para
+ * controlar os robôs e visualizar o progresso da simulação.
+ */
 public class Controlador {
     public static final int deltaTime = 1; // Tempo arbitrário de execução em segundos
     public static GAME_STATUS gameStatus = GAME_STATUS.GAMEON;
@@ -23,6 +37,7 @@ public class Controlador {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+        inicializarRobos();
         inicialzizarSim();
 
         while (gameStatus != GAME_STATUS.GAMEOVER) {
@@ -36,6 +51,17 @@ public class Controlador {
 
     }
 
+    /**
+     * Método responsável por inicializar a simulação do simulador de robôs.
+     * Este método configura o ambiente, solicita ao usuário a quantidade de robôs
+     * que deseja controlar, permite a escolha de tipos, categorias, classes e nomes
+     * para os robôs, e define suas posições iniciais no mapa.
+     * <p>
+     * Observação:
+     * - O método utiliza pausas (TimeUnit.MILLISECONDS.sleep) para melhorar a
+     * experiência
+     * do usuário com mensagens exibidas de forma gradual.
+     */
     private static void inicialzizarSim() {
         try {
 
@@ -43,6 +69,7 @@ public class Controlador {
             final int LARGURA = 10;
             ambiente = new Ambiente(COMPRIMENTO, LARGURA);
 
+            // Introdução
             System.out.println("====================== SIMULADOR DE ROBÔS ======================");
             System.out.println("Nesse simulador, você controlará robôs de combate...");
             TimeUnit.MILLISECONDS.sleep(1600);
@@ -50,6 +77,7 @@ public class Controlador {
             System.out.println("O simulador funciona por turnos, nos quais algumas ações serão disponíveis.");
             TimeUnit.MILLISECONDS.sleep(1600);
 
+            // Seleção de quantidade de robôs
             int quantidade;
             do {
                 System.out.print("\nQuantos robôs você deseja controlar? ");
@@ -61,47 +89,53 @@ public class Controlador {
             } while (quantidade > 10);
             TimeUnit.MILLISECONDS.sleep(1600);
 
+            // Loop de configuração de cada robô
             for (int i = 0; i < quantidade; i++) {
-                System.out.printf("\n\nQual será o tipo escolhido para o seu robô %d? ", (i + 1));
-                TimeUnit.MILLISECONDS.sleep(1600);
-                
+
+                // ====== Seleção de categoria ======
+                System.out.println("\n======= CATEGORIAS DE ROBÔS =======");
+
                 ArrayList<String> categorias = CatalogoRobos.getCategorias();
-                System.out.print(categorias);
-                
-                for (int j = 1; j <= categorias.size(); j++) {
-                    System.out.printf("%d - %s ", j, categorias.get(j - 1));
-                }
+                for (int j = 1; j <= categorias.size(); j++)
+                    System.out.printf("[%d] %s\n", j, categorias.get(j - 1));
 
-                String tipo = scanner.nextLine();
+                System.out.printf("\nQual será a categoria escolhido para o seu robô {%d}? ", i + 1);
 
-                int idxCategoria = scanner.nextInt() - 1;
-                String categoriaEscolhida = categorias.get(idxCategoria);
+                String categoriaEscolhida = categorias.get(scanner.nextInt() - 1);
                 TimeUnit.MILLISECONDS.sleep(1600);
 
-                ArrayList<String> classes = CatalogoRobos.getRobosPorCategoria(categorias.get(idxCategoria));
-                for (int j = 1; j <= classes.size(); j++) {
-                    System.out.print(j + " " + classes.get(j) + "    ");
-                }
-                int idxClasse = scanner.nextInt() - 1;
-                String classeEscolhida = classes.get(idxClasse);
+                // ====== Seleção de tipo de robô ======
+                System.out.printf("\n======= TIPOS DE %s =======\n", categoriaEscolhida.toUpperCase());
+
+                ArrayList<String> classes = CatalogoRobos.getRobosPorCategoria(categoriaEscolhida);
+                for (int j = 1; j <= classes.size(); j++)
+                    System.out.printf("[%d] %s\n", j, classes.get(j - 1));
+
+                System.out.printf("\nQual será o tipo escolhido para o seu robô {%d}? ", i + 1);
+
+                String classeEscolhida = classes.get(scanner.nextInt() - 1);
                 TimeUnit.MILLISECONDS.sleep(1600);
 
-                System.out.print("\n\nEscolha um nome para o seu robô " + (i + 1) +
-                        " do tipo" + classes.get(idxClasse) + ": ");
+                // Escolha do nome do robô
+                System.out.printf("\n\nEscolha um nome para o seu robô %d do tipo %s: ",
+                        i + 1, classeEscolhida);
+
+                scanner.nextLine(); // Consumir quebra de linha deixada pelo nextInt()
                 String nome = scanner.nextLine();
                 TimeUnit.MILLISECONDS.sleep(1600);
 
-
+                // Posicionamento do robô
                 System.out
-                        .println("\nO mapa tem tamanho (%d, %d)".formatted(ambiente.getComprimento(),
-                                ambiente.getLargura()));
+                        .printf("\n\nO mapa tem tamanho (%d, %d)\n", ambiente.getComprimento(),
+                                ambiente.getLargura());
                 TimeUnit.MILLISECONDS.sleep(1600);
 
-                System.out.print("Escolha uma posição inicial para %s no formato [x y]: ".formatted(nome));
+                System.out.printf("Escolha uma posição inicial para %s no formato [x y]: ", nome);
                 int x = scanner.nextInt();
                 int y = scanner.nextInt();
                 System.out.println();
 
+                // Adição do robô ao ambiente
                 Robo novoRobo = CatalogoRobos.criarRobo(categoriaEscolhida, classeEscolhida, nome, x, y);
                 ambiente.adicionarRobo(novoRobo);
             }
@@ -110,6 +144,9 @@ public class Controlador {
         }
     }
 
+    /**
+     * TODO: documentar
+     */
     private static void imprimirAmbiente() {
         for (int i = 0; i < ambiente.getLargura(); i++) {
             for (int j = 0; j < ambiente.getComprimento(); j++) {
@@ -123,14 +160,20 @@ public class Controlador {
         }
     }
 
+    /**
+     * Método responsável por inicializar os robôs no catálogo.
+     * <p>
+     * Robôs registrados:
+     * <ul>
+     * <li>"Robô Aéreo" associado às classes RoboJato e RoboDrone.
+     * <li>"Robô Terrestre" associado às classes RoboTanque e RoboAntiAereo.
+     * <ul>
+     */
     private static void inicializarRobos() {
-        Class<?>[] robos = {
-                RoboAereo.class,
-                RoboAntiAereo.class,
-                RoboTanque.class,
-                RoboJato.class
-                };
-        }
-
+        CatalogoRobos.registrarRobo("Robô Aéreo", RoboJato.class);
+        CatalogoRobos.registrarRobo("Robô Aéreo", RoboDrone.class);
+        CatalogoRobos.registrarRobo("Robô Terrestre", RoboTanque.class);
+        CatalogoRobos.registrarRobo("Robô Terrestre", RoboAntiAereo.class);
+    }
 
 }
