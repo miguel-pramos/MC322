@@ -1,6 +1,5 @@
 package com.robotsim.robots;
 
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import com.robotsim.Controlador;
@@ -59,7 +58,7 @@ public class RoboDrone extends RoboAereo {
         if (this.bateria <= 0) {
             Controlador.ambiente.matarRobo(this);
         } else {
-            this.mover(deltaX, deltaY);
+            super.mover(deltaX, deltaY);
             System.out.printf("Sua bateria está em %d%n", this.bateria);
         }
     }

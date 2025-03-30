@@ -65,7 +65,8 @@ public class RoboAntiAereo extends RoboTerrestre {
             Scanner scanner = new Scanner(System.in);
             System.out.print("Escolha o índice do robô aéreo para atacar: ");
             int indice = scanner.nextInt();
-
+            scanner.nextLine(); // Consumir \n
+            
             scanner.close();
 
             if (indice < 0 || indice >= robosAlvos.size()) {

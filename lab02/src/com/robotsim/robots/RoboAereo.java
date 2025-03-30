@@ -86,6 +86,8 @@ public abstract class RoboAereo extends Robo {
             System.out.print("Digite a altitude a subir: ");
             int deltaZ = scanner.nextInt();
 
+            scanner.nextLine(); // Consumir \n
+
             scanner.close();
 
             if (deltaZ <= 0) {

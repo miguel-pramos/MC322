@@ -9,10 +9,11 @@ import com.robotsim.etc.Acao;
 
 /**
  * Classe abstrata que representa um robô no simulador.
- * Cada robô possui um nome, pontos de vida (HP), posição no ambiente (X, Y) 
+ * Cada robô possui um nome, pontos de vida (HP), posição no ambiente (X, Y)
  * e uma lista de ações que pode executar.
  * <p>
- * Métodos principais incluem movimentação, execução de ações, exibição de posição 
+ * Métodos principais incluem movimentação, execução de ações, exibição de
+ * posição
  * e manipulação de pontos de vida.
  */
 public abstract class Robo {
@@ -23,11 +24,11 @@ public abstract class Robo {
     protected ArrayList<Acao> acoes;
 
     /**
-     * Inicializa o robô com um nome e em uma posição. Também inicializa as 
+     * Inicializa o robô com um nome e em uma posição. Também inicializa as
      * ações disponíveis da classe.
      * 
-     * @param nome Nome do robô
-     * @param posicaoX Posição horizontal inicial 
+     * @param nome     Nome do robô
+     * @param posicaoX Posição horizontal inicial
      * @param posicaoY Posição vertical inicial
      */
     public Robo(String nome, int posicaoX, int posicaoY) {
@@ -39,7 +40,7 @@ public abstract class Robo {
     }
 
     /**
-     * Método que adiciona as ações de cada classe. Deve ser sobrescrito 
+     * Método que adiciona as ações de cada classe. Deve ser sobrescrito
      * pelas classes filhas.
      */
     protected void inicializarAcoes() {
@@ -47,12 +48,16 @@ public abstract class Robo {
     };
 
     /**
-     * Busca uma ação pelo nome e executa-a, se existir.
+     * Tenta executar uma ação.
+     * 
      * @param nomeAcao Nome da ação buscada
      */
     public void executarAcao(Acao acao) {
-        acao.executar();
-        System.out.println("Ação indisponível para este robô: " + acao.getNome());
+        try {
+            acao.executar();
+        } catch (Exception e) {
+            System.out.println("Ação indisponível para este robô: " + acao.getNome());
+        }
     }
 
     protected void mover(int deltaX, int deltaY) {
@@ -102,12 +107,14 @@ public abstract class Robo {
         @Override
         public void executar() {
             Scanner scanner = new Scanner(System.in);
-            
+
             System.out.print("O quento quer andar no eixo X? ");
             int deltaX = scanner.nextInt();
 
             System.out.print("O quento quer andar no eixo Y? ");
             int deltaY = scanner.nextInt();
+            scanner.nextLine(); // Consumir \n
+
             scanner.close();
             robo.mover(deltaX, deltaY);
         }

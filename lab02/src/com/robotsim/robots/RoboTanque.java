@@ -63,6 +63,8 @@ public class RoboTanque extends RoboTerrestre {
             Scanner scanner = new Scanner(System.in);
             System.out.print("Escolha o índice do robô terrestre para atacar: ");
             int indice = scanner.nextInt();
+            scanner.nextLine(); // Consumir \n
+
             scanner.close();
 
             if (indice < 0 || indice >= robosTerrestres.size()) {
