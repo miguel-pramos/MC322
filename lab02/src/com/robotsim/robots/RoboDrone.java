@@ -27,7 +27,7 @@ public class RoboDrone extends RoboAereo {
         }
         double distancia;
         for (Robo robo : Controlador.ambiente.getRobos()) {
-            if (robo instanceof RoboAereo){
+            if (robo instanceof RoboAereo && robo != this){
                 distancia = (GeometryMath.distanciaEuclidiana(this, robo.getPosicaoX(),
                         robo.getPosicaoY(), ((RoboAereo) robo).getAltitude()));
 
