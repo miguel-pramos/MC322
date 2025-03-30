@@ -67,7 +67,6 @@ public class RoboDrone extends RoboAereo {
     @Override
     protected void inicializarAcoes() {
         acoes.add(new DetectarRobos(this));
-        acoes.add(new Mover(this));
         super.inicializarAcoes();
 
     }
@@ -88,30 +87,6 @@ public class RoboDrone extends RoboAereo {
         @Override
         public void executar() {
             robo.detectarRobos();
-        }
-    }
-
-    private class Mover implements Acao {
-        RoboDrone robo;
-
-        public Mover(RoboDrone robo) {
-            this.robo = robo;
-        }
-
-        @Override
-        public String getNome() {
-            return "Mover";
-        }
-
-        @Override
-        public void executar() {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Quanto você deseja mover em cada direção? Formato: 'x y' ");
-            int deltaX = scanner.nextInt();
-            int deltaY = scanner.nextInt();
-            scanner.close();
-
-            robo.mover(deltaX, deltaY);
         }
     }
 }
