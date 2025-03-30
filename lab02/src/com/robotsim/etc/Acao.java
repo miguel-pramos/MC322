@@ -10,9 +10,11 @@ public interface Acao {
      * @return Uma string com o nome da ação.
      */
     String getNome();
+
     /**
      * Executa a ação.
+     * 
      * @param args que dependem da ação específica.
      */
-    void executar(Object ...args);
+    void executar();
 }

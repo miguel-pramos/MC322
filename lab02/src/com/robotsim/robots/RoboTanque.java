@@ -1,5 +1,8 @@
 package com.robotsim.robots;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
@@ -12,6 +15,7 @@ public class RoboTanque extends RoboTerrestre {
 
     static {
         // Registro do robô no catálogo
+        System.out.println("Chamado");
         CatalogoRobos.registrarRobo("Robo Terrestre", RoboTanque.class);
     }
 
@@ -46,12 +50,34 @@ public class RoboTanque extends RoboTerrestre {
         }
 
         @Override
-        public void executar(Object... args) {
-            if (args.length != 1 || !(args[0] instanceof RoboTerrestre)) {
-                throw new IllegalArgumentException("Atirar requer um alvo do tipo RoboTerrestre."); // Estudar necessidade disso
+        public void executar() {
+            ArrayList<RoboTerrestre> robosTerrestres = new ArrayList<>();
+            int i = 0;
+
+            for (Robo robo : Controlador.ambiente.getRobos()) {
+                if (robo instanceof RoboTerrestre) {
+                    robosTerrestres.add((RoboTerrestre) robo);
+                    System.out.printf("[%d] %s\n", i, robo.getNome());
+                    i++;
+                }
             }
 
-            RoboTerrestre alvo = (RoboTerrestre) args[0];
+            if (robosTerrestres.isEmpty()) {
+                System.out.println("Não há robôs terrestres para atacar.");
+                return;
+            }
+
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Escolha o índice do robô terrestre para atacar: ");
+            int indice = scanner.nextInt();
+            scanner.close();
+
+            if (indice < 0 || indice >= robosTerrestres.size()) {
+                System.out.println("Índice inválido.");
+                return;
+            }
+
+            RoboTerrestre alvo = robosTerrestres.get(indice);
             robo.atirar(alvo);
         }
     }

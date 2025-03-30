@@ -1,5 +1,8 @@
 package com.robotsim.robots;
 
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
@@ -49,12 +52,40 @@ public class RoboAntiAereo extends RoboTerrestre {
         }
 
         @Override
-        public void executar(Object... args) {
-            if (args.length != 1 || !(args[0] instanceof RoboAereo)) {
-                throw new IllegalArgumentException("Atirar requer um alvo do tipo RoboAereo."); // Estudar necessidade disso
+        public void executar() {
+            ArrayList<RoboAereo> robosAlvos = new ArrayList<>();
+            int i = 0;
+
+            for (Robo robo : Controlador.ambiente.getRobos()) {
+                if (robo instanceof RoboAereo) {  // Apenas atacar robôs aéreos
+                    robosAlvos.add((RoboAereo) robo);
+                    System.out.printf("[%d] %s\n", i, robo.getNome());
+                    i++;
+                }
             }
-            RoboAereo alvo = (RoboAereo) args[0];
-            robo.atirar(alvo);
+
+            if (robosAlvos.isEmpty()) {
+                System.out.println("Não há robôs aéreos para atacar.");
+                return;
+            }
+
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Escolha o índice do robô aéreo para atacar: ");
+            int indice = scanner.nextInt();
+
+            scanner.close();
+
+            if (indice < 0 || indice >= robosAlvos.size()) {
+                System.out.println("Índice inválido.");
+                return;
+            }
+
+            RoboAereo alvo = robosAlvos.get(indice);
+            try {
+                robo.atirar(alvo);
+            } catch (IllegalStateException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 

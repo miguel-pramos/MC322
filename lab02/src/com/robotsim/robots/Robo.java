@@ -2,6 +2,7 @@
 package com.robotsim.robots;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
@@ -21,6 +22,14 @@ public abstract class Robo {
     private int posicaoY;
     protected ArrayList<Acao> acoes;
 
+    /**
+     * Inicializa o robô com um nome e em uma posição. Também inicializa as 
+     * ações disponíveis da classe.
+     * 
+     * @param nome Nome do robô
+     * @param posicaoX Posição horizontal inicial 
+     * @param posicaoY Posição vertical inicial
+     */
     public Robo(String nome, int posicaoX, int posicaoY) {
         this.nome = nome;
         this.posicaoX = posicaoX;
@@ -29,10 +38,18 @@ public abstract class Robo {
         inicializarAcoes();
     }
 
+    /**
+     * Método que adiciona as ações de cada classe. Deve ser sobrescrito 
+     * pelas classes filhas.
+     */
     protected void inicializarAcoes() {
         acoes.add(new Mover(this));
     };
 
+    /**
+     * Busca uma ação pelo nome e executa-a, se existir.
+     * @param nomeAcao Nome da ação buscada
+     */
     public void executarAcao(String nomeAcao) {
         for (Acao acao : acoes) {
             if (acao.getNome().equalsIgnoreCase(nomeAcao)) {
@@ -88,12 +105,15 @@ public abstract class Robo {
         }
 
         @Override
-        public void executar(Object... args) {
-            if (args.length != 1 || !(args[0] instanceof Integer && args[1] instanceof Integer)) {
-                throw new IllegalArgumentException("Mover requer dois inteiros."); // Estudar necessidade disso
-            }
-            int deltaX = (int) args[0];
-            int deltaY = (int) args[1];
+        public void executar() {
+            Scanner scanner = new Scanner(System.in);
+            
+            System.out.print("O quento quer andar no eixo X?");
+            int deltaX = scanner.nextInt();
+
+            System.out.print("O quento quer andar no eixo Y?");
+            int deltaY = scanner.nextInt();
+            scanner.close();
             robo.mover(deltaX, deltaY);
         }
     }

@@ -1,5 +1,7 @@
 package com.robotsim.robots;
 
+import java.util.Scanner;
+
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.util.GeometryMath;
@@ -38,12 +40,15 @@ public abstract class RoboTerrestre extends Robo {
         }
 
         @Override
-        public void executar(Object... args) {
-            if (args.length != 1 || !(args[0] instanceof Integer && args[1] instanceof Integer)) {
-                throw new IllegalArgumentException("Mover requer dois inteiros."); // Estudar necessidade disso
-            }
-            int deltaX = (int) args[0];
-            int deltaY = (int) args[1];
+        public void executar() {
+            Scanner scanner = new Scanner(System.in);
+            
+            System.out.print("O quento quer andar no eixo X?");
+            int deltaX = scanner.nextInt();
+
+            System.out.print("O quento quer andar no eixo Y?");
+            int deltaY = scanner.nextInt();
+            scanner.close();
             robo.mover(deltaX, deltaY);
         }
     }

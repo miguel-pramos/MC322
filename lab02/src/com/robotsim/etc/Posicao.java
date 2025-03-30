@@ -1,5 +1,6 @@
-package com.robotsim.util;
+package com.robotsim.etc;
 
+// Sem uso, por enquanto
 public class Posicao {
     private int x;
     private int y;

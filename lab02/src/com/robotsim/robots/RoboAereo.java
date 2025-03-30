@@ -1,5 +1,7 @@
 package com.robotsim.robots;
 
+import java.util.Scanner;
+
 import com.robotsim.etc.Acao;
 
 public abstract class RoboAereo extends Robo {
@@ -50,15 +52,22 @@ public abstract class RoboAereo extends Robo {
         }
 
         @Override
-        public void executar(Object... args) {
-            if (args.length != 1 || !(args[0] instanceof Integer)) {
-                throw new IllegalArgumentException("Descer requer um inteiro representando a altura a descer."); // Estudar necessidade disso
+        public void executar() {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Digite a altitude a descer: ");
+            int deltaZ = scanner.nextInt();
+
+            scanner.close();
+
+            if (deltaZ <= 0) {
+                System.out.println("A altitude deve ser um valor positivo.");
+                return;
             }
-            int deltaZ = (int) args[0];
+
             robo.descer(deltaZ);
         }
     }
-    
+
     private class Subir implements Acao {
         RoboAereo robo;
 
@@ -70,13 +79,20 @@ public abstract class RoboAereo extends Robo {
         public String getNome() {
             return "Subir";
         }
-        
+
         @Override
-        public void executar(Object... args) {
-            if (args.length != 1 || !(args[0] instanceof Integer)) {
-                throw new IllegalArgumentException("Subir requer um inteiro representando a altura a subir."); // Estudar necessidade disso
+        public void executar() {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Digite a altitude a subir: ");
+            int deltaZ = scanner.nextInt();
+
+            scanner.close();
+
+            if (deltaZ <= 0) {
+                System.out.println("A altitude deve ser um valor positivo.");
+                return;
             }
-            int deltaZ = (int) args[0];
+
             robo.subir(deltaZ);
         }
     }

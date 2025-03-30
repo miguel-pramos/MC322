@@ -1,5 +1,7 @@
 package com.robotsim.robots;
 
+import java.util.Scanner;
+
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
@@ -40,14 +42,14 @@ public class RoboDrone extends RoboAereo {
     public void detectarRobo(RoboAereo alvo) {
         if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), getPosicaoY(), getAltitude()) < alcanceDeteccao) {
             System.out.print("O robo " + alvo.getNome() + " está na posição:");
-            System.out.println("(" + alvo.getPosicaoX() + "," + alvo.getPosicaoY() + "," + alvo.getAltitude() + ")");
+            System.out.println("(%d, %d, %d)".formatted(alvo.getPosicaoX(), alvo.getPosicaoY(), alvo.getAltitude()));
         }
     }
 
     public void detectarRobo(RoboTerrestre alvo) {
         if (GeometryMath.distanciaEuclidiana(alvo.getPosicaoX(), getPosicaoY(), 0) < alcanceDeteccao) {
             System.out.print("O robo " + alvo.getNome() + " está na posição:");
-            System.out.println("(" + alvo.getPosicaoX() + "," + alvo.getPosicaoY() + ",0)");
+            System.out.println("(%d, %d, 0)".formatted(alvo.getPosicaoX(), alvo.getPosicaoY()));
         }
     }
 
@@ -64,19 +66,42 @@ public class RoboDrone extends RoboAereo {
         }
 
         @Override
-        public void executar(Object... args) {
-            if (args.length != 1 || !(args[0] instanceof RoboTerrestre || args[0] instanceof RoboAereo)) {
-                throw new IllegalArgumentException("Atirar requer um alvo do tipo RoboTerrestre ou do tipo RoboAereo.");
+        public void executar() {
+            System.out.println("Robôs disponíveis para detecção:");
+            int i = 0;
+
+            for (Robo robo : Controlador.ambiente.getRobos()) {
+                if (robo != this.robo) { // Não permitir detectar a si mesmo
+                    System.out.printf("[%d] %s\n", i, robo.getNome());
+                    i++;
+                }
             }
 
-            if (args[0] instanceof RoboAereo) {
-                RoboAereo alvo = (RoboAereo) args[0];
-                this.robo.detectarRobo(alvo);
+            if (i == 0) {
+                System.out.println("Não há robôs para detectar.");
                 return;
             }
 
-            RoboTerrestre alvo = (RoboTerrestre) args[0];
-            this.robo.detectarRobo(alvo);
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Escolha o índice do robô para detectar: ");
+            int indice = scanner.nextInt();
+
+            scanner.close();
+
+            if (indice < 0 || indice >= Controlador.ambiente.getRobos().size()) {
+                System.out.println("Índice inválido.");
+                return;
+            }
+
+            Robo alvo = Controlador.ambiente.getRobos().get(indice);
+
+            if (alvo instanceof RoboAereo) {
+                robo.detectarRobo((RoboAereo) alvo);
+            } else if (alvo instanceof RoboTerrestre) {
+                robo.detectarRobo((RoboTerrestre) alvo);
+            } else {
+                System.out.println("Tipo de robô desconhecido.");
+            }
         }
     }
 }

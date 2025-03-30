@@ -23,7 +23,6 @@ public class Controlador {
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        inicializarRobos();
         inicialzizarSim();
 
         while (gameStatus != GAME_STATUS.GAMEOVER) {
@@ -124,12 +123,5 @@ public class Controlador {
         }
     }
 
-    private static void inicializarRobos() {
-        Class<?>[] robos = {
-            RoboAereo.class,
-            RoboAntiAereo.class,
-            RoboTanque.class,
-            RoboJato.class
-        };
-    }
+    
 }
