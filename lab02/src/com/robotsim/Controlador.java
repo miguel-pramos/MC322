@@ -193,6 +193,7 @@ public class Controlador {
                 int x = scanner.nextInt();
                 int y = scanner.nextInt();
                 System.out.println();
+                TimeUnit.MILLISECONDS.sleep(1600);
 
                 // Adição do robô ao ambiente
                 Robo novoRobo = CatalogoRobos.criarRobo(categoriaEscolhida, classeEscolhida, nome, x, y);

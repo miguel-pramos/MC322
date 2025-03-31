@@ -15,11 +15,11 @@ import com.robotsim.util.GeometryMath;
  * @see RoboAereo
  */
 public class RoboDrone extends RoboAereo {
-    private int bateria = 200;
-    private final int alcanceDeteccao = 50;
+    private int bateria = 50;
+    private final int alcanceDeteccao = 30;
 
     public RoboDrone(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+        super(nome, posicaoX, posicaoY, 50);
     }
 
     /**

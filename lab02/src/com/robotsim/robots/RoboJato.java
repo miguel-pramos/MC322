@@ -16,15 +16,15 @@ import com.robotsim.util.GeometryMath;
  * @see RoboAereo
  */
 public class RoboJato extends RoboAereo {
-    private int misseisRestantes = 2;
+    private int misseisRestantes = 4;
     private int rajadasRestantes = 10;
-    private final int alcanceMissil = 1;
-    private final int alcanceMetralhadora = Controlador.getAmbiente().getComprimento() / 12;
-    private final int danoMissil = 200;
-    private final int danoMetralhadora = 20;
+    private final int alcanceMissil = 20;
+    private final int alcanceMetralhadora = 15;
+    private final int danoMissil = 250;
+    private final int danoMetralhadora = 180;
 
     public RoboJato(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+        super(nome, posicaoX, posicaoY, 200);
         this.altitude = 2;
     }
 

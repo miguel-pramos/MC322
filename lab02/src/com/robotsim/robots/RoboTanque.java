@@ -16,11 +16,12 @@ import com.robotsim.util.GeometryMath;
  */
 public class RoboTanque extends RoboTerrestre {
     private int balasRestantes = 10;
-    private final int dano = 8;
-    private final int alcance = Controlador.getAmbiente().getLargura() / 6;
+    private final int dano = 200;
+    private final int alcance = 25;
 
     public RoboTanque(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+        super(nome, posicaoX, posicaoY, 500);
+        this.velocidadeMaxima = 8;
     }
 
     /**
@@ -81,7 +82,7 @@ public class RoboTanque extends RoboTerrestre {
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
                 if (robo instanceof RoboTerrestre && robo != this.robo) {
                     robosTerrestres.add((RoboTerrestre) robo);
-                    System.out.printf("[%d] %s\n", i, robo.getNome());
+                    System.out.printf("[%d] %s\n", (i + 1), robo.getNome());
                     i++;
                 }
             }
@@ -93,7 +94,7 @@ public class RoboTanque extends RoboTerrestre {
 
             Scanner scanner = Controlador.getScanner();
             System.out.print("Escolha o índice do robô terrestre para atacar: ");
-            int indice = scanner.nextInt();
+            int indice = scanner.nextInt() - 1;
             scanner.nextLine(); // Consumir \n
 
             if (indice < 0 || indice >= robosTerrestres.size()) {
