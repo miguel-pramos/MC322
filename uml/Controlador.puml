@@ -1,0 +1,21 @@
+@startuml
+class Controlador {
+    +main(String[] args)
+    -inicializarRobos()
+    -inicialzizarSim()
+    -interagir(Robo robo)
+    -imprimirAmbiente(Robo robo)
+    +getScanner(): Scanner
+    +getAmbiente(): Ambiente
+}
+
+enum GAME_STATUS {
+    GAMEON
+    GAMEOVER
+}
+
+Controlador --> Ambiente
+Controlador --> Robo
+Controlador --> Acao
+Controlador --> CatalogoRobos
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+class Ambiente {
+    -comprimento: int
+    -largura: int
+    -robos: ArrayList<Robo>
+    +Ambiente(int comprimento, int largura)
+    +dentroDosLimites(int x, int y): boolean
+    +dentroDosLimites(int x, int y, int z, int alturaMaxima): boolean
+    +adicionarRobo(Robo robo)
+    +destruirRobo(Robo robo): boolean
+    +getLargura(): int
+    +getComprimento(): int
+    +getRobos(): ArrayList<Robo>
+}
+
+Ambiente --> Robo
+@enduml

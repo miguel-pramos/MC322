@@ -1,0 +1,73 @@
+@startuml
+abstract class Robo {
+    -nome: String
+    -HP: int
+    -posicaoX: int
+    -posicaoY: int
+    -acoes: ArrayList<Acao>
+    +Robo(String nome, int posicaoX, int posicaoY)
+    +executarAcao(Acao acao)
+    +tomarDano(int dano)
+    +exibirPosicao()
+    +getAcoes(): ArrayList<Acao>
+    +getPosicaoX(): int
+    +getPosicaoY(): int
+    +getNome(): String
+}
+
+class RoboTerrestre {
+    -velocidadeMaxima: int
+    +RoboTerrestre(String nome, int posicaoX, int posicaoY)
+}
+
+class RoboTanque {
+    -balasRestantes: int
+    -dano: int
+    -alcance: int
+    +RoboTanque(String nome, int posicaoX, int posicaoY)
+    +atirar(RoboTerrestre alvo)
+}
+
+class RoboAntiAereo {
+    -balasRestantes: int
+    -dano: int
+    -alcance: int
+    +RoboAntiAereo(String nome, int posicaoX, int posicaoY)
+    +atirar(RoboAereo alvo)
+}
+
+class RoboAereo {
+    -altitudeMaxima: static int
+    -altitude: int
+    +RoboAereo(String nome, int posicaoX, int posicaoY)
+    +subir(int deltaZ)
+    +descer(int deltaZ)
+    +getAltitude(): int
+}
+
+class RoboJato {
+    -misseisRestantes: int
+    -rajadasRestantes: int
+    -alcanceMissil: int
+    -alcanceMetralhadora: int
+    -danoMissil: int
+    -danoMetralhadora: int
+    +RoboJato(String nome, int posicaoX, int posicaoY)
+    +lancarMissil(RoboAereo alvo)
+    +atirarRajada(RoboTerrestre alvo)
+}
+
+class RoboDrone {
+    -bateria: int
+    -alcanceDeteccao: int
+    +RoboDrone(String nome, int posicaoX, int posicaoY)
+    +detectarRobos()
+}
+
+Robo <|-- RoboTerrestre
+RoboTerrestre <|-- RoboTanque
+RoboTerrestre <|-- RoboAntiAereo
+Robo <|-- RoboAereo
+RoboAereo <|-- RoboJato
+RoboAereo <|-- RoboDrone
+@enduml

@@ -1,0 +1,140 @@
+@startuml
+
+' Diagrama de Acao
+interface Acao {
+    +getNome(): String
+    +executar()
+}
+
+' Diagrama de CatalogoRobos
+class CatalogoRobos {
+    -catalogo: HashMap<String, HashMap<String, Class<? extends Robo>>>
+    +registrarRobo(String categoria, Class<? extends Robo> classeRobo)
+    +getCategorias(): ArrayList<String>
+    +getRobosPorCategoria(String categoria): ArrayList<String>
+    +criarRobo(String categoria, String nomeClasse, String nome, int posicaoX, int posicaoY): Robo
+}
+
+CatalogoRobos --> Robo
+
+' Diagrama de GeometryMath
+class GeometryMath {
+    +distanciaEuclidiana(Robo robo, int x, int y): double
+    +distanciaEuclidiana(RoboAereo robo, int x, int y, int z): double
+}
+
+GeometryMath --> Robo
+GeometryMath --> RoboAereo
+
+' Diagrama de Ambiente
+class Ambiente {
+    -comprimento: int
+    -largura: int
+    -robos: ArrayList<Robo>
+    +Ambiente(int comprimento, int largura)
+    +dentroDosLimites(int x, int y): boolean
+    +dentroDosLimites(int x, int y, int z, int alturaMaxima): boolean
+    +adicionarRobo(Robo robo)
+    +destruirRobo(Robo robo): boolean
+    +getLargura(): int
+    +getComprimento(): int
+    +getRobos(): ArrayList<Robo>
+}
+
+Ambiente --> Robo
+
+' Diagrama de Robo e suas subclasses
+abstract class Robo {
+    -nome: String
+    -HP: int
+    -posicaoX: int
+    -posicaoY: int
+    -acoes: ArrayList<Acao>
+    +Robo(String nome, int posicaoX, int posicaoY)
+    +executarAcao(Acao acao)
+    +tomarDano(int dano)
+    +exibirPosicao()
+    +getAcoes(): ArrayList<Acao>
+    +getPosicaoX(): int
+    +getPosicaoY(): int
+    +getNome(): String
+}
+
+class RoboTerrestre {
+    -velocidadeMaxima: int
+    +RoboTerrestre(String nome, int posicaoX, int posicaoY)
+}
+
+class RoboTanque {
+    -balasRestantes: int
+    -dano: int
+    -alcance: int
+    +RoboTanque(String nome, int posicaoX, int posicaoY)
+    +atirar(RoboTerrestre alvo)
+}
+
+class RoboAntiAereo {
+    -balasRestantes: int
+    -dano: int
+    -alcance: int
+    +RoboAntiAereo(String nome, int posicaoX, int posicaoY)
+    +atirar(RoboAereo alvo)
+}
+
+class RoboAereo {
+    -altitudeMaxima: static int
+    -altitude: int
+    +RoboAereo(String nome, int posicaoX, int posicaoY)
+    +subir(int deltaZ)
+    +descer(int deltaZ)
+    +getAltitude(): int
+}
+
+class RoboJato {
+    -misseisRestantes: int
+    -rajadasRestantes: int
+    -alcanceMissil: int
+    -alcanceMetralhadora: int
+    -danoMissil: int
+    -danoMetralhadora: int
+    +RoboJato(String nome, int posicaoX, int posicaoY)
+    +lancarMissil(RoboAereo alvo)
+    +atirarRajada(RoboTerrestre alvo)
+}
+
+class RoboDrone {
+    -bateria: int
+    -alcanceDeteccao: int
+    +RoboDrone(String nome, int posicaoX, int posicaoY)
+    +detectarRobos()
+}
+
+Robo <|-- RoboTerrestre
+RoboTerrestre <|-- RoboTanque
+RoboTerrestre <|-- RoboAntiAereo
+Robo <|-- RoboAereo
+RoboAereo <|-- RoboJato
+RoboAereo <|-- RoboDrone
+
+' Diagrama de Controlador
+class Controlador {
+    +main(String[] args)
+    -inicializarRobos()
+    -inicialzizarSim()
+    -interagir(Robo robo)
+    -imprimirAmbiente(Robo robo)
+    +getScanner(): Scanner
+    +getAmbiente(): Ambiente
+}
+
+enum GAME_STATUS {
+    GAMEON
+    GAMEOVER
+}
+
+Controlador --> Ambiente
+Controlador --> Robo
+Controlador --> Acao
+Controlador --> CatalogoRobos
+
+@enduml

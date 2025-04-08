@@ -1,0 +1,11 @@
+@startuml
+class CatalogoRobos {
+    -catalogo: HashMap<String, HashMap<String, Class<? extends Robo>>>
+    +registrarRobo(String categoria, Class<? extends Robo> classeRobo)
+    +getCategorias(): ArrayList<String>
+    +getRobosPorCategoria(String categoria): ArrayList<String>
+    +criarRobo(String categoria, String nomeClasse, String nome, int posicaoX, int posicaoY): Robo
+}
+
+CatalogoRobos --> Robo
+@enduml
