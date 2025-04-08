@@ -17,10 +17,11 @@ public abstract class Robo {
     protected int posicaoY; // Posição atual no eixo Y.
     protected ArrayList<Acao> acoes; // Lista de ações disponíveis para o robô.
 
-    public Robo(String nome, int posicaoX, int posicaoY) {
+    public Robo(String nome, int posicaoX, int posicaoY, int HP) {
         this.nome = nome;
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
+        this.HP = HP;
         this.acoes = new ArrayList<>();
         inicializarAcoes();
     }
@@ -59,7 +60,9 @@ public abstract class Robo {
             this.posicaoX += deltaX;
             this.posicaoY += deltaY;
         }
-
+        else{
+            System.out.println("Você está fora dos limites do ambiente. Ação cancelada!");
+        }
     }
 
     /**
@@ -71,9 +74,9 @@ public abstract class Robo {
      */
     public void tomarDano(int dano) {
         this.HP -= dano;
-        if (this.HP < 0) {
+        System.out.printf("O robo %s foi atingido com sucesso!\n", this.nome);
+        if (this.HP < 0)
             Controlador.getAmbiente().destruirRobo(this);
-        }
     }
 
     /**

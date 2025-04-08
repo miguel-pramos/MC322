@@ -17,11 +17,11 @@ import com.robotsim.util.GeometryMath;
  */
 public class RoboAntiAereo extends RoboTerrestre {
     private int balasRestantes = 10;
-    private int dano = 4;
-    private int alcance = Controlador.getAmbiente().getLargura() / 5;
+    private int dano = 250;
+    private int alcance = 60;
 
     public RoboAntiAereo(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+        super(nome, posicaoX, posicaoY, 300);
         this.velocidadeMaxima = 0; // Robo AntiAéreo é fixo.
     }
 
@@ -51,7 +51,6 @@ public class RoboAntiAereo extends RoboTerrestre {
     @Override
     protected void inicializarAcoes() {
         acoes.add(new Atirar(this));
-        super.inicializarAcoes();
     }
 
     /**

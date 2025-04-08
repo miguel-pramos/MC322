@@ -17,8 +17,8 @@ public abstract class RoboAereo extends Robo {
     protected static int altitudeMaxima;
     protected int altitude;
 
-    public RoboAereo(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+    public RoboAereo(String nome, int posicaoX, int posicaoY, int HP) {
+        super(nome, posicaoX, posicaoY, HP);
     }
 
     @Override
@@ -43,6 +43,9 @@ public abstract class RoboAereo extends Robo {
             this.altitude += deltaZ;
         } else {
             this.altitude = altitudeMaxima;
+            System.out.printf("\nVocê subiu... E subiu... Até atingir " +
+                    "os limites das máquinas modernas e parou na altura " +
+                    "máxima de %d", altitudeMaxima);
         }
     }
 
