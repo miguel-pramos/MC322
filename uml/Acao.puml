@@ -1,6 +1,0 @@
-@startuml
-interface Acao {
-    +getNome(): String
-    +executar()
-}
-@enduml

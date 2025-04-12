@@ -2,6 +2,9 @@
 
 Este repositório contém os códigos desenvolvidos durante os laboratórios da disciplina **MC322 - Programação Orientada a Objetos**. 
 
+### Diagrama UML do simulador
+![Diagrama UML](uml/diagram.png "Diagrama UML")
+
 ## Estrutura do Repositório
 
 Os códigos estão organizados em pastas, onde cada pasta corresponde a um laboratório específico. O nome de cada pasta indica o laboratório específico.

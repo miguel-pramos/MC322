@@ -1,9 +1,0 @@
-@startuml
-class GeometryMath {
-    +distanciaEuclidiana(Robo robo, int x, int y): double
-    +distanciaEuclidiana(RoboAereo robo, int x, int y, int z): double
-}
-
-GeometryMath --> Robo
-GeometryMath --> RoboAereo
-@enduml

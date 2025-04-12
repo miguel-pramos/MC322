@@ -1,30 +1,33 @@
 @startuml
 
+
 ' Diagrama de Acao
 interface Acao {
     +getNome(): String
     +executar()
 }
 
+Acao "1.." --* Robo
+
 ' Diagrama de CatalogoRobos
 class CatalogoRobos {
     -catalogo: HashMap<String, HashMap<String, Class<? extends Robo>>>
-    +registrarRobo(String categoria, Class<? extends Robo> classeRobo)
-    +getCategorias(): ArrayList<String>
-    +getRobosPorCategoria(String categoria): ArrayList<String>
-    +criarRobo(String categoria, String nomeClasse, String nome, int posicaoX, int posicaoY): Robo
+    {static} +registrarRobo(String categoria, Class<? extends Robo> classeRobo)
+    {static} +getCategorias(): ArrayList<String>
+    {static} +getRobosPorCategoria(String categoria): ArrayList<String>
+    {static} +criarRobo(String categoria, String nomeClasse, String nome, int posicaoX, int posicaoY): Robo
 }
 
-CatalogoRobos --> Robo
+CatalogoRobos "1" o-- "0.." Robo
 
 ' Diagrama de GeometryMath
 class GeometryMath {
-    +distanciaEuclidiana(Robo robo, int x, int y): double
-    +distanciaEuclidiana(RoboAereo robo, int x, int y, int z): double
+    {static} +distanciaEuclidiana(Robo robo, int x, int y): double
+    {static} +distanciaEuclidiana(RoboAereo robo, int x, int y, int z): double
 }
 
-GeometryMath --> Robo
-GeometryMath --> RoboAereo
+GeometryMath ..> Robo
+GeometryMath ..> RoboAereo
 
 ' Diagrama de Ambiente
 class Ambiente {
@@ -41,15 +44,16 @@ class Ambiente {
     +getRobos(): ArrayList<Robo>
 }
 
-Ambiente --> Robo
+Ambiente "1" *-- "1.." Robo
 
 ' Diagrama de Robo e suas subclasses
 abstract class Robo {
-    -nome: String
-    -HP: int
-    -posicaoX: int
-    -posicaoY: int
-    -acoes: ArrayList<Acao>
+    #nome: String
+    #HP: int
+    #posicaoX: int
+    #posicaoY: int
+    #acoes: ArrayList<Acao>
+    #inicilizarAcoes(): void
     +Robo(String nome, int posicaoX, int posicaoY)
     +executarAcao(Acao acao)
     +tomarDano(int dano)
@@ -60,7 +64,7 @@ abstract class Robo {
     +getNome(): String
 }
 
-class RoboTerrestre {
+abstract class RoboTerrestre {
     -velocidadeMaxima: int
     +RoboTerrestre(String nome, int posicaoX, int posicaoY)
 }
@@ -81,7 +85,7 @@ class RoboAntiAereo {
     +atirar(RoboAereo alvo)
 }
 
-class RoboAereo {
+abstract class RoboAereo {
     -altitudeMaxima: static int
     -altitude: int
     +RoboAereo(String nome, int posicaoX, int posicaoY)
@@ -110,21 +114,21 @@ class RoboDrone {
 }
 
 Robo <|-- RoboTerrestre
+Robo <|-- RoboAereo
 RoboTerrestre <|-- RoboTanque
 RoboTerrestre <|-- RoboAntiAereo
-Robo <|-- RoboAereo
 RoboAereo <|-- RoboJato
 RoboAereo <|-- RoboDrone
 
 ' Diagrama de Controlador
 class Controlador {
-    +main(String[] args)
-    -inicializarRobos()
-    -inicialzizarSim()
-    -interagir(Robo robo)
-    -imprimirAmbiente(Robo robo)
-    +getScanner(): Scanner
-    +getAmbiente(): Ambiente
+    {static} +main(String[] args)
+    {static} -inicializarRobos()
+    {static} -inicialzizarSim()
+    {static} -interagir(Robo robo)
+    {static} -imprimirAmbiente(Robo robo)
+    {static} +getScanner(): Scanner
+    {static} +getAmbiente(): Ambiente
 }
 
 enum GAME_STATUS {
@@ -132,9 +136,8 @@ enum GAME_STATUS {
     GAMEOVER
 }
 
-Controlador --> Ambiente
-Controlador --> Robo
-Controlador --> Acao
-Controlador --> CatalogoRobos
+Controlador "1" *-- "1" GAME_STATUS
+Controlador "1" *-- "1" Ambiente
+Controlador "1" *-- "1" CatalogoRobos
 
 @enduml
