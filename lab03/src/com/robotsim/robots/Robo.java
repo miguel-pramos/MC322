@@ -17,10 +17,11 @@ public abstract class Robo {
     protected int posicaoY; // Posição atual no eixo Y.
     protected ArrayList<Acao> acoes; // Lista de ações disponíveis para o robô.
 
-    public Robo(String nome, int posicaoX, int posicaoY) {
+    public Robo(String nome, int posicaoX, int posicaoY, int HP) {
         this.nome = nome;
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
+        this.HP = HP;
         this.acoes = new ArrayList<>();
         inicializarAcoes();
     }
@@ -36,7 +37,7 @@ public abstract class Robo {
 
     /**
      * Tenta executar uma ação.
-     * 
+     *
      * @param nomeAcao Nome da ação buscada
      */
     public void executarAcao(Acao acao) {
@@ -49,7 +50,7 @@ public abstract class Robo {
 
     /**
      * Método responsável por mover o robô para uma nova posição.
-     * 
+     *
      * @param deltaX Deslocamento no eixo X.
      * @param deltaY Deslocamento no eixo Y.
      */
@@ -59,21 +60,23 @@ public abstract class Robo {
             this.posicaoX += deltaX;
             this.posicaoY += deltaY;
         }
-
+        else{
+            System.out.println("Você está fora dos limites do ambiente. Ação cancelada!");
+        }
     }
 
     /**
      * Método que aplica dano ao robô.
      * Este método pode ser sobrescrito por subclasses para implementar
      * comportamentos específicos.
-     * 
+     *
      * @param dano Quantidade de dano a ser aplicada.
      */
     public void tomarDano(int dano) {
         this.HP -= dano;
-        if (this.HP < 0) {
+        System.out.printf("O robo %s foi atingido com sucesso!\n", this.nome);
+        if (this.HP < 0)
             Controlador.getAmbiente().destruirRobo(this);
-        }
     }
 
     /**

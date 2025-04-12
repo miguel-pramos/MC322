@@ -11,14 +11,14 @@ import com.robotsim.util.GeometryMath;
  * duas dimensões.
  * Robôs terrestres possuem velocidade máxima e podem ser danificados por
  * ataques.
- * 
+ *
  * @see Robo
  */
 public abstract class RoboTerrestre extends Robo {
     protected int velocidadeMaxima; // Pixels por segundo
 
-    public RoboTerrestre(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+    public RoboTerrestre(String nome, int posicaoX, int posicaoY, int HP) {
+        super(nome, posicaoX, posicaoY, HP);
     }
 
     @Override
@@ -32,7 +32,7 @@ public abstract class RoboTerrestre extends Robo {
      * O robô não pode se mover além de sua velocidade máxima.
      * Caso o deslocamento exceda a velocidade máxima, ele será ajustado para o
      * limite permitido.
-     * 
+     *
      * @param deltaX Deslocamento no eixo X.
      * @param deltaY Deslocamento no eixo Y.
      */
@@ -69,11 +69,11 @@ public abstract class RoboTerrestre extends Robo {
         public void executar() {
             Scanner scanner = Controlador.getScanner();
 
-            System.out.print("O quento quer andar no eixo X?");
+            System.out.print("O quento quer andar no eixo X? ");
             int deltaX = scanner.nextInt();
             scanner.nextLine(); // Consumir \n
 
-            System.out.print("O quento quer andar no eixo Y?");
+            System.out.print("O quento quer andar no eixo Y? ");
             int deltaY = scanner.nextInt();
             scanner.nextLine(); // Consumir \n
 

@@ -12,20 +12,19 @@ import com.robotsim.util.GeometryMath;
  * capacidade
  * de lançar mísseis e atirar rajadas de metralhadora, a depender do tipo de
  * alvo.
- * 
+ *
  * @see RoboAereo
  */
 public class RoboJato extends RoboAereo {
-    private int misseisRestantes = 2;
+    private int misseisRestantes = 4;
     private int rajadasRestantes = 10;
-    private final int alcanceMissil = 1;
-    private final int alcanceMetralhadora = Controlador.getAmbiente().getComprimento() / 12;
-    private final int danoMissil = 200;
-    private final int danoMetralhadora = 20;
+    private final int alcanceMissil = 20;
+    private final int alcanceMetralhadora = 15;
+    private final int danoMissil = 250;
+    private final int danoMetralhadora = 180;
 
     public RoboJato(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
-        this.altitude = 2;
+        super(nome, posicaoX, posicaoY, 200, 50, 200);
     }
 
     /**
@@ -90,12 +89,12 @@ public class RoboJato extends RoboAereo {
          * Método que executa a ação de ataque de um robô aéreo utilizando um míssil.
          * O método apresenta uma lista de robôs disponíveis no ambiente para serem atacados,
          * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil no robô escolhido.
-         * 
+         *
          * Regras e comportamentos:
          * - O robô não pode atacar a si mesmo.
          * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e a execução será encerrada.
          * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida.
-         * 
+         *
          */
         @Override
         public void executar() {
@@ -153,11 +152,11 @@ public class RoboJato extends RoboAereo {
          * Método que executa a ação de ataque de um robô aéreo utilizando uma rajada.
          * O método apresenta uma lista de robôs disponíveis no ambiente para serem atacados,
          * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil no robô escolhido.
-         * 
+         *
          * Regras e comportamentos:
          * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e a execução será encerrada.
          * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida.
-         * 
+         *
          */
         @Override
         public void executar() {

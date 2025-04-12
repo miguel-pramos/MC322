@@ -11,23 +11,24 @@ import com.robotsim.util.GeometryMath;
  * A classe RoboTanque representa um robô terrestre com a capacidade de atirar
  * em outros robôs terrestres.
  * Este robô possui munição limitada e um alcance específico para seus ataques.
- * 
+ *
  * @see RoboTerrestre
  */
 public class RoboTanque extends RoboTerrestre {
     private int balasRestantes = 10;
-    private final int dano = 8;
-    private final int alcance = Controlador.getAmbiente().getLargura() / 6;
+    private final int dano = 200;
+    private final int alcance = 25;
 
     public RoboTanque(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+        super(nome, posicaoX, posicaoY, 500);
+        this.velocidadeMaxima = 8;
     }
 
     /**
      * Função que atira em um alvo que seja um robô terrestre, causando dano se o
      * alvo estiver
      * dentro do alcance do míssil.
-     * 
+     *
      * @param alvo
      * @throws IllegalStateException
      */
@@ -64,12 +65,12 @@ public class RoboTanque extends RoboTerrestre {
          * Método sobrescrito que executa a ação do RoboTanque.
          * Este método permite ao RoboTanque atacar um robô terrestre presente no
          * ambiente.
-         * 
+         *
          * Regras e comportamentos:
          * - O robô não pode atacar a si mesmo.
          * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e a execução será encerrada.
-         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida. 
-         * 
+         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida.
+         *
          * Caso não haja robôs terrestres no ambiente, ou o índice fornecido seja
          * inválido, mensagens apropriadas serão exibidas ao usuário.
          */
@@ -81,7 +82,7 @@ public class RoboTanque extends RoboTerrestre {
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
                 if (robo instanceof RoboTerrestre && robo != this.robo) {
                     robosTerrestres.add((RoboTerrestre) robo);
-                    System.out.printf("[%d] %s\n", i, robo.getNome());
+                    System.out.printf("[%d] %s\n", (i + 1), robo.getNome());
                     i++;
                 }
             }
@@ -93,7 +94,7 @@ public class RoboTanque extends RoboTerrestre {
 
             Scanner scanner = Controlador.getScanner();
             System.out.print("Escolha o índice do robô terrestre para atacar: ");
-            int indice = scanner.nextInt();
+            int indice = scanner.nextInt() - 1;
             scanner.nextLine(); // Consumir \n
 
             if (indice < 0 || indice >= robosTerrestres.size()) {

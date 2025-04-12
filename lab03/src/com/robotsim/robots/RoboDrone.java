@@ -11,15 +11,15 @@ import com.robotsim.util.GeometryMath;
  * outros robôs
  * no ambiente. Este robô possui uma bateria limitada e um alcance específico
  * para detecção.
- * 
+ *
  * @see RoboAereo
  */
 public class RoboDrone extends RoboAereo {
-    private int bateria = 200;
-    private final int alcanceDeteccao = 50;
+    private int bateria = 50;
+    private final int alcanceDeteccao = 30;
 
     public RoboDrone(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+        super(nome, posicaoX, posicaoY, 50, 10, 30);
     }
 
     /**
@@ -71,7 +71,7 @@ public class RoboDrone extends RoboAereo {
      * <p>
      * A cada movimento, a bateria é reduzida proporcionalmente ao deslocamento.
      * Caso a bateria chegue a zero ou menos, o robô é removido do ambiente.
-     * 
+     *
      * @param deltaX Deslocamento no eixo X.
      * @param deltaY Deslocamento no eixo Y.
      */

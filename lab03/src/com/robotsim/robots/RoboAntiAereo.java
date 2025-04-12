@@ -12,16 +12,16 @@ import com.robotsim.util.GeometryMath;
  * atacar robôs aéreos. Este robô possui munição limitada e um alcance
  * específico
  * para seus ataques.
- * 
+ *
  * @see RoboTerrestre
  */
 public class RoboAntiAereo extends RoboTerrestre {
     private int balasRestantes = 10;
-    private int dano = 4;
-    private int alcance = Controlador.getAmbiente().getLargura() / 5;
+    private int dano = 250;
+    private int alcance = 60;
 
     public RoboAntiAereo(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+        super(nome, posicaoX, posicaoY, 300);
         this.velocidadeMaxima = 0; // Robo AntiAéreo é fixo.
     }
 
@@ -30,7 +30,7 @@ public class RoboAntiAereo extends RoboTerrestre {
      * <p>
      * O ataque só é realizado se houver balas restantes e se o alvo estiver dentro
      * do alcance.
-     * 
+     *
      * @param alvo O alvo aéreo (RoboAereo) que será atacado.
      * @throws IllegalStateException Se não houver balas restantes.
      */
@@ -51,7 +51,6 @@ public class RoboAntiAereo extends RoboTerrestre {
     @Override
     protected void inicializarAcoes() {
         acoes.add(new Atirar(this));
-        super.inicializarAcoes();
     }
 
     /**
@@ -75,13 +74,13 @@ public class RoboAntiAereo extends RoboTerrestre {
          * Método sobrescrito que executa a ação do RoboAntiAereo.
          * Este método permite ao RoboTanque atacar um robô terrestre presente no
          * ambiente.
-         * 
+         *
          * Regras e comportamentos:
          * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e
          * a execução será encerrada.
          * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso
          * contrário, uma mensagem de erro será exibida.
-         * 
+         *
          * Caso não haja robôs aéreos no ambiente, ou o índice fornecido seja
          * inválido, mensagens apropriadas serão exibidas ao usuário.
          */

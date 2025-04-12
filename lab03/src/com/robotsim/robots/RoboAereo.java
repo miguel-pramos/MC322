@@ -10,15 +10,17 @@ import com.robotsim.etc.Acao;
  * três dimensões.
  * Robôs aéreos possuem altitude variável e podem subir ou descer dentro de um
  * limite máximo.
- * 
+ *
  * @see Robo
  */
 public abstract class RoboAereo extends Robo {
     protected static int altitudeMaxima;
     protected int altitude;
 
-    public RoboAereo(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY);
+    public RoboAereo(String nome, int posicaoX, int posicaoY, int HP, int altitude, int altitudeMaxima) {
+        super(nome, posicaoX, posicaoY, HP);
+        this.altitude = altitude;
+        this.altitudeMaxima = altitudeMaxima;
     }
 
     @Override
@@ -33,7 +35,7 @@ public abstract class RoboAereo extends Robo {
      * <p>
      * O robô não pode ultrapassar a altitude máxima. Caso o incremento ultrapasse o
      * limite, a altitude será ajustada para o valor máximo.
-     * 
+     *
      * @param deltaZ Valor a ser incrementado na altitude.
      */
     public void subir(int deltaZ) {
@@ -43,6 +45,9 @@ public abstract class RoboAereo extends Robo {
             this.altitude += deltaZ;
         } else {
             this.altitude = altitudeMaxima;
+            System.out.printf("\nVocê subiu... E subiu... Até atingir " +
+                    "os limites das máquinas modernas e parou na altura " +
+                    "máxima de %d", altitudeMaxima);
         }
     }
 
@@ -51,7 +56,7 @@ public abstract class RoboAereo extends Robo {
      * <p>
      * O robô não pode descer abaixo de 0. Caso o decremento ultrapasse o limite, a
      * altitude será ajustada para 0.
-     * 
+     *
      * @param deltaZ Valor a ser decrementado na altitude.
      */
     public void descer(int deltaZ) {
@@ -66,7 +71,7 @@ public abstract class RoboAereo extends Robo {
 
     /**
      * Método que retorna a altitude atual do robô.
-     * 
+     *
      * @return A altitude atual.
      */
     public int getAltitude() {
