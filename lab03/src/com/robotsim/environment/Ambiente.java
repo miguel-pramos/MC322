@@ -12,6 +12,7 @@ public class Ambiente {
     private int comprimento; // Comprimento do ambiente.
     private int largura; // Largura do ambiente.
     private ArrayList<Robo> robos = new ArrayList<>(); // Lista de robôs no ambiente.
+    private ArrayList<Obstaculo> obstaculos = new ArrayList<>(); // Lista de robôs no ambiente.
 
     public Ambiente(int comprimento, int largura) {
         this.comprimento = comprimento;
@@ -59,9 +60,29 @@ public class Ambiente {
      * @param robo O robô a ser removido.
      * @return true se o robô foi removido com sucesso, false caso contrário.
      */
-    public boolean destruirRobo(Robo robo) {
+    public void destruirRobo(Robo robo) {
         System.out.printf("O robô %s foi destruído.%n", robo.getNome());
         return this.robos.remove(robo);
+    }
+
+    /**
+     * Adiciona um obstáculo ao ambiente.
+     *
+     * @param robo O obstáculo a ser adicionado.
+     */
+    public void adicionarObstaculo(Obstaculo obstaculo) {
+        this.obstaculos.add(obstaculo);
+    }
+
+    /**
+     * Remove um obstáculo do ambiente, simulando sua destruição.
+     *
+     * @param robo O obstáculo a ser removido.
+     * @return true se o obstáculo foi removido com sucesso, false caso contrário.
+     */
+    public void destruirObstaculo(Obstaculo obstaculo) {
+        System.out.printf("O robô %s foi destruído.%n", obstaculo.tipo.name);
+        this.obstaculos.remove(obstaculo);
     }
 
     public int getLargura() {
@@ -74,5 +95,9 @@ public class Ambiente {
 
     public ArrayList<Robo> getRobos() {
         return robos;
+    }
+
+    public ArrayList<Obstaculo> getObstaculos() {
+        return obstaculos;
     }
 }

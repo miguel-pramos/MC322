@@ -3,6 +3,7 @@ package com.robotsim;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.Random;
 
 import com.robotsim.environment.Ambiente;
 import com.robotsim.etc.Acao;
@@ -121,8 +122,8 @@ public class Controlador {
     private static void inicialzizarSim() {
         try {
 
-            final int COMPRIMENTO = 50;
-            final int LARGURA = 10;
+            final int COMPRIMENTO = 80;
+            final int LARGURA = 60;
             ambiente = new Ambiente(COMPRIMENTO, LARGURA);
 
             // Introdução
@@ -131,6 +132,27 @@ public class Controlador {
             TimeUnit.MILLISECONDS.sleep(1600);
 
             System.out.println("O simulador funciona por turnos, nos quais algumas ações serão disponíveis.");
+            TimeUnit.MILLISECONDS.sleep(1600);
+
+            // Posicionamento dos obstáculos
+            System.out
+                    .printf("\n\nO mapa tem tamanho (%d, %d)\n", ambiente.getComprimento(),
+                            ambiente.getLargura());
+            TimeUnit.MILLISECONDS.sleep(1600);
+
+            Random rand = new Random();
+            for (int loops = 0; loops < 20; loops++) {
+                int numObst = rand.nextInt(5);
+                System.out.print("\rSeu ambiente terá " + numObst + " obstáculos");
+                Thread.sleep(85); // Apenas para simular um processo demorado
+            }
+
+            // Adição do obstáculo ao ambiente
+            for (int i = 0; i < numObst; i++) {
+                Obstaculo novoObstaculo = new Obstaculo();
+                ambiente.adicionarObstaculo(novoObstaculo);
+            }
+
             TimeUnit.MILLISECONDS.sleep(1600);
 
             // Seleção de quantidade de robôs
@@ -147,6 +169,7 @@ public class Controlador {
 
             }
             TimeUnit.MILLISECONDS.sleep(1600);
+
 
             // Loop de configuração de cada robô
             for (int i = 0; i < quantidade; i++) {
@@ -181,12 +204,6 @@ public class Controlador {
 
                 scanner.nextLine(); // Consumir quebra de linha deixada pelo nextInt()
                 String nome = scanner.nextLine();
-                TimeUnit.MILLISECONDS.sleep(1600);
-
-                // Posicionamento do robô
-                System.out
-                        .printf("\n\nO mapa tem tamanho (%d, %d)\n", ambiente.getComprimento(),
-                                ambiente.getLargura());
                 TimeUnit.MILLISECONDS.sleep(1600);
 
                 System.out.printf("Escolha uma posição inicial para %s no formato [x y]: ", nome);
