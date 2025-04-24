@@ -69,11 +69,11 @@ public abstract class RoboTerrestre extends Robo {
         public void executar() {
             Scanner scanner = Controlador.getScanner();
 
-            System.out.print("O quento quer andar no eixo X? ");
+            System.out.print("O quanto quer andar no eixo X? ");
             int deltaX = scanner.nextInt();
             scanner.nextLine(); // Consumir \n
 
-            System.out.print("O quento quer andar no eixo Y? ");
+            System.out.print("O quanto quer andar no eixo Y? ");
             int deltaY = scanner.nextInt();
             scanner.nextLine(); // Consumir \n
 

@@ -59,8 +59,7 @@ public abstract class Robo {
                 .dentroDosLimites(this.posicaoX + deltaX, this.posicaoY + deltaY)) {
             this.posicaoX += deltaX;
             this.posicaoY += deltaY;
-        }
-        else{
+        } else {
             System.out.println("Você está fora dos limites do ambiente. Ação cancelada!");
         }
     }
@@ -124,10 +123,10 @@ public abstract class Robo {
         public void executar() {
             Scanner scanner = Controlador.getScanner();
 
-            System.out.print("O quento quer andar no eixo X? ");
+            System.out.print("O quanto quer andar no eixo X? ");
             int deltaX = scanner.nextInt();
 
-            System.out.print("O quento quer andar no eixo Y? ");
+            System.out.print("O quanto quer andar no eixo Y? ");
             int deltaY = scanner.nextInt();
             scanner.nextLine(); // Consumir \n
 

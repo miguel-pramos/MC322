@@ -74,4 +74,12 @@ public class CatalogoRobos {
             throw new RuntimeException("Erro ao criar robô", e);
         }
     }
+
+    public static ArrayList<Class<? extends Robo>> getTodasClasses() {
+        ArrayList<Class<? extends Robo>> todasClasses = new ArrayList<>();
+        for (HashMap<String, Class<? extends Robo>> categoria : catalogo.values()) {
+            todasClasses.addAll(categoria.values());
+        }
+        return todasClasses;
+    }
 }
