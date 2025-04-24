@@ -55,15 +55,56 @@ public abstract class Robo {
      * @param deltaY Deslocamento no eixo Y.
      */
     protected void mover(int deltaX, int deltaY) {
-        if (Controlador.getAmbiente()
-                .dentroDosLimites(this.posicaoX + deltaX, this.posicaoY + deltaY)) {
+        boolean nosLimites = Controlador.getAmbiente()
+                .dentroDosLimites(this.posicaoX + deltaX, this.posicaoY + deltaY)
+
+        boolean semColisao
+
+        if (nosLimites) {
             this.posicaoX += deltaX;
             this.posicaoY += deltaY;
-        } else {
+        }
+        else{
             System.out.println("Você está fora dos limites do ambiente. Ação cancelada!");
         }
     }
 
+    private semColisao(){
+        private List<Posicao> calcularCaminho(Posicao inicio, Posicao fim) {
+            List<Posicao> caminho = new ArrayList<>();
+
+            int x1 = inicio.x;
+            int y1 = inicio.y;
+            int x2 = fim.x;
+            int y2 = fim.y;
+
+            int dx = Math.abs(x2 - x1);
+            int dy = Math.abs(y2 - y1);
+
+            int sx = x1 < x2 ? 1 : -1;
+            int sy = y1 < y2 ? 1 : -1;
+
+            int err = dx - dy;
+            int currentX = x1;
+            int currentY = y1;
+
+            while (true) {
+                caminho.add(new Posicao(currentX, currentY));
+                if (currentX == x2 && currentY == y2) break;
+
+                int e2 = 2 * err;
+                if (e2 > -dy) {
+                    err -= dy;
+                    currentX += sx;
+                }
+                if (e2 < dx) {
+                    err += dx;
+                    currentY += sy;
+                }
+            }
+            return caminho;
+        }
+    }
     /**
      * Método que aplica dano ao robô.
      * Este método pode ser sobrescrito por subclasses para implementar
@@ -123,10 +164,10 @@ public abstract class Robo {
         public void executar() {
             Scanner scanner = Controlador.getScanner();
 
-            System.out.print("O quanto quer andar no eixo X? ");
+            System.out.print("O quento quer andar no eixo X? ");
             int deltaX = scanner.nextInt();
 
-            System.out.print("O quanto quer andar no eixo Y? ");
+            System.out.print("O quento quer andar no eixo Y? ");
             int deltaY = scanner.nextInt();
             scanner.nextLine(); // Consumir \n
 

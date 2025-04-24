@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.robotsim.robots.Robo;
 
+
 /**
  * A classe Ambiente representa o espaço onde os robôs interagem.
  * Define os limites do ambiente e gerencia os robôs presentes nele.
@@ -21,7 +22,7 @@ public class Ambiente {
 
     /**
      * Verifica se uma posição bidimensional está dentro dos limites do ambiente.
-     * 
+     *
      * @param x Coordenada no eixo X.
      * @param y Coordenada no eixo Y.
      * @return true se a posição estiver dentro dos limites, false caso contrário.
@@ -33,7 +34,7 @@ public class Ambiente {
 
     /**
      * Verifica se uma posição tridimensional está dentro dos limites do ambiente.
-     * 
+     *
      * @param x            Coordenada no eixo X.
      * @param y            Coordenada no eixo Y.
      * @param z            Coordenada no eixo Z.
@@ -47,7 +48,7 @@ public class Ambiente {
 
     /**
      * Adiciona um robô ao ambiente.
-     * 
+     *
      * @param robo O robô a ser adicionado.
      */
     public void adicionarRobo(Robo robo) {
@@ -56,13 +57,13 @@ public class Ambiente {
 
     /**
      * Remove um robô do ambiente, simulando sua destruição.
-     * 
+     *
      * @param robo O robô a ser removido.
      * @return true se o robô foi removido com sucesso, false caso contrário.
      */
     public void destruirRobo(Robo robo) {
         System.out.printf("O robô %s foi destruído.%n", robo.getNome());
-        return this.robos.remove(robo);
+        this.robos.remove(robo);
     }
 
     /**
@@ -81,7 +82,7 @@ public class Ambiente {
      * @return true se o obstáculo foi removido com sucesso, false caso contrário.
      */
     public void destruirObstaculo(Obstaculo obstaculo) {
-        System.out.printf("O robô %s foi destruído.%n", obstaculo.tipo.name);
+        System.out.printf("O robô %s foi destruído.%n", obstaculo.tipo.toString());
         this.obstaculos.remove(obstaculo);
     }
 

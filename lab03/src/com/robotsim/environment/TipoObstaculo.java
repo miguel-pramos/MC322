@@ -9,8 +9,8 @@ public enum TipoObstaculo {
     sobrado(15, 9, 45, 0),
     predio(21, 17, 160, 0);
 
-    private final int largura;
-    private final int comprimento;
+    protected final int largura;
+    protected final int comprimento;
     private final int altura;
     private final int dano;
 
