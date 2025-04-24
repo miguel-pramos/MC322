@@ -1,7 +1,6 @@
 package com.robotsim.environment;
 
 import java.util.Random;
-import com.robotsim.environment.TipoObstaculo;
 import com.robotsim.Controlador;
 
 public class Obstaculo {
