@@ -6,6 +6,7 @@ import java.util.Scanner;
 import com.robotsim.Controlador;
 import com.robotsim.environment.Obstaculo;
 import com.robotsim.environment.TipoObstaculo;
+import com.robotsim.util.TesteColisao;
 import com.robotsim.etc.Acao;
 
 /**
@@ -56,6 +57,7 @@ public abstract class Robo {
      * @param deltaX Deslocamento no eixo X.
      * @param deltaY Deslocamento no eixo Y.
      */
+
     protected void mover(int deltaX, int deltaY) {
         int xIni = this.posicaoX;
         int yIni = this.posicaoY;
@@ -65,10 +67,10 @@ public abstract class Robo {
         boolean nosLimites = Controlador.getAmbiente()
                 .dentroDosLimites(xFinal, yFinal);
 
-        int[] dadosPossivelColisao = dadosColisao(xIni, yIni, xFinal, yFinal);
+        int[] dadosPossivelColisao = TesteColisao.dadosColisao(xIni, yIni, xFinal, yFinal);
 
         if (nosLimites) {
-            if (dadosPossivelColisao[0] == -1) {
+            if (TesteColisao.semColisao(dadosPossivelColisao)) {
                 this.posicaoX += deltaX;
                 this.posicaoY += deltaY;
             }
@@ -81,85 +83,6 @@ public abstract class Robo {
         else{
             System.out.println("Você está fora dos limites do ambiente. Ação cancelada!");
         }
-    }
-
-    private String tipoDeColisao(int xRobo, int yRobo){
-        for(Robo robo : Controlador.getAmbiente().getRobos()){
-            if(robo.posicaoX == xRobo && robo.posicaoY == yRobo){
-                return "Robo";
-            }
-        }
-
-        for(Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()){
-            int obsSupX = obstaculo.getPosX() + obstaculo.getTipo().getComprimento();
-            int obsSupY = obstaculo.getPosY() + obstaculo.getTipo().getLargura();
-
-            int obsInfX = obstaculo.getPosX() - obstaculo.getTipo().getComprimento();
-            int obstInfY = obstaculo.getPosY() - obstaculo.getTipo().getLargura();
-
-            if (xRobo < obsInfX || xRobo > obsSupX) {
-                continue;
-            }
-            if (yRobo < obstInfY || yRobo > obsSupY) {
-                continue;
-            }
-
-            // Se nenhuma das condições acima for verdadeira, há colisão
-            return obstaculo.getNome();
-        }
-
-        return "Nula";
-    }
-
-    private int[] dadosColisao(int xIni, int yIni, int xFin, int yFin){
-        int[] dados = {-1, -1, -1};
-
-        int dx = Math.abs(xFin - xIni);
-        int dy = Math.abs(yFin - yIni);
-
-        int sx = xIni < xFin ? 1 : -1;
-        int sy = yIni < yFin ? 1 : -1;
-
-        int err = dx - dy;
-        int atualX = xIni;
-        int atualY = yIni;
-
-        while (true) {
-            if (atualX == xFin && atualY == yFin)
-                break;
-
-            int e2 = 2 * err;
-            if (e2 > -dy) {
-                err -= dy;
-                atualX += sx;
-            }
-            if (e2 < dx) {
-                err += dx;
-                atualY += sy;
-            }
-
-            String tipo = tipoDeColisao(atualX, atualY);
-            switch (tipo) {
-                case "Nula" -> continue;
-                case "Robo" -> {
-                    System.out.printf("Colidiu com um robo em %d %d\n", atualX, atualY);
-                    dados[0] = atualX;
-                    dados[1] = atualY;
-                    dados[2] = 0;
-                    return dados;
-                };
-                default -> {
-                    TipoObstaculo obstColidido = TipoObstaculo.valueOf(tipo);
-                    System.out.printf("Você colidiu com um %s\n", tipo);
-                    dados[0] = atualX;
-                    dados[1] = atualY;
-                    dados[2] = obstColidido.getDano();
-                    return dados;
-                }
-            };
-        }
-
-        return dados;
     }
 
     /**
