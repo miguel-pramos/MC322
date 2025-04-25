@@ -4,16 +4,14 @@ import com.robotsim.Controlador;
 import com.robotsim.environment.Obstaculo;
 import com.robotsim.environment.TipoObstaculo;
 import com.robotsim.robots.Robo;
+import com.robotsim.robots.RoboAereo;
 import com.robotsim.robots.RoboTerrestre;
 
 public class TesteColisao {
-    private static final int VAZIO = -1;
+    public static int[] dadosColisao(Robo roboMovendo, int xFin, int yFin){
+        int xIni = roboMovendo.getPosicaoX();
+        int yIni = roboMovendo.getPosicaoY();
 
-    public static boolean semColisao(int[] dadosPossivelColisao) {
-        return dadosPossivelColisao[0] == VAZIO;
-    }
-
-    public static int[] dadosColisao(int xIni, int yIni, int xFin, int yFin){
         int dx = Math.abs(xFin - xIni);
         int dy = Math.abs(yFin - yIni);
 
@@ -23,6 +21,8 @@ public class TesteColisao {
         int err = dx - dy;
         int atualX = xIni;
         int atualY = yIni;
+        int antigoX = atualX;
+        int antigoY = atualY;
 
         while (true) {
             if (atualX == xFin && atualY == yFin)
@@ -31,35 +31,52 @@ public class TesteColisao {
             int e2 = 2 * err;
             if (e2 > -dy) {
                 err -= dy;
+                antigoX = atualX;
                 atualX += sx;
             }
             if (e2 < dx) {
                 err += dx;
+                antigoY = atualY;
                 atualY += sy;
             }
 
-            String tipo = tipoDeColisao(atualX, atualY);
+            String tipo = tipoDeColisao(roboMovendo);
             switch (tipo) {
                 case "Nula": continue;
                 case "Robo":
                     System.out.printf("Colidiu com um robo em %d %d\n", atualX, atualY);
-                    return new int[]{atualX, atualY, 0};
+                    return new int[]{antigoX, antigoY, 0};
                 default:
                     TipoObstaculo obstColidido = TipoObstaculo.valueOf(tipo);
                     System.out.printf("Você colidiu com um %s\n", tipo);
-                    return new int[]{atualX, atualY, obstColidido.getDano()};
+                    return new int[]{antigoX, antigoY, obstColidido.getDano()};
             }
         }
 
-        int[] dados = {VAZIO, VAZIO, VAZIO};
+        int[] dados = {atualX, atualY, 0};
         return dados;
     }
 
-    protected static String tipoDeColisao(int xRobo, int yRobo){
-        for(Robo robo : Controlador.getAmbiente().getRobos()){
-            if(robo instanceof RoboTerrestre &&
-                    robo.getPosicaoX() == xRobo && robo.getPosicaoY() == yRobo){
-                return "Robo";
+    public static String tipoDeColisao(Robo roboMovendo) {
+        int xRobo = roboMovendo.getPosicaoX();
+        int yRobo = roboMovendo.getPosicaoY();
+
+        if (roboMovendo instanceof RoboTerrestre){
+            for (Robo robo : Controlador.getAmbiente().getRobos()) {
+                if (robo instanceof RoboTerrestre &&
+                        robo.getPosicaoX() == xRobo && robo.getPosicaoY() == yRobo) {
+                    return "Robo";
+                }
+            }
+        } else if (roboMovendo instanceof RoboAereo){
+            int zRobo = ((RoboAereo) roboMovendo).getAltitude();
+
+            for (Robo robo : Controlador.getAmbiente().getRobos()) {
+                if (robo instanceof RoboAereo &&
+                        robo.getPosicaoX() == xRobo &&
+                        robo.getPosicaoY() == yRobo &&
+                        ((RoboAereo) robo).getAltitude() == zRobo)
+                    return "Robo";
             }
         }
 
@@ -74,6 +91,11 @@ public class TesteColisao {
                 continue;
             }
             if (yRobo < obstInfY || yRobo > obsSupY) {
+                continue;
+            }
+
+            if (roboMovendo instanceof RoboAereo &&
+                    ((RoboAereo) roboMovendo).getAltitude() > obstaculo.getTipo().getAltura()){
                 continue;
             }
 

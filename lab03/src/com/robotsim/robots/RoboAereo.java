@@ -31,40 +31,6 @@ public abstract class RoboAereo extends Robo {
         acoes.add(new Descer(this));
     }
 
-    protected String tipoDeColisao(int xRobo, int yRobo) {
-        for (Robo robo : Controlador.getAmbiente().getRobos()) {
-            if (robo instanceof RoboAereo &&
-                    robo.posicaoX == xRobo &&
-                    robo.posicaoY == yRobo &&
-                    ((RoboAereo) robo).altitude == this.altitude) {
-                return "Robo";
-            }
-        }
-
-        for (Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
-            int obsSupX = obstaculo.getPosX() + obstaculo.getTipo().getComprimento();
-            int obsSupY = obstaculo.getPosY() + obstaculo.getTipo().getLargura();
-
-            int obsInfX = obstaculo.getPosX() - obstaculo.getTipo().getComprimento();
-            int obstInfY = obstaculo.getPosY() - obstaculo.getTipo().getLargura();
-
-            if (xRobo < obsInfX || xRobo > obsSupX) {
-                continue;
-            }
-            if (yRobo < obstInfY || yRobo > obsSupY) {
-                continue;
-            }
-
-            if (this.altitude > obstaculo.getTipo().getAltura()) {
-                continue;
-            }
-            // Se nenhuma das condições acima for verdadeira, há colisão
-            return obstaculo.getNome();
-        }
-
-        return "Nula";
-    }
-
     /**
      * Método que permite ao robô subir uma determinada altitude.
      * <p>

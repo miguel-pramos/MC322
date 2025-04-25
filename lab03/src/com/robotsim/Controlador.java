@@ -11,6 +11,7 @@ import com.robotsim.environment.Obstaculo;
 import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
 import com.robotsim.robots.*;
+import com.robotsim.util.TesteColisao;
 
 enum GAME_STATUS {
     GAMEON,
@@ -41,7 +42,7 @@ public class Controlador {
 
     public static void main(String[] args) {
         inicializarRobos();
-        inicialzizarSim();
+        inicializarSim();
 
         // Loop principal do simulador
         while (ambiente.getRobos().size() > 1) {
@@ -121,11 +122,11 @@ public class Controlador {
      * experiência
      * do usuário com mensagens exibidas de forma gradual.
      */
-    private static void inicialzizarSim() {
+    private static void inicializarSim() {
         try {
 
-            final int COMPRIMENTO = 80;
-            final int LARGURA = 60;
+            final int COMPRIMENTO = 60;
+            final int LARGURA = 40;
             ambiente = new Ambiente(COMPRIMENTO, LARGURA);
 
             // Introdução
@@ -165,7 +166,8 @@ public class Controlador {
             Collections.shuffle(todasClasses);
 
             Random random = new Random();
-            for (int i = 0; i < 3; i++) {
+            int i = 0;
+            while (i < 3) {
                 Class<? extends Robo> classeEscolhida = todasClasses.get(i);
                 String nome = classeEscolhida.getSimpleName();
 
@@ -174,11 +176,18 @@ public class Controlador {
 
                 Robo novoRobo = classeEscolhida.getConstructor(String.class, int.class, int.class)
                         .newInstance(nome, x, y);
+
+                String colisao = TesteColisao.tipoDeColisao(novoRobo);
+
+                if (!colisao.equals("Nula")) {
+                    continue;
+                }
                 ambiente.adicionarRobo(novoRobo);
 
                 System.out.printf("Robô %s do tipo %s adicionado na posição (%d, %d)\n", nome,
                         classeEscolhida.getSimpleName(), x, y);
                 TimeUnit.MILLISECONDS.sleep(300);
+                i++;
             }
 
             TimeUnit.MILLISECONDS.sleep(1600);
