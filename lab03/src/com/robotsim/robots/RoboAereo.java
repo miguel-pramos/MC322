@@ -31,19 +31,17 @@ public abstract class RoboAereo extends Robo {
         acoes.add(new Descer(this));
     }
 
-    @Override
-    protected String tipoDeColisao(int xRobo, int yRobo){
-        for(Robo robo : Controlador.getAmbiente().getRobos()){
-            if(robo instanceof RoboAereo &&
+    protected String tipoDeColisao(int xRobo, int yRobo) {
+        for (Robo robo : Controlador.getAmbiente().getRobos()) {
+            if (robo instanceof RoboAereo &&
                     robo.posicaoX == xRobo &&
                     robo.posicaoY == yRobo &&
-                    ((RoboAereo) robo).altitude == this.altitude){
+                    ((RoboAereo) robo).altitude == this.altitude) {
                 return "Robo";
             }
         }
 
-
-        for(Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()){
+        for (Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
             int obsSupX = obstaculo.getPosX() + obstaculo.getTipo().getComprimento();
             int obsSupY = obstaculo.getPosY() + obstaculo.getTipo().getLargura();
 

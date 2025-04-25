@@ -8,6 +8,7 @@ import com.robotsim.environment.Obstaculo;
 import com.robotsim.environment.TipoObstaculo;
 import com.robotsim.util.TesteColisao;
 import com.robotsim.etc.Acao;
+import com.robotsim.robots.sensors.Sensor;
 
 /**
  * A classe Robo é a classe base para todos os tipos de robôs no simulador.
@@ -19,6 +20,7 @@ public abstract class Robo {
     protected int posicaoX; // Posição atual no eixo X.
     protected int posicaoY; // Posição atual no eixo Y.
     protected ArrayList<Acao> acoes; // Lista de ações disponíveis para o robô.
+    protected ArrayList<Sensor> sensores; // Sensores do robô
 
     public Robo(String nome, int posicaoX, int posicaoY, int HP) {
         this.nome = nome;
@@ -26,6 +28,7 @@ public abstract class Robo {
         this.posicaoY = posicaoY;
         this.HP = HP;
         this.acoes = new ArrayList<>();
+        this.sensores = new ArrayList<>();
         inicializarAcoes();
     }
 
@@ -36,6 +39,11 @@ public abstract class Robo {
      */
     protected void inicializarAcoes() {
         acoes.add(new Mover(this));
+    }
+
+    protected void inicializarSensores() {
+        for (Sensor sensor : this.sensores)
+            acoes.add(sensor.getAcao());
     }
 
     /**
@@ -73,14 +81,12 @@ public abstract class Robo {
             if (TesteColisao.semColisao(dadosPossivelColisao)) {
                 this.posicaoX += deltaX;
                 this.posicaoY += deltaY;
-            }
-            else {
+            } else {
                 this.posicaoX = dadosPossivelColisao[0] - 1;
                 this.posicaoY = dadosPossivelColisao[1] - 1;
                 this.tomarDano(dadosPossivelColisao[2]);
             }
-        }
-        else{
+        } else {
             System.out.println("Você está fora dos limites do ambiente. Ação cancelada!");
         }
     }

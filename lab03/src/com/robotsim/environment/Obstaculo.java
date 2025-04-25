@@ -7,8 +7,8 @@ public class Obstaculo {
     private int posX;
     private int posY;
     protected TipoObstaculo tipo;
-    private final TipoObstaculo[] tipos = TipoObstaculo.values()
-            ;
+    private final TipoObstaculo[] tipos = TipoObstaculo.values();
+    
     public Obstaculo() {
         Random rand = new Random();
         this.tipo = tipos[rand.nextInt(tipos.length)];

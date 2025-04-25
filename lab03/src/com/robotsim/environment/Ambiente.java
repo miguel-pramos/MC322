@@ -95,10 +95,10 @@ public class Ambiente {
     }
 
     public ArrayList<Robo> getRobos() {
-        return new ArrayList.copyOf(robos);
+        return new ArrayList<Robo>(robos);
     }
 
     public ArrayList<Obstaculo> getObstaculos() {
-        return new ArrayList.copyOf(obstaculos);
+        return new ArrayList<Obstaculo>(obstaculos);
     }
 }
