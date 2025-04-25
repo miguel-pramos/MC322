@@ -14,7 +14,12 @@ A ideia é que seja possível analisar a evolução do sistema de simulação a 
 ## Como Navegar
 
 1. Explore as pastas para encontrar o código relacionado a cada laboratório.
-2. Cada pasta contém arquivos de código-fonte, testes e outros recursos utilizados no laboratório.
+2. Cada pasta contém arquivos de código-fonte, testes e outros recursos utilizados no laboratório, além de um README.md indicando os recursos novos implementados e outros detalhes.
+
+## Como executar
+
+Cada laboratório contém, em sua pasta, um REAME.md que indica com mais detalhes como executar o simulador no estágio em que se encontra. 
+Nele estarão instruções de execução e de interação com o simulador.
 
 ## IDEs utilizadas no desenvolvimento do simulador
 

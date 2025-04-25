@@ -1,3 +1,6 @@
+' A linha de raciocínio utilizada para construir o diagrama foi guiada pelo uso de UML
+' e pela indicação dos relacionamentos.;
+
 @startuml diagram
 
 
