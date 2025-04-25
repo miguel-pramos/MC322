@@ -182,6 +182,7 @@ public class Controlador {
                 if (!colisao.equals("Nula")) {
                     continue;
                 }
+                
                 ambiente.adicionarRobo(novoRobo);
 
                 System.out.printf("Robô %s do tipo %s adicionado na posição (%d, %d)\n", nome,

@@ -6,7 +6,7 @@ import com.robotsim.Controlador;
 public class Obstaculo {
     private int posX;
     private int posY;
-    protected TipoObstaculo tipo;
+    protected final TipoObstaculo tipo;
     private final TipoObstaculo[] tipos = TipoObstaculo.values();
     
     public Obstaculo() {
@@ -22,7 +22,7 @@ public class Obstaculo {
         this.posY = posY;
     }
 
-    public boolean boaPosicao (TipoObstaculo tipo, int testeX, int testeY){
+    public static boolean boaPosicao (TipoObstaculo tipo, int testeX, int testeY){
         int metadeComprimento = (tipo.comprimento - 1) / 2;
         int metadeLargura = (tipo.largura - 1) / 2;
 
@@ -42,7 +42,7 @@ public class Obstaculo {
         return dentroDosLimitesSuperior && dentroDosLimitesInferior && semColisEntreObst;
     }
 
-    boolean testColisEntreObst(int ret1SuperiorX, int ret1SuperiorY, int ret1InferiorX, int ret1InferiorY) {
+    private static boolean testColisEntreObst(int ret1SuperiorX, int ret1SuperiorY, int ret1InferiorX, int ret1InferiorY) {
         for(Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
             int ret2SuperiorX = obstaculo.getPosX() + obstaculo.getTipo().comprimento;
             int ret2SuperiorY = obstaculo.getPosY() + obstaculo.getTipo().largura;

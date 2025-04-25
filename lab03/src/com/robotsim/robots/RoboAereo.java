@@ -3,7 +3,6 @@ package com.robotsim.robots;
 import java.util.Scanner;
 
 import com.robotsim.Controlador;
-import com.robotsim.environment.Obstaculo;
 import com.robotsim.etc.Acao;
 
 /**
@@ -15,7 +14,7 @@ import com.robotsim.etc.Acao;
  * @see Robo
  */
 public abstract class RoboAereo extends Robo {
-    protected static int altitudeMaxima;
+    protected int altitudeMaxima;
     protected int altitude;
 
     public RoboAereo(String nome, int posicaoX, int posicaoY, int HP, int altitude, int altitudeMaxima) {
@@ -77,6 +76,10 @@ public abstract class RoboAereo extends Robo {
      */
     public int getAltitude() {
         return this.altitude;
+    }
+
+    public int getAltitudeMaxima() {
+        return this.altitudeMaxima;
     }
 
     /**

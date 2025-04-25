@@ -4,7 +4,7 @@ import com.robotsim.etc.Acao;
 import com.robotsim.robots.Robo;
 
 public abstract class Sensor {
-    private double raioDeAlcance;
+    private final double raioDeAlcance;
     private Acao acao;
     private Robo robo;
 
