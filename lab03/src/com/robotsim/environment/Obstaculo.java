@@ -14,12 +14,9 @@ public class Obstaculo {
         this.tipo = tipos[rand.nextInt(tipos.length)];
 
         do {
-            posX = rand.nextInt(Controlador.getAmbiente().getComprimento());
-            posY = rand.nextInt(Controlador.getAmbiente().getLargura());
+            this.posX = rand.nextInt(Controlador.getAmbiente().getComprimento());
+            this.posY = rand.nextInt(Controlador.getAmbiente().getLargura());
         } while (!boaPosicao(tipo, posX, posY));
-
-        this.posX = posX;
-        this.posY = posY;
     }
 
     public static boolean boaPosicao (TipoObstaculo tipo, int testeX, int testeY){
@@ -67,15 +64,15 @@ public class Obstaculo {
     }
 
     public int getPosX() {
-        return posX;
+        return this.posX;
     }
 
     public int getPosY() {
-        return posY;
+        return this.posY;
     }
 
     public TipoObstaculo getTipo() {
-        return tipo;
+        return this.tipo;
     }
 
     public String getNome() {

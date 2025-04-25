@@ -1,12 +1,8 @@
 package com.robotsim.robots;
 
-import java.util.concurrent.TimeUnit;
-
 import com.robotsim.Controlador;
-import com.robotsim.etc.Acao;
 import com.robotsim.robots.sensors.SensorObstaculo;
 import com.robotsim.robots.sensors.SensorRobo;
-import com.robotsim.util.GeometryMath;
 
 /**
  * A classe RoboDrone representa um robô aéreo com a capacidade de detectar
@@ -25,7 +21,6 @@ public class RoboDrone extends RoboAereo {
         this.sensores.add(new SensorObstaculo(30, this));
         this.inicializarSensores();
     }
-
 
     /**
      * Método responsável por mover o RoboDrone.
@@ -47,5 +42,4 @@ public class RoboDrone extends RoboAereo {
         }
     }
 
-    
 }

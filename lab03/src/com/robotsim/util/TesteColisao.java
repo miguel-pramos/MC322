@@ -8,7 +8,7 @@ import com.robotsim.robots.RoboAereo;
 import com.robotsim.robots.RoboTerrestre;
 
 public class TesteColisao {
-    public static int[] dadosColisao(Robo roboMovendo, int xFin, int yFin){
+    public static int[] dadosColisao(Robo roboMovendo, int xFin, int yFin) {
         int xIni = roboMovendo.getPosicaoX();
         int yIni = roboMovendo.getPosicaoY();
 
@@ -42,18 +42,19 @@ public class TesteColisao {
 
             String tipo = tipoDeColisao(roboMovendo);
             switch (tipo) {
-                case "Nula": continue;
+                case "Nula":
+                    continue;
                 case "Robo":
                     System.out.printf("Colidiu com um robo em %d %d\n", atualX, atualY);
-                    return new int[]{antigoX, antigoY, 0};
+                    return new int[] { antigoX, antigoY, 0 };
                 default:
                     TipoObstaculo obstColidido = TipoObstaculo.valueOf(tipo);
                     System.out.printf("Você colidiu com um %s\n", tipo);
-                    return new int[]{antigoX, antigoY, obstColidido.getDano()};
+                    return new int[] { antigoX, antigoY, obstColidido.getDano() };
             }
         }
 
-        int[] dados = {atualX, atualY, 0};
+        int[] dados = { atualX, atualY, 0 };
         return dados;
     }
 
@@ -61,18 +62,19 @@ public class TesteColisao {
         int xRobo = roboMovendo.getPosicaoX();
         int yRobo = roboMovendo.getPosicaoY();
 
-        if (roboMovendo instanceof RoboTerrestre){
+        if (roboMovendo instanceof RoboTerrestre) {
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
-                if (robo instanceof RoboTerrestre &&
+                if (robo instanceof RoboTerrestre && robo != roboMovendo &&
                         robo.getPosicaoX() == xRobo && robo.getPosicaoY() == yRobo) {
                     return "Robo";
                 }
             }
-        } else if (roboMovendo instanceof RoboAereo){
+        } else if (roboMovendo instanceof RoboAereo) {
             int zRobo = ((RoboAereo) roboMovendo).getAltitude();
 
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
                 if (robo instanceof RoboAereo &&
+                        robo != roboMovendo &&
                         robo.getPosicaoX() == xRobo &&
                         robo.getPosicaoY() == yRobo &&
                         ((RoboAereo) robo).getAltitude() == zRobo)
@@ -80,7 +82,7 @@ public class TesteColisao {
             }
         }
 
-        for(Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()){
+        for (Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
             int obsSupX = obstaculo.getPosX() + obstaculo.getTipo().getComprimento();
             int obsSupY = obstaculo.getPosY() + obstaculo.getTipo().getLargura();
 
@@ -95,7 +97,7 @@ public class TesteColisao {
             }
 
             if (roboMovendo instanceof RoboAereo &&
-                    ((RoboAereo) roboMovendo).getAltitude() > obstaculo.getTipo().getAltura()){
+                    ((RoboAereo) roboMovendo).getAltitude() > obstaculo.getTipo().getAltura()) {
                 continue;
             }
 

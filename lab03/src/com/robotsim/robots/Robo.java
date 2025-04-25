@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.robotsim.Controlador;
-import com.robotsim.environment.Obstaculo;
-import com.robotsim.environment.TipoObstaculo;
 import com.robotsim.util.TesteColisao;
 import com.robotsim.etc.Acao;
 import com.robotsim.robots.sensors.Sensor;
@@ -28,6 +26,7 @@ public abstract class Robo {
         this.posicaoY = posicaoY;
         this.HP = HP;
         this.acoes = new ArrayList<>();
+        this.sensores = new ArrayList<>();
         inicializarAcoes();
     }
 
@@ -66,8 +65,6 @@ public abstract class Robo {
      */
 
     protected void mover(int deltaX, int deltaY) {
-        int xIni = this.posicaoX;
-        int yIni = this.posicaoY;
         int xFinal = this.posicaoX + deltaX;
         int yFinal = this.posicaoY + deltaY;
 

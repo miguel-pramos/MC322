@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.Random;
+import java.lang.reflect.InvocationTargetException;
 
 import com.robotsim.environment.Ambiente;
 import com.robotsim.environment.Obstaculo;
@@ -171,24 +172,33 @@ public class Controlador {
                 Class<? extends Robo> classeEscolhida = todasClasses.get(i);
                 String nome = classeEscolhida.getSimpleName();
 
-                int x = random.nextInt(ambiente.getComprimento() + 1);
-                int y = random.nextInt(ambiente.getLargura() + 1);
+                int x = random.nextInt(ambiente.getComprimento());
+                int y = random.nextInt(ambiente.getLargura());
 
-                Robo novoRobo = classeEscolhida.getConstructor(String.class, int.class, int.class)
-                        .newInstance(nome, x, y);
+                try {
+                    Robo novoRobo = classeEscolhida.getConstructor(String.class, int.class, int.class)
+                            .newInstance(nome, x, y);
 
-                String colisao = TesteColisao.tipoDeColisao(novoRobo);
+                    String colisao = TesteColisao.tipoDeColisao(novoRobo);
 
-                if (!colisao.equals("Nula")) {
-                    continue;
+                    if (!colisao.equals("Nula")) {
+                        System.out.printf(
+                                "Colisão detectada ao tentar adicionar o robô %s na posição (%d, %d). Tentando novamente...\n\n",
+                                nome, x, y);
+                        continue;
+                    }
+
+                    ambiente.adicionarRobo(novoRobo);
+
+                    System.out.printf("Robô %s do tipo %s adicionado na posição (%d, %d)\n", nome,
+                            classeEscolhida.getSimpleName(), x, y);
+                    TimeUnit.MILLISECONDS.sleep(300);
+                    i++;
+                } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
+                        | InvocationTargetException e) {
+                    System.err.printf("Erro ao criar instância do robô %s: %s\n", nome, e.getMessage());
+                    e.printStackTrace();
                 }
-                
-                ambiente.adicionarRobo(novoRobo);
-
-                System.out.printf("Robô %s do tipo %s adicionado na posição (%d, %d)\n", nome,
-                        classeEscolhida.getSimpleName(), x, y);
-                TimeUnit.MILLISECONDS.sleep(300);
-                i++;
             }
 
             TimeUnit.MILLISECONDS.sleep(1600);
