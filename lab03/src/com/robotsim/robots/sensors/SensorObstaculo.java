@@ -8,6 +8,12 @@ import com.robotsim.robots.Robo;
 import com.robotsim.util.GeometryMath;
 import com.robotsim.etc.Acao;
 
+/**
+ * A classe SensorObstaculo é responsável por detectar obstáculos no ambiente.
+ *
+ * <p>
+ * Quando um obstáculo é detectado, sua posição é exibida no console.
+ */
 public class SensorObstaculo extends Sensor {
 
     public SensorObstaculo(double raioDeAlcance, Robo robo) {
@@ -15,6 +21,9 @@ public class SensorObstaculo extends Sensor {
         this.setAcao(new MonitorarAcao(this));
     }
 
+    /**
+     * Classe interna que representa a ação de monitorar obstáculos.
+     */
     private class MonitorarAcao implements Acao {
         private final SensorObstaculo sensor;
 
@@ -26,7 +35,18 @@ public class SensorObstaculo extends Sensor {
         public String getNome() {
             return "(Sensor) Monitorar Obstáculos";
         }
-
+        
+        /**
+         * Método sobrescrito que descreve a ação de monitorar obstáculos.
+         * Este método é responsável por detectar obstáculos no ambiente e exibir
+         * informações sobre eles no console.
+         *
+         * Regras e comportamentos:
+         * - O sensor verifica todos os obstáculos presentes no ambiente.
+         * - Caso um obstáculo esteja dentro do raio de alcance do sensor, sua posição
+         *   será exibida no console.
+         * - Caso nenhum obstáculo seja detectado, uma mensagem informativa será exibida.
+         */
         @Override
         public void executar() {
             int counter = 0;

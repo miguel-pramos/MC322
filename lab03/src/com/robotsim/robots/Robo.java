@@ -39,6 +39,11 @@ public abstract class Robo {
         acoes.add(new Mover(this));
     }
 
+    /**
+     * Método responsável por inicializar as ações específicas dos sensores.
+     * Este método deve ser chamado por subclasses após os sensores específicos
+     * serem adicionados.
+     */
     protected void inicializarSensores() {
         for (Sensor sensor : this.sensores)
             acoes.add(sensor.getAcao());
