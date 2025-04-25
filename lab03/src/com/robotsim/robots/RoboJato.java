@@ -41,8 +41,11 @@ public class RoboJato extends RoboAereo {
         if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY(),
                 alvo.getAltitude()) < alcanceMissil) {
             alvo.tomarDano(danoMissil);
+            this.misseisRestantes--;
         }
-        misseisRestantes--;
+        else{
+            System.out.println("O inimigo estava longe demais... Não acertou");
+        }
     }
 
     /**
@@ -59,8 +62,11 @@ public class RoboJato extends RoboAereo {
 
         if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY(), 0) < alcanceMetralhadora) {
             alvo.tomarDano(danoMetralhadora);
+            this.rajadasRestantes--;
         }
-        rajadasRestantes--;
+        else{
+            System.out.println("O inimigo estava longe demais... Não acertou");
+        }
     }
 
     @Override
@@ -166,7 +172,7 @@ public class RoboJato extends RoboAereo {
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
                 if (robo instanceof RoboTerrestre) { // Não permitir atacar a si mesmo
                     robosAlvos.add((RoboTerrestre) robo);
-                    System.out.printf("[%d] %s\n", i, robo.getNome());
+                    System.out.printf("[%d] %s\n", (i + 1), robo.getNome());
                     i++;
                 }
             }
@@ -178,7 +184,7 @@ public class RoboJato extends RoboAereo {
 
             Scanner scanner = Controlador.getScanner();
             System.out.print("Escolha o índice do robô para atacar com rajada: ");
-            int indice = scanner.nextInt();
+            int indice = scanner.nextInt() - 1;
 
             scanner.nextLine(); // Consumir \n
 

@@ -32,7 +32,7 @@ public class RoboDrone extends RoboAereo {
      * @param deltaY Deslocamento no eixo Y.
      */
     protected void mover(int deltaX, int deltaY) {
-        this.bateria -= deltaX + deltaY;
+        this.bateria -= Math.abs(deltaX) + Math.abs(deltaY);
 
         if (this.bateria <= 0) {
             Controlador.getAmbiente().destruirRobo(this); // Remove o robô do ambiente.

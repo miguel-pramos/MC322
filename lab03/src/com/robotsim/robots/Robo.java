@@ -81,10 +81,18 @@ public abstract class Robo {
         if (nosLimites) {
             this.posicaoX = dadosPossivelColisao[0];
             this.posicaoY = dadosPossivelColisao[1];
-            this.tomarDano(dadosPossivelColisao[2]);
+            if (TesteColisao.existeColisao(dadosPossivelColisao)){
+                System.out.printf(
+                        "Colisão detectada! Parando na posição (%d, %d)\n",
+                        nome, posicaoX, posicaoY);
+            }
+            if (dadosPossivelColisao[2] != 0) {
+                this.tomarDano(dadosPossivelColisao[2]);
+            }
         } else {
-            System.out.println("Você está fora dos limites do ambiente. Ação cancelada!");
+            System.out.println("Você estará fora dos limites do ambiente. Ação cancelada!");
         }
+
     }
 
     /**
@@ -122,6 +130,10 @@ public abstract class Robo {
 
     public String getNome() {
         return nome;
+    }
+
+    public int getHP(){
+        return HP;
     }
 
     /**

@@ -38,7 +38,7 @@ public abstract class RoboTerrestre extends Robo {
      */
     @Override
     protected void mover(int deltaX, int deltaY) {
-        double distancia = GeometryMath.distanciaEuclidiana(this, deltaX, deltaY);
+        double distancia = GeometryMath.distanciaEuclidiana(this, this.posicaoX + deltaX, this.posicaoY + deltaY);
         if (distancia / Controlador.DELTA_TIME > this.velocidadeMaxima) {
             System.out.printf("%s tentou se mover rápido demais!", this.nome);
             return;

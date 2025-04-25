@@ -14,6 +14,7 @@ public class Ambiente {
     private int largura; // Largura do ambiente.
     private ArrayList<Robo> robos = new ArrayList<>(); // Lista de robôs no ambiente.
     private ArrayList<Obstaculo> obstaculos = new ArrayList<>(); // Lista de robôs no ambiente.
+    private ArrayList<Robo> robosRemovidos = new ArrayList<>();
 
     public Ambiente(int comprimento, int largura) {
         this.comprimento = comprimento;
@@ -64,6 +65,7 @@ public class Ambiente {
     public void destruirRobo(Robo robo) {
         System.out.printf("O robô %s foi destruído.%n", robo.getNome());
         this.robos.remove(robo);
+        robosRemovidos.add(robo);
     }
 
     /**
@@ -97,6 +99,8 @@ public class Ambiente {
     public ArrayList<Robo> getRobos() {
         return new ArrayList<Robo>(robos);
     }
+
+    public ArrayList<Robo> getRobosRemovidos() { return robosRemovidos; }
 
     public ArrayList<Obstaculo> getObstaculos() {
         return new ArrayList<Obstaculo>(obstaculos);

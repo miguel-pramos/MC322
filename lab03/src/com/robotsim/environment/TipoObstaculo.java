@@ -3,11 +3,11 @@ package com.robotsim.environment;
 
 
 public enum TipoObstaculo {
-    arameFarpado(3, 7, 5, 15),
-    minaTerrestre(3, 3, 1, 150),
-    bunker(9, 7, 30, 0),
-    sobrado(15, 9, 45, 0),
-    predio(21, 17, 160, 0);
+    arameFarpado(1, 5, 5, 15),
+    minaTerrestre(1, 1, 1, 150),
+    bunker(7, 5, 30, 0),
+    sobrado(11, 7, 45, 0),
+    predio(15, 11, 160, 0);
 
     protected final int largura;
     protected final int comprimento;

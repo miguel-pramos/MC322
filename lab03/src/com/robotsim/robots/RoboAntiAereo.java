@@ -38,9 +38,12 @@ public class RoboAntiAereo extends RoboTerrestre {
         if (balasRestantes <= 0)
             throw new IllegalStateException("Nenhuma bala restante");
 
-        if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance)
-            alvo.tomarDano(this.dano);
-        this.balasRestantes--;
+        if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance) {
+            alvo.tomarDano(dano);
+            this.balasRestantes--;
+        } else {
+            System.out.println("O inimigo estava longe demais... Não acertou");
+        }
     }
 
     /**
@@ -92,7 +95,7 @@ public class RoboAntiAereo extends RoboTerrestre {
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
                 if (robo instanceof RoboAereo) { // Apenas atacar robôs aéreos
                     robosAlvos.add((RoboAereo) robo);
-                    System.out.printf("[%d] %s\n", i, robo.getNome());
+                    System.out.printf("[%d] %s\n", (i + 1), robo.getNome());
                     i++;
                 }
             }
@@ -104,7 +107,7 @@ public class RoboAntiAereo extends RoboTerrestre {
 
             Scanner scanner = Controlador.getScanner();
             System.out.print("Escolha o índice do robô aéreo para atacar: ");
-            int indice = scanner.nextInt();
+            int indice = scanner.nextInt() - 1;
             scanner.nextLine(); // Consumir \n
 
             if (indice < 0 || indice >= robosAlvos.size()) {

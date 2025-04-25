@@ -48,8 +48,10 @@ public class Controlador {
         // Loop principal do simulador
         while (ambiente.getRobos().size() > 1) {
             for (Robo robo : ambiente.getRobos()) {
-                interagir(robo);
-                imprimirAmbiente(robo);
+                if (roboNaoRemovido(robo)) {
+                    interagir(robo);
+                    imprimirAmbiente(robo);
+                }
             }
 
         }
@@ -61,8 +63,24 @@ public class Controlador {
 
     // EXECUÇÃO NO LOOP
 
+    private static boolean roboNaoRemovido(Robo roboAnalisado){
+        for (Robo roboRemovido : ambiente.getRobosRemovidos()){
+            if (roboAnalisado == roboRemovido){
+                return false;
+            }
+        }
+        return true;
+    }
+
     private static void interagir(Robo robo) {
-        System.out.printf("\n\nAÇÕES DISPONÍVEIS PARA %s:\n", robo.getNome().toUpperCase());
+        System.out.printf("\nSeu HP: %d\n", robo.getHP());
+        if (robo instanceof RoboAereo) {
+            System.out.printf("Sua posição: (%d, %d, %d)\n", robo.getPosicaoX(), robo.getPosicaoY(), ((RoboAereo) robo).getAltitude());
+        } else{
+            System.out.printf("Sua posição: (%d, %d, %d)\n", robo.getPosicaoX(), robo.getPosicaoY(), 0);
+        }
+
+        System.out.printf("\nAÇÕES DISPONÍVEIS PARA %s:\n", robo.getNome().toUpperCase());
         int i = 1;
         for (Acao acao : robo.getAcoes()) {
             System.out.printf("[%d] %s\n", i, acao.getNome());
@@ -160,7 +178,7 @@ public class Controlador {
 
             TimeUnit.MILLISECONDS.sleep(1600);
 
-            System.out.println("Agora, os robôs serão criados:");
+            System.out.println("\nAgora, os robôs serão criados:");
             TimeUnit.MILLISECONDS.sleep(300);
 
             ArrayList<Class<? extends Robo>> todasClasses = CatalogoRobos.getTodasClasses();
@@ -182,9 +200,6 @@ public class Controlador {
                     String colisao = TesteColisao.tipoDeColisao(novoRobo);
 
                     if (!colisao.equals("Nula")) {
-                        System.out.printf(
-                                "Colisão detectada ao tentar adicionar o robô %s na posição (%d, %d). Tentando novamente...\n\n",
-                                nome, x, y);
                         continue;
                     }
 

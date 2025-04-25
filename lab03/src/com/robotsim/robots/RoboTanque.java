@@ -35,9 +35,13 @@ public class RoboTanque extends RoboTerrestre {
     protected void atirar(RoboTerrestre alvo) {
         if (this.balasRestantes <= 0)
             throw new IllegalStateException("Nenhuma bala restante");
-        if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance)
+        else if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance) {
             alvo.tomarDano(this.dano);
-        this.balasRestantes--;
+            this.balasRestantes--;
+        }
+        else{
+            System.out.println("O inimigo estava longe demais... Não acertou");
+        }
     }
 
     @Override

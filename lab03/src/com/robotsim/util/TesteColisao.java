@@ -8,6 +8,16 @@ import com.robotsim.robots.RoboAereo;
 import com.robotsim.robots.RoboTerrestre;
 
 public class TesteColisao {
+    public static int True = 1;
+    public static int False = 0;
+
+    public static boolean existeColisao(int[] dadosColisao){
+        if (dadosColisao[3] == True) {
+            return true;
+        }
+        return false;
+    }
+
     public static int[] dadosColisao(Robo roboMovendo, int xFin, int yFin) {
         int xIni = roboMovendo.getPosicaoX();
         int yIni = roboMovendo.getPosicaoY();
@@ -46,15 +56,15 @@ public class TesteColisao {
                     continue;
                 case "Robo":
                     System.out.printf("Colidiu com um robo em %d %d\n", atualX, atualY);
-                    return new int[] { antigoX, antigoY, 0 };
+                    return new int[] { antigoX, antigoY, 0, True};
                 default:
                     TipoObstaculo obstColidido = TipoObstaculo.valueOf(tipo);
                     System.out.printf("Você colidiu com um %s\n", tipo);
-                    return new int[] { antigoX, antigoY, obstColidido.getDano() };
+                    return new int[] { antigoX, antigoY, obstColidido.getDano(), True};
             }
         }
 
-        int[] dados = { atualX, atualY, 0 };
+        int[] dados = { atualX, atualY, 0, False};
         return dados;
     }
 
