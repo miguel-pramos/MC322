@@ -83,8 +83,7 @@ public abstract class Robo {
             this.posicaoY = dadosPossivelColisao[1];
             if (TesteColisao.existeColisao(dadosPossivelColisao)){
                 System.out.printf(
-                        "Colisão detectada! Parando na posição (%d, %d)\n",
-                        nome, posicaoX, posicaoY);
+                        "Colisão detectada! Parando na posição (%d, %d)\n", posicaoX, posicaoY);
             }
             if (dadosPossivelColisao[2] != 0) {
                 this.tomarDano(dadosPossivelColisao[2]);

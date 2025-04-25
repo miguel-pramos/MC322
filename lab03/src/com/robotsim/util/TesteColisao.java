@@ -50,7 +50,7 @@ public class TesteColisao {
                 atualY += sy;
             }
 
-            String tipo = tipoDeColisao(roboMovendo);
+            String tipo = tipoDeColisao(roboMovendo, atualX, atualY);
             switch (tipo) {
                 case "Nula":
                     continue;
@@ -68,9 +68,7 @@ public class TesteColisao {
         return dados;
     }
 
-    public static String tipoDeColisao(Robo roboMovendo) {
-        int xRobo = roboMovendo.getPosicaoX();
-        int yRobo = roboMovendo.getPosicaoY();
+    public static String tipoDeColisao(Robo roboMovendo, int xRobo, int yRobo) {
 
         if (roboMovendo instanceof RoboTerrestre) {
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
@@ -93,11 +91,11 @@ public class TesteColisao {
         }
 
         for (Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
-            int obsSupX = obstaculo.getPosX() + obstaculo.getTipo().getComprimento();
-            int obsSupY = obstaculo.getPosY() + obstaculo.getTipo().getLargura();
+            int obsSupX = obstaculo.getPosX() + (obstaculo.getTipo().getComprimento() - 1)/2;
+            int obsSupY = obstaculo.getPosY() + (obstaculo.getTipo().getLargura() - 1)/2;
 
-            int obsInfX = obstaculo.getPosX() - obstaculo.getTipo().getComprimento();
-            int obstInfY = obstaculo.getPosY() - obstaculo.getTipo().getLargura();
+            int obsInfX = obstaculo.getPosX() - (obstaculo.getTipo().getComprimento() - 1)/2;
+            int obstInfY = obstaculo.getPosY() - (obstaculo.getTipo().getLargura() - 1)/2;
 
             if (xRobo < obsInfX || xRobo > obsSupX) {
                 continue;

@@ -50,8 +50,8 @@ public class SensorObstaculo extends Sensor {
         @Override
         public void executar() {
             int counter = 0;
+            System.out.println("Iniciando o processo de detecção...");
             for (Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
-                System.out.println("Iniciando o processo de detecção...");
                 if (GeometryMath.distanciaEuclidiana(this.sensor.getRobo(), obstaculo.getPosX(),
                         obstaculo.getPosY()) <= this.sensor.getRaioDeAlcance()) {
                     counter++;

@@ -165,7 +165,8 @@ public class Controlador {
             Random rand = new Random();
             int numObst = 0;
             for (int loops = 0; loops < 20; loops++) {
-                numObst = rand.nextInt(5);
+                //numObst = rand.nextInt(5);
+                numObst = 4;
                 System.out.print("\rSeu ambiente terá " + numObst + " obstáculos");
                 Thread.sleep(85); // Apenas para simular um processo demorado
             }
@@ -197,7 +198,7 @@ public class Controlador {
                     Robo novoRobo = classeEscolhida.getConstructor(String.class, int.class, int.class)
                             .newInstance(nome, x, y);
 
-                    String colisao = TesteColisao.tipoDeColisao(novoRobo);
+                    String colisao = TesteColisao.tipoDeColisao(novoRobo, x, y);
 
                     if (!colisao.equals("Nula")) {
                         continue;
