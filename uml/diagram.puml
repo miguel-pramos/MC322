@@ -1,4 +1,4 @@
-@startuml
+@startuml diagram
 
 
 ' Diagrama de Acao
@@ -8,6 +8,7 @@ interface Acao {
 }
 
 Acao "1.." --* Robo
+Acao "1" --* Sensor
 
 ' Diagrama de CatalogoRobos
 class CatalogoRobos {
@@ -16,6 +17,7 @@ class CatalogoRobos {
     {static} +getCategorias(): ArrayList<String>
     {static} +getRobosPorCategoria(String categoria): ArrayList<String>
     {static} +criarRobo(String categoria, String nomeClasse, String nome, int posicaoX, int posicaoY): Robo
+    {static} +getTodasClasses(): ArrayList<Class<? extends Robo>>
 }
 
 CatalogoRobos "1" o-- "0.." Robo
@@ -23,7 +25,7 @@ CatalogoRobos "1" o-- "0.." Robo
 ' Diagrama de GeometryMath
 class GeometryMath {
     {static} +distanciaEuclidiana(Robo robo, int x, int y): double
-    {static} +distanciaEuclidiana(RoboAereo robo, int x, int y, int z): double
+    {static} +distanciaEuclidiana(Robo robo, int x, int y, int z): double
 }
 
 GeometryMath ..> Robo
@@ -34,17 +36,48 @@ class Ambiente {
     -comprimento: int
     -largura: int
     -robos: ArrayList<Robo>
+    -obstaculos: ArrayList<Obstaculo>
     +Ambiente(int comprimento, int largura)
     +dentroDosLimites(int x, int y): boolean
     +dentroDosLimites(int x, int y, int z, int alturaMaxima): boolean
     +adicionarRobo(Robo robo)
-    +destruirRobo(Robo robo): boolean
+    +destruirRobo(Robo robo): void
+    +adicionarObstaculo(Obstaculo obstaculo)
+    +destruirObstaculo(Obstaculo obstaculo): void
     +getLargura(): int
     +getComprimento(): int
     +getRobos(): ArrayList<Robo>
+    +getObstaculos(): ArrayList<Obstaculo>
 }
 
 Ambiente "1" *-- "1.." Robo
+Ambiente "1" *-- "0.." Obstaculo
+
+' Diagrama de Obstaculo e TipoObstaculo
+class Obstaculo {
+    -posX: int
+    -posY: int
+    #tipo: TipoObstaculo
+    -tipos: TipoObstaculo[]
+    +Obstaculo()
+    +getPosX(): int
+    +getPosY(): int
+    +getTipo(): TipoObstaculo
+    +getNome(): String
+}
+
+class TipoObstaculo {
+    #largura: int
+    #comprimento: int
+    -altura: int
+    -dano: int
+    +getLargura(): int
+    +getComprimento(): int
+    +getAltura(): int
+    +getDano(): int
+}
+
+Obstaculo "1" o-- "1" TipoObstaculo
 
 ' Diagrama de Robo e suas subclasses
 abstract class Robo {
@@ -53,8 +86,10 @@ abstract class Robo {
     #posicaoX: int
     #posicaoY: int
     #acoes: ArrayList<Acao>
-    #inicilizarAcoes(): void
-    +Robo(String nome, int posicaoX, int posicaoY)
+    #sensores: ArrayList<Sensor>
+    #inicializarAcoes(): void
+    #inicializarSensores(): void
+    +Robo(String nome, int posicaoX, int posicaoY, int HP)
     +executarAcao(Acao acao)
     +tomarDano(int dano)
     +exibirPosicao()
@@ -66,7 +101,7 @@ abstract class Robo {
 
 abstract class RoboTerrestre {
     -velocidadeMaxima: int
-    +RoboTerrestre(String nome, int posicaoX, int posicaoY)
+    +RoboTerrestre(String nome, int posicaoX, int posicaoY, int HP)
 }
 
 class RoboTanque {
@@ -86,9 +121,9 @@ class RoboAntiAereo {
 }
 
 abstract class RoboAereo {
-    -altitudeMaxima: static int
+    -altitudeMaxima: int
     -altitude: int
-    +RoboAereo(String nome, int posicaoX, int posicaoY)
+    +RoboAereo(String nome, int posicaoX, int posicaoY, int HP, int altitude, int altitudeMaxima)
     +subir(int deltaZ)
     +descer(int deltaZ)
     +getAltitude(): int
@@ -108,9 +143,8 @@ class RoboJato {
 
 class RoboDrone {
     -bateria: int
-    -alcanceDeteccao: int
     +RoboDrone(String nome, int posicaoX, int posicaoY)
-    +detectarRobos()
+    +mover(int deltaX, int deltaY)
 }
 
 Robo <|-- RoboTerrestre
@@ -120,11 +154,36 @@ RoboTerrestre <|-- RoboAntiAereo
 RoboAereo <|-- RoboJato
 RoboAereo <|-- RoboDrone
 
+' Diagrama de Sensor e suas subclasses
+abstract class Sensor {
+    -raioDeAlcance: double
+    -acao: Acao
+    -robo: Robo
+    +Sensor(double raioDeAlcance, Robo robo)
+    +getRobo(): Robo
+    +getAcao(): Acao
+    +setAcao(Acao acao)
+    +getRaioDeAlcance(): double
+}
+
+class SensorRobo {
+    +SensorRobo(double raioDeAlcance, Robo robo)
+}
+
+class SensorObstaculo {
+    +SensorObstaculo(double raioDeAlcance, Robo robo)
+}
+
+Sensor <|-- SensorRobo
+Sensor <|-- SensorObstaculo
+
+Sensor "0.." --* Robo
+
 ' Diagrama de Controlador
 class Controlador {
     {static} +main(String[] args)
     {static} -inicializarRobos()
-    {static} -inicialzizarSim()
+    {static} -inicializarSim()
     {static} -interagir(Robo robo)
     {static} -imprimirAmbiente(Robo robo)
     {static} +getScanner(): Scanner

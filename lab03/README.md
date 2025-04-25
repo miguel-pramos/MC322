@@ -15,7 +15,8 @@ O projeto está organizado em pacotes para facilitar a manutenção e a escalabi
 
 ## Funcionalidades adicionadas no Lab 03
 - Adição de `Sensor` e implementação do seu uso nos robôs.
-- Replanejamento do fluxo de execução, bem como da interação com o usuário.
+- Implementação de `Obstaculo` e interação desse com o ambiente e com os robôs.
+- Replanejamento do fluxo de execuçãe e de interação com o usuário.
 
 ## Como executar o programa
 Execute o script `run.sh` se estiver no Linux ou no Mac e `run.bat` se estiver no Windows. 
