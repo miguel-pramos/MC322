@@ -16,7 +16,9 @@ O projeto está organizado em pacotes para facilitar a manutenção e a escalabi
 ## Funcionalidades adicionadas no Lab 03
 - Adição de `Sensor` e implementação do seu uso nos robôs.
 - Implementação de `Obstaculo` e interação desse com o ambiente e com os robôs.
+- Detecção de colisões entre robôs e outros robôs e entre robôs e obstáculos.
 - Replanejamento do fluxo de execuçãe e de interação com o usuário.
+- Adição de scripts de execução.
 
 ## Como executar o programa
 Execute o script `run.sh` se estiver no Linux ou no Mac e `run.bat` se estiver no Windows. 

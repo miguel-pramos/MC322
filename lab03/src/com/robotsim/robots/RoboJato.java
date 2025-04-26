@@ -42,8 +42,7 @@ public class RoboJato extends RoboAereo {
                 alvo.getAltitude()) < alcanceMissil) {
             alvo.tomarDano(danoMissil);
             this.misseisRestantes--;
-        }
-        else{
+        } else {
             System.out.println("O inimigo estava longe demais... Não acertou");
         }
     }
@@ -63,8 +62,7 @@ public class RoboJato extends RoboAereo {
         if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY(), 0) < alcanceMetralhadora) {
             alvo.tomarDano(danoMetralhadora);
             this.rajadasRestantes--;
-        }
-        else{
+        } else {
             System.out.println("O inimigo estava longe demais... Não acertou");
         }
     }
@@ -93,13 +91,17 @@ public class RoboJato extends RoboAereo {
 
         /**
          * Método que executa a ação de ataque de um robô aéreo utilizando um míssil.
-         * O método apresenta uma lista de robôs disponíveis no ambiente para serem atacados,
-         * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil no robô escolhido.
+         * O método apresenta uma lista de robôs disponíveis no ambiente para serem
+         * atacados,
+         * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil
+         * no robô escolhido.
          *
          * Regras e comportamentos:
          * - O robô não pode atacar a si mesmo.
-         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e a execução será encerrada.
-         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida.
+         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e
+         * a execução será encerrada.
+         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso
+         * contrário, uma mensagem de erro será exibida.
          *
          */
         @Override
@@ -108,7 +110,7 @@ public class RoboJato extends RoboAereo {
             int i = 1;
 
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
-                if (robo != this.robo) { // Não permitir atacar a si mesmo
+                if (robo != this.robo && robo instanceof RoboAereo) { // Não permitir atacar a si mesmo
                     robosAlvos.add((RoboAereo) robo);
                     System.out.printf("\n[%d] %s", i, robo.getNome());
                     i++;
@@ -121,7 +123,7 @@ public class RoboJato extends RoboAereo {
             }
 
             Scanner scanner = Controlador.getScanner();
-            System.out.print("Escolha o índice do robô para atacar com míssil: ");
+            System.out.print("\n\nEscolha o índice do robô para atacar com míssil: ");
             int indice = scanner.nextInt() - 1;
 
             if (indice < 0 || indice >= robosAlvos.size()) {
@@ -156,12 +158,16 @@ public class RoboJato extends RoboAereo {
 
         /**
          * Método que executa a ação de ataque de um robô aéreo utilizando uma rajada.
-         * O método apresenta uma lista de robôs disponíveis no ambiente para serem atacados,
-         * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil no robô escolhido.
+         * O método apresenta uma lista de robôs disponíveis no ambiente para serem
+         * atacados,
+         * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil
+         * no robô escolhido.
          *
          * Regras e comportamentos:
-         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e a execução será encerrada.
-         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida.
+         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e
+         * a execução será encerrada.
+         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso
+         * contrário, uma mensagem de erro será exibida.
          *
          */
         @Override

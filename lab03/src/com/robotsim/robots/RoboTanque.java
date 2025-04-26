@@ -21,7 +21,7 @@ public class RoboTanque extends RoboTerrestre {
 
     public RoboTanque(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY, 500);
-        this.velocidadeMaxima = 8;
+        this.velocidadeMaxima = 15;
     }
 
     /**

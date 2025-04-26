@@ -144,7 +144,7 @@ public class Controlador {
     private static void inicializarSim() {
         try {
 
-            final int COMPRIMENTO = 60;
+            final int COMPRIMENTO = 80;
             final int LARGURA = 40;
             ambiente = new Ambiente(COMPRIMENTO, LARGURA);
 
@@ -165,8 +165,7 @@ public class Controlador {
             Random rand = new Random();
             int numObst = 0;
             for (int loops = 0; loops < 20; loops++) {
-                //numObst = rand.nextInt(5);
-                numObst = 4;
+                numObst = rand.nextInt(5);
                 System.out.print("\rSeu ambiente terá " + numObst + " obstáculos");
                 Thread.sleep(85); // Apenas para simular um processo demorado
             }

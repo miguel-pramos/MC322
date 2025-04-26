@@ -18,7 +18,7 @@ import com.robotsim.util.GeometryMath;
 public class RoboAntiAereo extends RoboTerrestre {
     private int balasRestantes = 10;
     private int dano = 250;
-    private int alcance = 60;
+    private int alcance = 35;
 
     public RoboAntiAereo(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY, 300);
