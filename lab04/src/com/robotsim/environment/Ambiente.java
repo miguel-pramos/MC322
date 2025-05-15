@@ -2,6 +2,7 @@ package com.robotsim.environment;
 
 import java.util.ArrayList;
 
+import com.robotsim.environment.obstacle.Obstaculo;
 import com.robotsim.robots.Robo;
 
 
@@ -84,7 +85,7 @@ public class Ambiente {
      * @return true se o obstáculo foi removido com sucesso, false caso contrário.
      */
     public void destruirObstaculo(Obstaculo obstaculo) {
-        System.out.printf("O robô %s foi destruído.%n", obstaculo.tipo.toString());
+        System.out.printf("O robô %s foi destruído.%n", obstaculo.getTipo().toString());
         this.obstaculos.remove(obstaculo);
     }
 

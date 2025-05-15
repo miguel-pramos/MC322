@@ -3,7 +3,7 @@ package com.robotsim.robots.sensors;
 import java.util.concurrent.TimeUnit;
 
 import com.robotsim.Controlador;
-import com.robotsim.environment.Obstaculo;
+import com.robotsim.environment.obstacle.Obstaculo;
 import com.robotsim.robots.Robo;
 import com.robotsim.util.GeometryMath;
 import com.robotsim.etc.Acao;

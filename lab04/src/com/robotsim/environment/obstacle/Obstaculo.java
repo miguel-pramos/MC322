@@ -1,4 +1,4 @@
-package com.robotsim.environment;
+package com.robotsim.environment.obstacle;
 
 import java.util.Random;
 import com.robotsim.Controlador;
