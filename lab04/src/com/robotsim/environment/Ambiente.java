@@ -85,7 +85,7 @@ public class Ambiente {
      * @return true se o obstáculo foi removido com sucesso, false caso contrário.
      */
     public void destruirObstaculo(Obstaculo obstaculo) {
-        System.out.printf("O robô %s foi destruído.%n", obstaculo.getTipo().toString());
+        System.out.printf("O obstáculo %s foi destruído.%n", obstaculo.getTipo().toString());
         this.obstaculos.remove(obstaculo);
     }
 
