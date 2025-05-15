@@ -2,6 +2,7 @@ package com.robotsim.environment;
 
 import java.util.Random;
 import com.robotsim.Controlador;
+import com.robotsim.environment.obstacle.TipoObstaculo;
 
 /**
  * A classe Obstaculo representa um obstáculo no ambiente do simulador.

@@ -1,4 +1,4 @@
-package com.robotsim.environment;
+package com.robotsim.environment.obstacle;
 
 /**
  * O enum TipoObstaculo define os diferentes tipos de obstáculos que podem existir no ambiente.

@@ -8,7 +8,7 @@ import java.util.Random;
 import java.lang.reflect.InvocationTargetException;
 
 import com.robotsim.environment.Ambiente;
-import com.robotsim.environment.Obstaculo;
+import com.robotsim.environment.obstacle.Obstaculo;
 import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
 import com.robotsim.robots.*;

@@ -1,8 +1,8 @@
 package com.robotsim.util;
 
 import com.robotsim.Controlador;
-import com.robotsim.environment.Obstaculo;
-import com.robotsim.environment.TipoObstaculo;
+import com.robotsim.environment.obstacle.Obstaculo;
+import com.robotsim.environment.obstacle.TipoObstaculo;
 import com.robotsim.robots.Robo;
 import com.robotsim.robots.RoboAereo;
 import com.robotsim.robots.RoboTerrestre;
