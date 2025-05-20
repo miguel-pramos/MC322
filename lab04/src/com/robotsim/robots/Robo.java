@@ -6,13 +6,17 @@ import java.util.Scanner;
 import com.robotsim.Controlador;
 import com.robotsim.util.TesteColisao;
 import com.robotsim.etc.Acao;
+import com.robotsim.etc.Comunicavel;
+import com.robotsim.exceptions.ErroComunicacaoException;
+import com.robotsim.exceptions.RoboDesligadoException;
 import com.robotsim.robots.sensors.Sensor;
 
 /**
  * A classe Robo é a classe base para todos os tipos de robôs no simulador.
  * Ela define propriedades e comportamentos comuns, como posição, nome e ações.
  */
-public abstract class Robo {
+public abstract class Robo implements Comunicavel {
+    protected boolean ligado = false;
     protected String nome; // Nome do robô.
     protected int HP; // Pontos de vida do robô.
     protected int posicaoX; // Posição atual no eixo X.
@@ -28,6 +32,11 @@ public abstract class Robo {
         this.acoes = new ArrayList<>();
         this.sensores = new ArrayList<>();
         inicializarAcoes();
+    }
+
+    public boolean alternarEstado() {
+        this.ligado = !this.ligado;
+        return this.ligado;
     }
 
     /**
@@ -81,7 +90,7 @@ public abstract class Robo {
         if (nosLimites) {
             this.posicaoX = dadosPossivelColisao[0];
             this.posicaoY = dadosPossivelColisao[1];
-            if (TesteColisao.existeColisao(dadosPossivelColisao)){
+            if (TesteColisao.existeColisao(dadosPossivelColisao)) {
                 System.out.printf(
                         "Colisão detectada! Parando na posição (%d, %d)\n", posicaoX, posicaoY);
             }
@@ -115,6 +124,22 @@ public abstract class Robo {
         System.out.println(nome + " está na posição (" + this.posicaoX + ", " + this.posicaoY + ")");
     }
 
+    @Override
+    public void enviarMensagens(Comunicavel comunicavel, String mensagem)
+            throws RoboDesligadoException, ErroComunicacaoException {
+        if (!this.ligado)
+            throw new RoboDesligadoException("O robô %s está desligado.".formatted(this.nome));
+
+        comunicavel.receberMensagens(mensagem);
+        Controlador.getComunicacao().registrarMensagem(this.nome, mensagem);
+    }
+
+    @Override
+    public void receberMensagens(String mensagem) throws RoboDesligadoException, ErroComunicacaoException {
+        if (!this.ligado)
+            throw new RoboDesligadoException("O robô %s está desligado.".formatted(this.nome));
+    }
+
     public ArrayList<Acao> getAcoes() {
         return new ArrayList<>(acoes);
     }
@@ -131,7 +156,7 @@ public abstract class Robo {
         return nome;
     }
 
-    public int getHP(){
+    public int getHP() {
         return HP;
     }
 
