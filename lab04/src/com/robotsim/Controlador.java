@@ -11,6 +11,7 @@ import com.robotsim.environment.Ambiente;
 import com.robotsim.environment.obstacle.Obstaculo;
 import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
+import com.robotsim.etc.CentralComunicacao;
 import com.robotsim.robots.*;
 import com.robotsim.util.TesteColisao;
 
@@ -34,11 +35,11 @@ enum GAME_STATUS {
  * para
  * controlar os robôs e visualizar o progresso da simulação.
  */
-public class Controlador {
+public final class Controlador {
     public static final int DELTA_TIME = 1; // Tempo arbitrário de execução em segundos
 
     private static Ambiente ambiente;
-
+    private static CentralComunicacao comunicacao = new CentralComunicacao();
     private static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -245,6 +246,10 @@ public class Controlador {
 
     public static Ambiente getAmbiente() {
         return ambiente;
+    }
+
+    public static CentralComunicacao getComunicacao() {
+        return comunicacao;
     }
 
 }
