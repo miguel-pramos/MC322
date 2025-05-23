@@ -26,9 +26,9 @@ Nele estarão instruções de execução e de interação com o simulador.
 - Visual Studio Code (Miguel)
 - IntelliJ (Rafael)
 
-### Versão utilizada do Jav
+### Versão utilizada do Java
 
-openjdk version "24.0.1"
+openjdk version "21.0.7"
 
 ## Contribuidores
 - **Miguel** (_281335_)

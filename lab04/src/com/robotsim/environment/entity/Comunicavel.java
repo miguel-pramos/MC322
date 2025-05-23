@@ -1,4 +1,4 @@
-package com.robotsim.etc;
+package com.robotsim.environment.entity;
 
 import com.robotsim.exceptions.ErroComunicacaoException;
 import com.robotsim.exceptions.RoboDesligadoException;

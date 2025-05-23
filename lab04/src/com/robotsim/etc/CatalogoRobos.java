@@ -6,16 +6,18 @@ import java.util.HashMap;
 import com.robotsim.robots.Robo;
 
 /**
- * A classe CatalogoRobos é responsável por gerenciar um catálogo de classes de robôs
- * organizados por categorias. A ideia é que as classes que herdam de {@link com.robotsim.robots.Robo}
+ * A classe CatalogoRobos é responsável por gerenciar um catálogo de classes de
+ * robôs
+ * organizados por categorias. A ideia é que as classes que herdam de
+ * {@link com.robotsim.robots.Robo}
  * possam registrar-se no catálogo automaticamente.
  * <p>
  * Funcionalidades principais:
  * <ul>
- *   <li>Registrar classes de robôs em categorias específicas.</li>
- *   <li>Obter uma lista de categorias disponíveis.</li>
- *   <li>Obter uma lista de robôs registrados em uma categoria específica.</li>
- *   <li>Criar instâncias de robôs com base nas classes registradas.</li>
+ * <li>Registrar classes de robôs em categorias específicas.</li>
+ * <li>Obter uma lista de categorias disponíveis.</li>
+ * <li>Obter uma lista de robôs registrados em uma categoria específica.</li>
+ * <li>Criar instâncias de robôs com base nas classes registradas.</li>
  * </ul>
  */
 public class CatalogoRobos {
@@ -29,9 +31,12 @@ public class CatalogoRobos {
      * @param classeRobo Classe do robô a ser registrada
      */
     public static void registrarRobo(String categoria, Class<? extends Robo> classeRobo) {
-        /* Verifica se a categoria está criada, se estiver, adiciona a classe nova, se não
-        cria a categoria e só então adiciona a classe nova */
-        catalogo.computeIfAbsent(categoria, _ -> new HashMap<String, Class<? extends Robo>>())
+        /*
+         * Verifica se a categoria está criada, se estiver, adiciona a classe nova, se
+         * não
+         * cria a categoria e só então adiciona a classe nova
+         */
+        catalogo.computeIfAbsent(categoria, k -> new HashMap<String, Class<? extends Robo>>())
                 .put(classeRobo.getSimpleName(), classeRobo);
     }
 

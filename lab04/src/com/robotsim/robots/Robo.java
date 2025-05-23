@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.robotsim.Controlador;
+import com.robotsim.environment.entity.Comunicavel;
 import com.robotsim.util.TesteColisao;
 import com.robotsim.etc.Acao;
-import com.robotsim.etc.Comunicavel;
 import com.robotsim.exceptions.ErroComunicacaoException;
 import com.robotsim.exceptions.RoboDesligadoException;
 import com.robotsim.robots.sensors.Sensor;
