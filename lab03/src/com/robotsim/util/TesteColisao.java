@@ -11,7 +11,7 @@ public class TesteColisao {
     public static int True = 1;
     public static int False = 0;
 
-    public static boolean existeColisao(int[] dadosColisao){
+    public static boolean existeColisao(int[] dadosColisao) {
         if (dadosColisao[3] == True) {
             return true;
         }
@@ -19,7 +19,7 @@ public class TesteColisao {
     }
 
     public static int[] dadosColisao(Robo roboMovendo, int xFin, int yFin) {
-        int xIni = roboMovendo.getPosicaoX();
+        int xIni = roboMovendo.getX();
         int yIni = roboMovendo.getPosicaoY();
 
         int dx = Math.abs(xFin - xIni);
@@ -56,15 +56,15 @@ public class TesteColisao {
                     continue;
                 case "Robo":
                     System.out.printf("Colidiu com um robo em %d %d\n", atualX, atualY);
-                    return new int[] { antigoX, antigoY, 0, True};
+                    return new int[] { antigoX, antigoY, 0, True };
                 default:
                     TipoObstaculo obstColidido = TipoObstaculo.valueOf(tipo);
                     System.out.printf("Você colidiu com um %s\n", tipo);
-                    return new int[] { antigoX, antigoY, obstColidido.getDano(), True};
+                    return new int[] { antigoX, antigoY, obstColidido.getDano(), True };
             }
         }
 
-        int[] dados = { atualX, atualY, 0, False};
+        int[] dados = { atualX, atualY, 0, False };
         return dados;
     }
 
@@ -73,7 +73,7 @@ public class TesteColisao {
         if (roboMovendo instanceof RoboTerrestre) {
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
                 if (robo instanceof RoboTerrestre && robo != roboMovendo &&
-                        robo.getPosicaoX() == xRobo && robo.getPosicaoY() == yRobo) {
+                        robo.getX() == xRobo && robo.getPosicaoY() == yRobo) {
                     return "Robo";
                 }
             }
@@ -83,7 +83,7 @@ public class TesteColisao {
             for (Robo robo : Controlador.getAmbiente().getRobos()) {
                 if (robo instanceof RoboAereo &&
                         robo != roboMovendo &&
-                        robo.getPosicaoX() == xRobo &&
+                        robo.getX() == xRobo &&
                         robo.getPosicaoY() == yRobo &&
                         ((RoboAereo) robo).getAltitude() == zRobo)
                     return "Robo";
@@ -91,11 +91,11 @@ public class TesteColisao {
         }
 
         for (Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
-            int obsSupX = obstaculo.getPosX() + (obstaculo.getTipo().getComprimento() - 1)/2;
-            int obsSupY = obstaculo.getPosY() + (obstaculo.getTipo().getLargura() - 1)/2;
+            int obsSupX = obstaculo.getPosX() + (obstaculo.getTipo().getComprimento() - 1) / 2;
+            int obsSupY = obstaculo.getPosY() + (obstaculo.getTipo().getLargura() - 1) / 2;
 
-            int obsInfX = obstaculo.getPosX() - (obstaculo.getTipo().getComprimento() - 1)/2;
-            int obstInfY = obstaculo.getPosY() - (obstaculo.getTipo().getLargura() - 1)/2;
+            int obsInfX = obstaculo.getPosX() - (obstaculo.getTipo().getComprimento() - 1) / 2;
+            int obstInfY = obstaculo.getPosY() - (obstaculo.getTipo().getLargura() - 1) / 2;
 
             if (xRobo < obsInfX || xRobo > obsSupX) {
                 continue;

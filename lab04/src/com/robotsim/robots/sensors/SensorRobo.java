@@ -61,23 +61,23 @@ public class SensorRobo extends Sensor {
                 if (outro_robo instanceof RoboAereo && outro_robo != this.sensor.getRobo()) {
 
                     // Calcula a distância considerando a altitude.
-                    distancia = GeometryMath.distanciaEuclidiana(this.sensor.getRobo(), outro_robo.getPosicaoX(),
-                            outro_robo.getPosicaoY(), ((RoboAereo) outro_robo).getAltitude());
+                    distancia = GeometryMath.distanciaEuclidiana(this.sensor.getRobo(), outro_robo.getX(),
+                            outro_robo.getY(), ((RoboAereo) outro_robo).getAltitude());
 
                     if (distancia < this.sensor.getRaioDeAlcance())
                         System.out.printf("O robô %s está na posição (%d, %d, %d)%n", outro_robo.getNome(),
-                                outro_robo.getPosicaoX(), outro_robo.getPosicaoY(),
+                                outro_robo.getX(), outro_robo.getY(),
                                 ((RoboAereo) outro_robo).getAltitude());
 
                 } else if (outro_robo instanceof RoboTerrestre && outro_robo != this.sensor.getRobo()) {
 
                     // Calcula a distância considerando altitude zero para robôs terrestres.
-                    distancia = GeometryMath.distanciaEuclidiana(this.sensor.getRobo(), outro_robo.getPosicaoX(),
-                            outro_robo.getPosicaoY(), 0);
+                    distancia = GeometryMath.distanciaEuclidiana(this.sensor.getRobo(), outro_robo.getX(),
+                            outro_robo.getY(), 0);
 
                     if (distancia < this.sensor.getRaioDeAlcance())
                         System.out.printf("O robô %s está na posição (%d, %d, %d)%n", outro_robo.getNome(),
-                                outro_robo.getPosicaoX(), outro_robo.getPosicaoY(), 0);
+                                outro_robo.getX(), outro_robo.getY(), 0);
 
                 } else if (outro_robo != this.sensor.getRobo()) {
                     System.out.println("Tipo desconhecido");

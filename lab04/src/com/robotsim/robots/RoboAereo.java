@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
+import com.robotsim.exceptions.ColisaoException;
 
 /**
  * A classe RoboAereo representa um robô aéreo genérico que pode se mover em
@@ -39,12 +40,13 @@ public abstract class RoboAereo extends Robo {
      * @param deltaZ Valor a ser incrementado na altitude.
      */
     public void subir(int deltaZ) {
-        if (Controlador.getAmbiente()
-                .dentroDosLimites(this.posicaoX, this.posicaoY,
-                        this.altitude + deltaZ, altitudeMaxima)) {
+        try {
+            Controlador.getAmbiente()
+                    .dentroDosLimites(this.posicaoX, this.posicaoY,
+                            this.altitude + deltaZ);
+        } catch (ColisaoException e) {
             this.altitude += deltaZ;
-        } else {
-            this.altitude = altitudeMaxima;
+
             System.out.printf("\nVocê subiu... E subiu... Até atingir " +
                     "os limites das máquinas modernas e parou na altura " +
                     "máxima de %d", altitudeMaxima);
@@ -60,11 +62,12 @@ public abstract class RoboAereo extends Robo {
      * @param deltaZ Valor a ser decrementado na altitude.
      */
     public void descer(int deltaZ) {
-        if (Controlador.getAmbiente()
-                .dentroDosLimites(this.posicaoX, this.posicaoY,
-                        this.altitude - deltaZ, altitudeMaxima)) {
+        try {
+            Controlador.getAmbiente()
+                    .dentroDosLimites(this.posicaoX, this.posicaoY,
+                            this.altitude - deltaZ);
+        } catch (ColisaoException e) {
             this.altitude -= deltaZ;
-        } else {
             this.altitude = 0;
         }
     }

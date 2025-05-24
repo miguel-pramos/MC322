@@ -24,8 +24,8 @@ public final class GeometryMath {
      *         especificado.
      */
     public static double distanciaEuclidiana(Robo robo, int x, int y) {
-        int xRobo = robo.getPosicaoX();
-        int yRobo = robo.getPosicaoY();
+        int xRobo = robo.getX();
+        int yRobo = robo.getY();
 
         return Math.sqrt(Math.pow(x - xRobo, 2) + Math.pow(y - yRobo, 2));
     }
@@ -40,12 +40,12 @@ public final class GeometryMath {
      * @return A distância euclidiana entre o robô e o ponto especificado.
      */
     public static double distanciaEuclidiana(Robo robo, int x, int y, int z) {
-        int xRobo = robo.getPosicaoX();
-        int yRobo = robo.getPosicaoY();
+        int xRobo = robo.getX();
+        int yRobo = robo.getY();
         int zRobo = 0;
-        if (robo instanceof RoboAereo) 
+        if (robo instanceof RoboAereo)
             zRobo = ((RoboAereo) robo).getAltitude();
-        
+
         return Math.sqrt(Math.pow(x - xRobo, 2) + Math.pow(y - yRobo, 2) + Math.pow(z - zRobo, 2));
     }
 

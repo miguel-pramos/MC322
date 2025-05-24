@@ -2,6 +2,9 @@ package com.robotsim.environment.obstacle;
 
 import java.util.Random;
 import com.robotsim.Controlador;
+import com.robotsim.environment.entity.Entidade;
+import com.robotsim.environment.entity.TipoEntidade;
+import com.robotsim.exceptions.ColisaoException;
 
 /**
  * A classe Obstaculo representa um obstáculo no ambiente do simulador.
@@ -12,7 +15,7 @@ import com.robotsim.Controlador;
  * garantindo que eles não colidam com outros obstáculos e estejam dentro dos
  * limites do ambiente.
  */
-public class Obstaculo {
+public class Obstaculo implements Entidade {
     private int posX; // Coordenada X do obstáculo
     private int posY; // Coordenada Y do obstáculo
     protected final TipoObstaculo tipo; // Tipo do obstáculo
@@ -51,13 +54,20 @@ public class Obstaculo {
         int inferiorX = testeX - metadeComprimento;
         int inferiorY = testeY - metadeLargura;
 
-        boolean dentroDosLimitesSuperior = Controlador.getAmbiente().dentroDosLimites(superiorX, superiorY);
+        boolean dentroDosLimitesSuperior;
+        try {
+            dentroDosLimitesSuperior = Controlador.getAmbiente().dentroDosLimites(superiorX, superiorY, 0);
+            boolean dentroDosLimitesInferior = Controlador.getAmbiente().dentroDosLimites(inferiorX, inferiorY, 0);
 
-        boolean dentroDosLimitesInferior = Controlador.getAmbiente().dentroDosLimites(inferiorX, inferiorY);
+            boolean semColisEntreObst = !testColisEntreObst(superiorX, superiorY, inferiorX, inferiorY);
 
-        boolean semColisEntreObst = !testColisEntreObst(superiorX, superiorY, inferiorX, inferiorY);
+            return dentroDosLimitesSuperior && dentroDosLimitesInferior && semColisEntreObst;
 
-        return dentroDosLimitesSuperior && dentroDosLimitesInferior && semColisEntreObst;
+        } catch (ColisaoException e) {
+
+            return false;
+        }
+
     }
 
     /**
@@ -73,11 +83,11 @@ public class Obstaculo {
     private static boolean testColisEntreObst(int ret1SuperiorX, int ret1SuperiorY, int ret1InferiorX,
             int ret1InferiorY) {
         for (Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
-            int ret2SuperiorX = obstaculo.getPosX() + obstaculo.getTipo().comprimento;
-            int ret2SuperiorY = obstaculo.getPosY() + obstaculo.getTipo().largura;
+            int ret2SuperiorX = obstaculo.getX() + obstaculo.getTipoObstaculo().comprimento;
+            int ret2SuperiorY = obstaculo.getY() + obstaculo.getTipoObstaculo().largura;
 
-            int ret2InferiorX = obstaculo.getPosX() - obstaculo.getTipo().comprimento;
-            int ret2InferiorY = obstaculo.getPosY() - obstaculo.getTipo().largura;
+            int ret2InferiorX = obstaculo.getX() - obstaculo.getTipoObstaculo().comprimento;
+            int ret2InferiorY = obstaculo.getY() - obstaculo.getTipoObstaculo().largura;
 
             // Verifica se um retângulo está à esquerda do outro
             if (ret2SuperiorX < ret1InferiorX || ret1SuperiorX < ret2InferiorX) {
@@ -95,15 +105,35 @@ public class Obstaculo {
         return false;
     }
 
-    public int getPosX() {
+    @Override
+    public String getDescricao() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public char getRepresentacao() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    public TipoEntidade getTipo() {
+        return TipoEntidade.OBSTACULO;
+    }
+
+    public int getX() {
         return this.posX;
     }
 
-    public int getPosY() {
+    public int getY() {
         return this.posY;
     }
 
-    public TipoObstaculo getTipo() {
+    public int getZ() {
+        return 0;
+    }
+
+    public TipoObstaculo getTipoObstaculo() {
         return this.tipo;
     }
 

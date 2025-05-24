@@ -63,9 +63,9 @@ public class Controlador {
 
     // EXECUÇÃO NO LOOP
 
-    private static boolean roboNaoRemovido(Robo roboAnalisado){
-        for (Robo roboRemovido : ambiente.getRobosRemovidos()){
-            if (roboAnalisado == roboRemovido){
+    private static boolean roboNaoRemovido(Robo roboAnalisado) {
+        for (Robo roboRemovido : ambiente.getRobosRemovidos()) {
+            if (roboAnalisado == roboRemovido) {
                 return false;
             }
         }
@@ -75,9 +75,10 @@ public class Controlador {
     private static void interagir(Robo robo) {
         System.out.printf("\nSeu HP: %d\n", robo.getHP());
         if (robo instanceof RoboAereo) {
-            System.out.printf("Sua posição: (%d, %d, %d)\n", robo.getPosicaoX(), robo.getPosicaoY(), ((RoboAereo) robo).getAltitude());
-        } else{
-            System.out.printf("Sua posição: (%d, %d, %d)\n", robo.getPosicaoX(), robo.getPosicaoY(), 0);
+            System.out.printf("Sua posição: (%d, %d, %d)\n", robo.getX(), robo.getPosicaoY(),
+                    ((RoboAereo) robo).getAltitude());
+        } else {
+            System.out.printf("Sua posição: (%d, %d, %d)\n", robo.getX(), robo.getPosicaoY(), 0);
         }
 
         System.out.printf("\nAÇÕES DISPONÍVEIS PARA %s:\n", robo.getNome().toUpperCase());
@@ -119,7 +120,7 @@ public class Controlador {
         System.out.println("\n\n=============== MAPA DO JOGO ===============");
         for (int i = 0; i < ambiente.getLargura(); i++) {
             for (int j = 0; j < ambiente.getComprimento(); j++) {
-                if (robo.getPosicaoX() == j && robo.getPosicaoY() == i)
+                if (robo.getX() == j && robo.getPosicaoY() == i)
                     System.out.print(robo.getNome().charAt(0));
                 else
                     System.out.print(".");

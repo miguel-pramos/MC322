@@ -35,7 +35,7 @@ public class SensorObstaculo extends Sensor {
         public String getNome() {
             return "(Sensor) Monitorar Obstáculos";
         }
-        
+
         /**
          * Método sobrescrito que descreve a ação de monitorar obstáculos.
          * Este método é responsável por detectar obstáculos no ambiente e exibir
@@ -44,16 +44,17 @@ public class SensorObstaculo extends Sensor {
          * Regras e comportamentos:
          * - O sensor verifica todos os obstáculos presentes no ambiente.
          * - Caso um obstáculo esteja dentro do raio de alcance do sensor, sua posição
-         *   será exibida no console.
-         * - Caso nenhum obstáculo seja detectado, uma mensagem informativa será exibida.
+         * será exibida no console.
+         * - Caso nenhum obstáculo seja detectado, uma mensagem informativa será
+         * exibida.
          */
         @Override
         public void executar() {
             int counter = 0;
             System.out.println("Iniciando o processo de detecção...");
             for (Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
-                if (GeometryMath.distanciaEuclidiana(this.sensor.getRobo(), obstaculo.getPosX(),
-                        obstaculo.getPosY()) <= this.sensor.getRaioDeAlcance()) {
+                if (GeometryMath.distanciaEuclidiana(this.sensor.getRobo(), obstaculo.getX(),
+                        obstaculo.getY()) <= this.sensor.getRaioDeAlcance()) {
                     counter++;
                     try {
                         TimeUnit.MILLISECONDS.sleep(1600); // Simula o tempo necessário para detecção.
@@ -63,7 +64,7 @@ public class SensorObstaculo extends Sensor {
                     }
 
                     System.out.printf("O obstáculo %s está na posição (%d, %d, %d)%n", obstaculo.getNome(),
-                            obstaculo.getPosX(), obstaculo.getPosY(), 0);
+                            obstaculo.getX(), obstaculo.getY(), 0);
                 }
 
             }
