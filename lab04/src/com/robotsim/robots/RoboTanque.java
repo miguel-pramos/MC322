@@ -35,11 +35,10 @@ public class RoboTanque extends RoboTerrestre {
     protected void atirar(RoboTerrestre alvo) {
         if (this.balasRestantes <= 0)
             throw new IllegalStateException("Nenhuma bala restante");
-        else if (GeometryMath.distanciaEuclidiana(this, alvo.getPosicaoX(), alvo.getPosicaoY()) < this.alcance) {
+        else if (GeometryMath.distanciaEuclidiana(this, alvo.getX(), alvo.getY()) < this.alcance) {
             alvo.tomarDano(this.dano);
             this.balasRestantes--;
-        }
-        else{
+        } else {
             System.out.println("O inimigo estava longe demais... Não acertou");
         }
     }
@@ -72,8 +71,10 @@ public class RoboTanque extends RoboTerrestre {
          *
          * Regras e comportamentos:
          * - O robô não pode atacar a si mesmo.
-         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e a execução será encerrada.
-         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso contrário, uma mensagem de erro será exibida.
+         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e
+         * a execução será encerrada.
+         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso
+         * contrário, uma mensagem de erro será exibida.
          *
          * Caso não haja robôs terrestres no ambiente, ou o índice fornecido seja
          * inválido, mensagens apropriadas serão exibidas ao usuário.
