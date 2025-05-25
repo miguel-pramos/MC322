@@ -52,8 +52,15 @@ public class Ambiente {
      * @param robo O robô a ser adicionado.
      */
     public void adicionarEntidade(Entidade entidade) {
-        this.mapa[0][0][0] = entidade.getTipo();
-        this.entidades.add(entidade);
+        int x = entidade.getX();
+        int y = entidade.getY();
+        int z = entidade.getZ();
+        if (dentroDosLimites(x, y, z)) {
+            this.mapa[x][y][z] = entidade.getTipo();
+            this.entidades.add(entidade);
+        } else {
+            throw new IllegalArgumentException("Entidade fora dos limites do ambiente.");
+        }
     }
 
     /**
