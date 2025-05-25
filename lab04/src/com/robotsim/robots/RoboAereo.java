@@ -44,8 +44,8 @@ public abstract class RoboAereo extends Robo {
             Controlador.getAmbiente()
                     .dentroDosLimites(this.posicaoX, this.posicaoY,
                             this.altitude + deltaZ);
-        } catch (ColisaoException e) {
             this.altitude += deltaZ;
+        } catch (ColisaoException e) {
 
             System.out.printf("\nVocê subiu... E subiu... Até atingir " +
                     "os limites das máquinas modernas e parou na altura " +
@@ -66,8 +66,8 @@ public abstract class RoboAereo extends Robo {
             Controlador.getAmbiente()
                     .dentroDosLimites(this.posicaoX, this.posicaoY,
                             this.altitude - deltaZ);
-        } catch (ColisaoException e) {
             this.altitude -= deltaZ;
+        } catch (ColisaoException e) {
             this.altitude = 0;
         }
     }
