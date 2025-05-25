@@ -5,8 +5,10 @@ import java.util.Scanner;
 
 import com.robotsim.Controlador;
 import com.robotsim.environment.entity.Comunicavel;
+import com.robotsim.environment.entity.Entidade;
 import com.robotsim.util.TesteColisao;
 import com.robotsim.etc.Acao;
+import com.robotsim.exceptions.ColisaoException;
 import com.robotsim.exceptions.ErroComunicacaoException;
 import com.robotsim.exceptions.RoboDesligadoException;
 import com.robotsim.robots.sensors.Sensor;
@@ -15,12 +17,13 @@ import com.robotsim.robots.sensors.Sensor;
  * A classe Robo é a classe base para todos os tipos de robôs no simulador.
  * Ela define propriedades e comportamentos comuns, como posição, nome e ações.
  */
-public abstract class Robo implements Comunicavel {
+public abstract class Robo implements Comunicavel, Entidade {
     protected boolean ligado = false;
     protected String nome; // Nome do robô.
     protected int HP; // Pontos de vida do robô.
     protected int posicaoX; // Posição atual no eixo X.
     protected int posicaoY; // Posição atual no eixo Y.
+    protected int posicaoZ; // Posição atual no eixo Z.  
     protected ArrayList<Acao> acoes; // Lista de ações disponíveis para o robô.
     protected ArrayList<Sensor> sensores; // Sensores do robô
 
@@ -82,12 +85,12 @@ public abstract class Robo implements Comunicavel {
         int xFinal = this.posicaoX + deltaX;
         int yFinal = this.posicaoY + deltaY;
 
-        boolean nosLimites = Controlador.getAmbiente()
-                .dentroDosLimites(xFinal, yFinal);
+        try {
+            Controlador.getAmbiente()
+                    .dentroDosLimites(xFinal, yFinal, 0);
 
-        int[] dadosPossivelColisao = TesteColisao.dadosColisao(this, xFinal, yFinal);
+            int[] dadosPossivelColisao = TesteColisao.dadosColisao(this, xFinal, yFinal);
 
-        if (nosLimites) {
             this.posicaoX = dadosPossivelColisao[0];
             this.posicaoY = dadosPossivelColisao[1];
             if (TesteColisao.existeColisao(dadosPossivelColisao)) {
@@ -97,8 +100,9 @@ public abstract class Robo implements Comunicavel {
             if (dadosPossivelColisao[2] != 0) {
                 this.tomarDano(dadosPossivelColisao[2]);
             }
-        } else {
+        } catch (ColisaoException e) {
             System.out.println("Você estará fora dos limites do ambiente. Ação cancelada!");
+
         }
 
     }
@@ -114,7 +118,7 @@ public abstract class Robo implements Comunicavel {
         this.HP -= dano;
         System.out.printf("O robo %s foi atingido com sucesso!\n", this.nome);
         if (this.HP < 0)
-            Controlador.getAmbiente().destruirRobo(this);
+            Controlador.getAmbiente().destruirEntidade(this);
     }
 
     /**
@@ -144,12 +148,16 @@ public abstract class Robo implements Comunicavel {
         return new ArrayList<>(acoes);
     }
 
-    public int getPosicaoX() {
+    public int getX() {
         return posicaoX;
     }
 
-    public int getPosicaoY() {
+    public int getY() {
         return posicaoY;
+    }
+
+    public int getZ() {
+        return posicaoZ;
     }
 
     public String getNome() {

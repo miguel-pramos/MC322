@@ -2,36 +2,32 @@ package com.robotsim.environment;
 
 import java.util.ArrayList;
 
+import com.robotsim.environment.entity.Entidade;
+import com.robotsim.environment.entity.TipoEntidade;
 import com.robotsim.environment.obstacle.Obstaculo;
+import com.robotsim.exceptions.ColisaoException;
 import com.robotsim.robots.Robo;
-
 
 /**
  * A classe Ambiente representa o espaço onde os robôs interagem.
  * Define os limites do ambiente e gerencia os robôs presentes nele.
  */
 public class Ambiente {
-    private int comprimento; // Comprimento do ambiente.
-    private int largura; // Largura do ambiente.
-    private ArrayList<Robo> robos = new ArrayList<>(); // Lista de robôs no ambiente.
-    private ArrayList<Obstaculo> obstaculos = new ArrayList<>(); // Lista de robôs no ambiente.
-    private ArrayList<Robo> robosRemovidos = new ArrayList<>();
+    private int comprimento, largura, altura; // Comprimento do ambiente.
+    private ArrayList<Entidade> entidades = new ArrayList<>();
+    private ArrayList<Entidade> entidadesRemovidas = new ArrayList<>();
+    private TipoEntidade[][][] mapa;
 
-    public Ambiente(int comprimento, int largura) {
+    public Ambiente(int comprimento, int largura, int altura) {
         this.comprimento = comprimento;
         this.largura = largura;
+        this.altura = altura;
+        this.mapa = new TipoEntidade[comprimento][largura][altura];
+        inicializarMapa();
     }
 
-    /**
-     * Verifica se uma posição bidimensional está dentro dos limites do ambiente.
-     *
-     * @param x Coordenada no eixo X.
-     * @param y Coordenada no eixo Y.
-     * @return true se a posição estiver dentro dos limites, false caso contrário.
-     */
-    public boolean dentroDosLimites(int x, int y) {
-        return (x < this.comprimento && y < this.largura)
-                && (x >= 0 && y >= 0);
+    private boolean estaOcupado(int x, int y, int z) {
+        return this.mapa[x][y][z] == TipoEntidade.VAZIO;
     }
 
     /**
@@ -43,8 +39,10 @@ public class Ambiente {
      * @param alturaMaxima Coordenada máxima para o eixo Z.
      * @return true se a posição estiver dentro dos limites, false caso contrário.
      */
-    public boolean dentroDosLimites(int x, int y, int z, int alturaMaxima) {
-        return (x < this.comprimento && y < this.largura && z < alturaMaxima)
+    public boolean dentroDosLimites(int x, int y, int z) throws ColisaoException {
+        if (estaOcupado(x, y, z))
+            throw new ColisaoException();
+        return (x < this.comprimento && y < this.largura && z < this.altura)
                 && (x >= 0 && y >= 0 && z >= 0);
     }
 
@@ -53,8 +51,16 @@ public class Ambiente {
      *
      * @param robo O robô a ser adicionado.
      */
-    public void adicionarRobo(Robo robo) {
-        this.robos.add(robo);
+    public void adicionarEntidade(Entidade entidade) {
+        int x = entidade.getX();
+        int y = entidade.getY();
+        int z = entidade.getZ();
+        if (dentroDosLimites(x, y, z)) {
+            this.mapa[x][y][z] = entidade.getTipo();
+            this.entidades.add(entidade);
+        } else {
+            throw new IllegalArgumentException("Entidade fora dos limites do ambiente.");
+        }
     }
 
     /**
@@ -63,30 +69,48 @@ public class Ambiente {
      * @param robo O robô a ser removido.
      * @return true se o robô foi removido com sucesso, false caso contrário.
      */
-    public void destruirRobo(Robo robo) {
-        System.out.printf("O robô %s foi destruído.%n", robo.getNome());
-        this.robos.remove(robo);
-        robosRemovidos.add(robo);
+    public void destruirEntidade(Entidade entidade) {
+        this.mapa[0][0][0] = TipoEntidade.VAZIO;
+        this.entidades.remove(entidade);
+        entidadesRemovidas.add(entidade);
     }
 
-    /**
-     * Adiciona um obstáculo ao ambiente.
-     *
-     * @param robo O obstáculo a ser adicionado.
-     */
-    public void adicionarObstaculo(Obstaculo obstaculo) {
-        this.obstaculos.add(obstaculo);
+    public void moverEntidade(Entidade entidade, int novoX, int novoY, int novoZ) {
+        this.mapa[entidade.getX()][entidade.getY()][entidade.getZ()] = TipoEntidade.VAZIO;
+        this.mapa[novoX][novoY][novoZ] = entidade.getTipo();
     }
 
-    /**
-     * Remove um obstáculo do ambiente, simulando sua destruição.
-     *
-     * @param robo O obstáculo a ser removido.
-     * @return true se o obstáculo foi removido com sucesso, false caso contrário.
-     */
-    public void destruirObstaculo(Obstaculo obstaculo) {
-        System.out.printf("O obstáculo %s foi destruído.%n", obstaculo.getTipo().toString());
-        this.obstaculos.remove(obstaculo);
+    void inicializarMapa() {
+        for (int i = 0; i < comprimento; i++)
+            for (int j = 0; j < largura; j++)
+                for (int k = 0; k < altura; k++)
+                    this.mapa[i][j][k] = TipoEntidade.VAZIO;
+
+    }
+
+    public void visualizarAmbiente() {
+        for (int y = 0; y < largura; y++) {
+            for (int x = 0; x < comprimento; x++) {
+                Entidade entidadeNoTopo = null;
+                for (int z = altura - 1; z >= 0; z--) {
+                    for (Entidade entidade : entidades)
+                        if (entidade.getX() == x && entidade.getY() == y && entidade.getZ() == z) {
+                            entidadeNoTopo = entidade;
+                            break;
+                        }
+
+                    if (entidadeNoTopo != null)
+                        break;
+                }
+                if (entidadeNoTopo != null)
+                    System.out.print(entidadeNoTopo.getRepresentacao());
+                else
+                    System.out.print(".");
+
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
     }
 
     public int getLargura() {
@@ -97,13 +121,27 @@ public class Ambiente {
         return comprimento;
     }
 
-    public ArrayList<Robo> getRobos() {
-        return new ArrayList<Robo>(robos);
+    public ArrayList<Entidade> getEntidadesRemovidas() {
+        return entidadesRemovidas;
     }
 
-    public ArrayList<Robo> getRobosRemovidos() { return robosRemovidos; }
+    public ArrayList<Robo> getRobos() {
+        ArrayList<Robo> robos = new ArrayList<>();
+        for (Entidade entidade : entidades) {
+            if (entidade instanceof Robo) {
+                robos.add((Robo) entidade);
+            }
+        }
+        return robos;
+    }
 
     public ArrayList<Obstaculo> getObstaculos() {
-        return new ArrayList<Obstaculo>(obstaculos);
+        ArrayList<Obstaculo> obstaculos = new ArrayList<>();
+        for (Entidade entidade : entidades) {
+            if (entidade instanceof Obstaculo) {
+                obstaculos.add((Obstaculo) entidade);
+            }
+        }
+        return obstaculos;
     }
 }

@@ -35,7 +35,7 @@ public class RoboDrone extends RoboAereo {
         this.bateria -= Math.abs(deltaX) + Math.abs(deltaY);
 
         if (this.bateria <= 0) {
-            Controlador.getAmbiente().destruirRobo(this); // Remove o robô do ambiente.
+            Controlador.getAmbiente().destruirEntidade(this); // Remove o robô do ambiente.
         } else {
             super.mover(deltaX, deltaY); // Chama o método da superclasse para movimentação.
             System.out.printf("Sua bateria está em %d%n", this.bateria);

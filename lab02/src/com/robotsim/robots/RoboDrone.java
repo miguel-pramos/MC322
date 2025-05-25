@@ -44,21 +44,21 @@ public class RoboDrone extends RoboAereo {
         for (Robo robo : Controlador.getAmbiente().getRobos()) {
             if (robo instanceof RoboAereo && robo != this) {
                 // Calcula a distância considerando a altitude.
-                distancia = GeometryMath.distanciaEuclidiana(this, robo.getPosicaoX(),
-                        robo.getPosicaoY(), ((RoboAereo) robo).getAltitude());
+                distancia = GeometryMath.distanciaEuclidiana(this, robo.getX(),
+                        robo.getY(), ((RoboAereo) robo).getAltitude());
 
                 if (distancia < alcanceDeteccao) {
                     System.out.printf("O robô %s está na posição (%d, %d, %d)%n", robo.getNome(),
-                            robo.getPosicaoX(), robo.getPosicaoY(), ((RoboAereo) robo).getAltitude());
+                            robo.getX(), robo.getY(), ((RoboAereo) robo).getAltitude());
                 }
             } else if (robo instanceof RoboTerrestre) {
                 // Calcula a distância considerando altitude zero para robôs terrestres.
-                distancia = GeometryMath.distanciaEuclidiana(this, robo.getPosicaoX(),
-                        robo.getPosicaoY(), 0);
+                distancia = GeometryMath.distanciaEuclidiana(this, robo.getX(),
+                        robo.getY(), 0);
 
                 if (distancia < alcanceDeteccao) {
                     System.out.printf("O robô %s está na posição (%d, %d, %d)%n", robo.getNome(),
-                            robo.getPosicaoX(), robo.getPosicaoY(), 0);
+                            robo.getX(), robo.getY(), 0);
                 }
             } else {
                 System.out.println("Tipo desconhecido");
