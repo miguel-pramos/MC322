@@ -1,6 +1,5 @@
 package com.robotsim.environment;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import com.robotsim.environment.entity.Entidade;

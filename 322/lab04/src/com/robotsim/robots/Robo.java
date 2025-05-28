@@ -70,7 +70,7 @@ public abstract class Robo implements Comunicavel, Entidade {
     }
 
     /**
-     * Tenta executar uma tarefa.
+     * Tenta executar uma ação.
      *
      * @param nomeAcao Nome da ação buscada
      */
@@ -222,7 +222,6 @@ public abstract class Robo implements Comunicavel, Entidade {
     }
 
     protected String criaID(int contador) {
-        contador++;
         // Formata o contador para ter dois dígitos, adicionando um zero à esquerda se necessário.
         // Exemplo: contador 1 se torna "01", contador 10 se torna "10".
         String id = String.valueOf(contador);
