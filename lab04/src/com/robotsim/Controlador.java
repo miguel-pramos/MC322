@@ -143,7 +143,7 @@ public final class Controlador {
             System.out.printf("[%d] %s (ID: %s, Tipo: %s, Estado: %s, HP: %d, Pos: (%d,%d,%d))\n",
                     i + 1, r.getNome(), r.getId(), r.getClass().getSimpleName(),
                     r.isLigado() ? "Ligado" : "Desligado", r.getHP(),
-                    r.getX(), r.getY(), (r instanceof RoboAereo ? ((RoboAereo) r).getAltitude() : 0));
+                    r.getX(), r.getY(), (r instanceof RoboAereo ? ((RoboAereo) r).getZ() : 0));
         }
     }
 
@@ -217,7 +217,7 @@ public final class Controlador {
             System.out.println("HP: " + robo.getHP());
             if (robo instanceof RoboAereo) {
                 RoboAereo ra = (RoboAereo) robo;
-                System.out.printf("Posição: (%d, %d, %d)\n", ra.getX(), ra.getY(), ra.getAltitude());
+                System.out.printf("Posição: (%d, %d, %d)\n", ra.getX(), ra.getY(), ra.getZ());
                 System.out.println("Altitude Máxima: " + ra.getAltitudeMaxima());
             } else {
                 System.out.printf("Posição: (%d, %d, %d)\n", robo.getX(), robo.getY(), 0); // RoboTerrestre tem Z=0
@@ -227,7 +227,7 @@ public final class Controlador {
         } else {
             System.out.printf("Status Rápido - %s: HP: %d, Estado: %s, Pos: (%d,%d,%d)\n",
                     robo.getNome(), robo.getHP(), (robo.isLigado() ? "Ligado" : "Desligado"),
-                    robo.getX(), robo.getY(), (robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0));
+                    robo.getX(), robo.getY(), (robo instanceof RoboAereo ? ((RoboAereo) robo).getZ() : 0));
         }
     }
 

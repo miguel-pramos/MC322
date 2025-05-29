@@ -32,6 +32,7 @@ public final class GeometryMath {
 
     /**
      * Calcula a distância euclidiana entre um robô aéreo e um ponto tridimensional.
+     * Este método considera a coordenada Z (altitude) para robôs aéreos.
      *
      * @param robo O objeto RoboAereo cuja posição será usada no cálculo.
      * @param x    A coordenada X do ponto de comparação.
