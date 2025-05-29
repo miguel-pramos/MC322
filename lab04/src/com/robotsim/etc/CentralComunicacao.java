@@ -3,7 +3,7 @@ package com.robotsim.etc;
 import java.util.ArrayList;
 
 public final class CentralComunicacao {
-    private ArrayList<String> mensagens;
+    private ArrayList<String> mensagens = new ArrayList<>();
 
     public void registrarMensagem(String remetente, String mensagem) {
         this.mensagens.add(mensagem);

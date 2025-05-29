@@ -10,7 +10,6 @@ import java.util.Random;
 import java.lang.reflect.InvocationTargetException;
 
 import com.robotsim.environment.Ambiente;
-import com.robotsim.environment.entity.Entidade;
 import com.robotsim.environment.obstacle.Obstaculo;
 import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
@@ -363,8 +362,8 @@ public final class Controlador {
     private static void inicializarSim() {
         try {
 
-            final int COMPRIMENTO = 50;
-            final int LARGURA = 30;
+            final int COMPRIMENTO = 60;
+            final int LARGURA = 15;
             final int ALTURA = 30;
             ambiente = new Ambiente(COMPRIMENTO, LARGURA, ALTURA);
 
