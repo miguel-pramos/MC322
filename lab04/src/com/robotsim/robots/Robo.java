@@ -28,7 +28,7 @@ public abstract class Robo implements Comunicavel, Entidade {
     protected int HP; // Pontos de vida do robô.
     protected int posicaoX; // Posição atual no eixo X.
     protected int posicaoY; // Posição atual no eixo Y.
-    protected int posicaoZ; // Posição atual no eixo Z.  
+    protected int posicaoZ; // Posição atual no eixo Z.
     protected ArrayList<Acao> acoes; // Lista de ações disponíveis para o robô.
     protected ArrayList<Sensor> sensores; // Sensores do robô
 
@@ -126,7 +126,7 @@ public abstract class Robo implements Comunicavel, Entidade {
         this.HP -= dano;
         System.out.printf("O robo %s foi atingido com sucesso!\n", this.nome);
         if (this.HP < 0)
-            Controlador.getAmbiente().destruirEntidade(this);
+            Controlador.getAmbiente().removerEntidade(this);
     }
 
     /**
@@ -222,15 +222,16 @@ public abstract class Robo implements Comunicavel, Entidade {
     }
 
     protected String criaID(int contador) {
-        // Formata o contador para ter dois dígitos, adicionando um zero à esquerda se necessário.
+        // Formata o contador para ter dois dígitos, adicionando um zero à esquerda se
+        // necessário.
         // Exemplo: contador 1 se torna "01", contador 10 se torna "10".
         String id = String.valueOf(contador);
         if (contador < 10) {
             id = '0' + id;
         }
-        
+
         Class<?> classeAtual = this.getClass();
-        while(true) {
+        while (true) {
             String specs = classeAtual.getSimpleName();
             id = specs.charAt(4) + id;
             classeAtual = classeAtual.getSuperclass();

@@ -71,7 +71,7 @@ public class Ambiente {
      * @param robo O robô a ser removido.
      * @return true se o robô foi removido com sucesso, false caso contrário.
      */
-    public void destruirEntidade(Entidade entidade) {
+    public void removerEntidade(Entidade entidade) {
         this.mapa[0][0][0] = TipoEntidade.VAZIO;
         this.entidades.remove(entidade);
         entidadesRemovidas.add(entidade);

@@ -27,7 +27,8 @@ public class RoboDrone extends RoboAereo {
 
     @Override
     public String getDescricao() {
-        return String.format("RoboDrone se move usando sua pequena bateria... Rumores dizem que sua autodestruição é potente \nNome: %s, HP: %d, Bateria: %d",
+        return String.format(
+                "RoboDrone se move usando sua pequena bateria... Rumores dizem que sua autodestruição é potente \nNome: %s, HP: %d, Bateria: %d",
                 this.nome, this.HP, this.bateria);
     }
 
@@ -51,13 +52,13 @@ public class RoboDrone extends RoboAereo {
         if (this.bateria <= 0) {
             System.out.println("Bateria esgotada! RoboDrone não pode mais exitir... Destruindo RoboDrone...");
             for (Entidade entidade : Controlador.getAmbiente().getEntidades()) {
-                if (entidade instanceof Robo && 
-                GeometryMath.distanciaEuclidiana((Robo) this, entidade.getX(), entidade.getY()) <= 5) {
+                if (entidade instanceof Robo &&
+                        GeometryMath.distanciaEuclidiana((Robo) this, entidade.getX(), entidade.getY()) <= 5) {
                     System.out.println(((Robo) entidade).getNome() + " está próximo demais! Tomou muito dano!!");
                     ((Robo) entidade).tomarDano(100); // Causa dano ao robô próximo.
                 }
             }
-            Controlador.getAmbiente().destruirEntidade(this); // Remove o robô do ambiente.
+            Controlador.getAmbiente().removerEntidade(this); // Remove o robô do ambiente.
         } else {
             super.mover(deltaX, deltaY); // Chama o método da superclasse para movimentação.
             System.out.printf("Sua bateria está em %d%n", this.bateria);
