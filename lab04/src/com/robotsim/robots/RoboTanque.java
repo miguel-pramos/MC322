@@ -18,6 +18,7 @@ public class RoboTanque extends RoboTerrestre {
     private int balasRestantes = 10;
     private final int dano = 200;
     private final int alcance = 25;
+    private static int contador = 0;
 
     public RoboTanque(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY, 500);
@@ -41,6 +42,17 @@ public class RoboTanque extends RoboTerrestre {
         } else {
             System.out.println("O inimigo estava longe demais... Não acertou");
         }
+    }
+
+    @Override
+    public String getDescricao() {
+        return String.format("RoboTanque é robusto e leva consigo grande poder de fogo \nNome: %s, HP: %d, Balas Restantes: %d, Dano: %d, Alcance: %d",
+                this.nome, this.HP, this.balasRestantes, this.dano, this.alcance);
+    }
+
+    @Override
+    public char getRepresentacao() {
+        return 'T'; // Representação do RoboTanque no ambiente.
     }
 
     @Override
@@ -110,5 +122,11 @@ public class RoboTanque extends RoboTerrestre {
             RoboTerrestre alvo = robosTerrestres.get(indice);
             robo.atirar(alvo);
         }
+    }
+
+    @Override
+    protected int getContador() {
+        contador++;
+        return contador;
     }
 }

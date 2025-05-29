@@ -6,8 +6,10 @@ import java.util.Scanner;
 import com.robotsim.Controlador;
 import com.robotsim.environment.entity.Comunicavel;
 import com.robotsim.environment.entity.Entidade;
+import com.robotsim.environment.entity.TipoEntidade;
 import com.robotsim.util.TesteColisao;
 import com.robotsim.etc.Acao;
+import com.robotsim.etc.EstadoRobo;
 import com.robotsim.exceptions.ColisaoException;
 import com.robotsim.exceptions.ErroComunicacaoException;
 import com.robotsim.exceptions.RoboDesligadoException;
@@ -20,6 +22,9 @@ import com.robotsim.robots.sensors.Sensor;
 public abstract class Robo implements Comunicavel, Entidade {
     protected boolean ligado = false;
     protected String nome; // Nome do robô.
+    protected String id; // Id do robô.
+    protected TipoEntidade tipo; // Tipo da entidade.
+    protected EstadoRobo estado; // Ligado ou desligado.
     protected int HP; // Pontos de vida do robô.
     protected int posicaoX; // Posição atual no eixo X.
     protected int posicaoY; // Posição atual no eixo Y.
@@ -32,6 +37,9 @@ public abstract class Robo implements Comunicavel, Entidade {
         this.posicaoX = posicaoX;
         this.posicaoY = posicaoY;
         this.HP = HP;
+        this.id = criaID(getContador());
+        this.tipo = TipoEntidade.ROBO;
+        this.estado = EstadoRobo.LIGADO;
         this.acoes = new ArrayList<>();
         this.sensores = new ArrayList<>();
         inicializarAcoes();
@@ -66,7 +74,7 @@ public abstract class Robo implements Comunicavel, Entidade {
      *
      * @param nomeAcao Nome da ação buscada
      */
-    public void executarAcao(Acao acao) {
+    public void executarTarefa(Acao acao) {
         try {
             acao.executar();
         } catch (Exception e) {
@@ -168,6 +176,18 @@ public abstract class Robo implements Comunicavel, Entidade {
         return HP;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public TipoEntidade getTipo() {
+        return tipo;
+    }
+
+    public EstadoRobo getEstado() {
+        return estado;
+    }
+
     /**
      * Classe interna que representa a ação de mover o robô.
      */
@@ -200,4 +220,28 @@ public abstract class Robo implements Comunicavel, Entidade {
             robo.mover(deltaX, deltaY);
         }
     }
+
+    protected String criaID(int contador) {
+        // Formata o contador para ter dois dígitos, adicionando um zero à esquerda se necessário.
+        // Exemplo: contador 1 se torna "01", contador 10 se torna "10".
+        String id = String.valueOf(contador);
+        if (contador < 10) {
+            id = '0' + id;
+        }
+        
+        Class<?> classeAtual = this.getClass();
+        while(true) {
+            String specs = classeAtual.getSimpleName();
+            id = specs.charAt(4) + id;
+            classeAtual = classeAtual.getSuperclass();
+            if (classeAtual == Robo.class) {
+                id = specs.charAt(0) + id;
+                break;
+            }
+        }
+
+        return id;
+    }
+
+    protected abstract int getContador();
 }

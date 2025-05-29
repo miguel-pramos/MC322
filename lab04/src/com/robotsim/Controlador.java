@@ -105,7 +105,7 @@ public final class Controlador {
             }
         }
         scanner.nextLine(); // Consumir \n
-        robo.executarAcao(robo.getAcoes().get(escolha - 1));
+        robo.executarTarefa(robo.getAcoes().get(escolha - 1));
 
     }
 

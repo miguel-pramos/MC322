@@ -55,11 +55,13 @@ public class Ambiente {
         int x = entidade.getX();
         int y = entidade.getY();
         int z = entidade.getZ();
-        if (dentroDosLimites(x, y, z)) {
-            this.mapa[x][y][z] = entidade.getTipo();
-            this.entidades.add(entidade);
-        } else {
-            throw new IllegalArgumentException("Entidade fora dos limites do ambiente.");
+        try {
+            if (dentroDosLimites(x, y, z)) {
+                this.mapa[x][y][z] = entidade.getTipo();
+                this.entidades.add(entidade);
+            }
+        } catch (ColisaoException e) {
+            System.err.println(e.getMessage());
         }
     }
 
@@ -119,6 +121,10 @@ public class Ambiente {
 
     public int getComprimento() {
         return comprimento;
+    }
+
+    public ArrayList<Entidade> getEntidades() {
+        return entidades;
     }
 
     public ArrayList<Entidade> getEntidadesRemovidas() {

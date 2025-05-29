@@ -19,6 +19,7 @@ public class RoboAntiAereo extends RoboTerrestre {
     private int balasRestantes = 10;
     private int dano = 250;
     private int alcance = 35;
+    private static int contador = 0;
 
     public RoboAntiAereo(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY, 300);
@@ -44,6 +45,17 @@ public class RoboAntiAereo extends RoboTerrestre {
         } else {
             System.out.println("O inimigo estava longe demais... Não acertou");
         }
+    }
+
+    @Override
+    public String getDescricao() {
+        return String.format("RoboAntiAereo não se move, mas tem um longo alcance pelos céus \nNome: %s, HP: %d, Balas Restantes: %d, Dano: %d, Alcance: %d",
+                this.nome, this.HP, this.balasRestantes, this.dano, this.alcance);
+    }
+
+    @Override
+    public char getRepresentacao() {
+        return 'A'; // Representação do RoboAntiAereo no ambiente.
     }
 
     /**
@@ -122,5 +134,11 @@ public class RoboAntiAereo extends RoboTerrestre {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    @Override
+    protected int getContador() {
+        contador++;
+        return contador;
     }
 }

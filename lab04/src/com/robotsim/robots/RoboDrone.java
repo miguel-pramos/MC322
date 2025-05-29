@@ -22,6 +22,18 @@ public class RoboDrone extends RoboAereo {
         this.inicializarSensores();
     }
 
+    @Override
+    public String getDescricao() {
+        return String.format(
+                "RoboDrone se move usando sua pequena bateria... Rumores dizem que sua autodestruição é potente \nNome: %s, HP: %d, Bateria: %d",
+                this.nome, this.HP, this.bateria);
+    }
+
+    @Override
+    public char getRepresentacao() {
+        return 'D'; // Representação do RoboDrone no ambiente.
+    }
+
     /**
      * Método responsável por mover o RoboDrone.
      * <p>

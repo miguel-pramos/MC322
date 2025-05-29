@@ -22,6 +22,7 @@ public class RoboJato extends RoboAereo {
     private final int alcanceMetralhadora = 15;
     private final int danoMissil = 250;
     private final int danoMetralhadora = 180;
+    private static int contador = 0;
 
     public RoboJato(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY, 200, 50, 200);
@@ -65,6 +66,17 @@ public class RoboJato extends RoboAereo {
         } else {
             System.out.println("O inimigo estava longe demais... Não acertou");
         }
+    }
+
+    @Override
+    public String getDescricao() {
+        return String.format("RoboJato é rápido e perigoso. Especializado em ataques aéreos \nNome: %s, HP: %d, Mísseis Restantes: %d, Rajadas Restantes: %d",
+                this.nome, this.HP, this.misseisRestantes, this.rajadasRestantes);
+    }
+
+    @Override
+    public char getRepresentacao() {
+        return 'J'; // Representação do RoboJato no ambiente.
     }
 
     @Override
@@ -206,5 +218,11 @@ public class RoboJato extends RoboAereo {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    @Override
+    protected int getContador() {
+        contador++;
+        return contador;
     }
 }
