@@ -14,7 +14,7 @@ import com.robotsim.exceptions.ColisaoException;
  *
  * @see Robo
  */
-public abstract class RoboAereo extends Robo {
+public abstract class RoboAereo extends Robo { // Implementa Atacante
     protected int altitudeMaxima;
     protected int altitude;
 

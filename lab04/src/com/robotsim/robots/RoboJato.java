@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.robotsim.Controlador;
+import com.robotsim.environment.entity.Entidade;
 import com.robotsim.etc.Acao;
+import com.robotsim.robots.abilities.Atacante;
+
 import com.robotsim.util.GeometryMath;
 
 /**
@@ -15,7 +18,7 @@ import com.robotsim.util.GeometryMath;
  *
  * @see RoboAereo
  */
-public class RoboJato extends RoboAereo {
+public class RoboJato extends RoboAereo implements Atacante {
     private int misseisRestantes = 4;
     private int rajadasRestantes = 10;
     private final int alcanceMissil = 20;
@@ -39,12 +42,14 @@ public class RoboJato extends RoboAereo {
         if (misseisRestantes <= 0)
             throw new IllegalStateException("Nenhum míssil restante");
 
+        // A verificação de podeAtacar já garante que alvo é RoboAereo
         if (GeometryMath.distanciaEuclidiana(this, alvo.getX(), alvo.getY(),
                 alvo.getAltitude()) < alcanceMissil) {
             alvo.tomarDano(danoMissil);
             this.misseisRestantes--;
+            System.out.println(this.nome + " lançou um míssil em " + alvo.getNome() + "!");
         } else {
-            System.out.println("O inimigo estava longe demais... Não acertou");
+            System.out.println("O inimigo estava longe demais... " + this.nome + " errou o míssil.");
         }
     }
 
@@ -60,17 +65,20 @@ public class RoboJato extends RoboAereo {
         if (rajadasRestantes <= 0)
             throw new IllegalStateException("Nenhuma rajada restante");
 
+        // A verificação de podeAtacar já garante que alvo é RoboTerrestre
         if (GeometryMath.distanciaEuclidiana(this, alvo.getX(), alvo.getY(), 0) < alcanceMetralhadora) {
             alvo.tomarDano(danoMetralhadora);
             this.rajadasRestantes--;
+            System.out.println(this.nome + " atirou uma rajada em " + alvo.getNome() + "!");
         } else {
-            System.out.println("O inimigo estava longe demais... Não acertou");
+            System.out.println("O inimigo estava longe demais... " + this.nome + " errou a rajada.");
         }
     }
 
     @Override
     public String getDescricao() {
-        return String.format("RoboJato é rápido e perigoso. Especializado em ataques aéreos \nNome: %s, HP: %d, Mísseis Restantes: %d, Rajadas Restantes: %d",
+        return String.format(
+                "RoboJato é rápido e perigoso. Especializado em ataques aéreos \nNome: %s, HP: %d, Mísseis Restantes: %d, Rajadas Restantes: %d",
                 this.nome, this.HP, this.misseisRestantes, this.rajadasRestantes);
     }
 
@@ -82,140 +90,91 @@ public class RoboJato extends RoboAereo {
     @Override
     protected void inicializarAcoes() {
         super.inicializarAcoes();
-        acoes.add(new AtirarRajada(this));
-        acoes.add(new LancarMissil(this));
+        // As ações de ataque agora são gerenciadas pela interface Atacante e sua
+        // implementação em RoboJato
+        // Ações específicas como "Lançar Míssil" e "Atirar Rajada" podem ser mantidas
+        // se
+        // a intenção é ter comandos separados para cada tipo de ataque.
+        // Se a ideia é ter um único comando "Atacar" que decide qual arma usar,
+        // então essas ações específicas podem ser removidas ou modificadas.
+        // Por ora, manterei as ações específicas, mas a lógica de ataque principal
+        // estará em executarAtaque.
+        acoes.add(new Atacar(this)); // Adiciona a ação genérica de atacar
+    }
+
+    // Implementação dos métodos da interface Atacante
+    @Override
+    public void executarAtaque(Entidade alvo) {
+        if (!podeAtacar(alvo)) {
+            System.out.println(this.nome + " não pode atacar este tipo de alvo.");
+            return;
+        }
+
+        if (alvo instanceof RoboAereo) {
+            System.out.println(this.nome + " vai tentar lançar um míssil em " + ((Robo) alvo).getNome());
+            lancarMissil((RoboAereo) alvo);
+        } else if (alvo instanceof RoboTerrestre) {
+            System.out.println(this.nome + " vai tentar atirar uma rajada em " + ((Robo) alvo).getNome());
+            atirarRajada((RoboTerrestre) alvo);
+        } else {
+            System.out.println("Tipo de alvo não suportado para ataque por RoboJato.");
+        }
+    }
+
+    @Override
+    public boolean podeAtacar(Entidade alvo) {
+        return alvo instanceof RoboAereo || alvo instanceof RoboTerrestre;
     }
 
     /**
-     * Classe interna que representa a ação de lançar um míssil por um RoboJato.
+     * Classe interna que representa a ação genérica de Atacar para RoboJato.
+     * Esta classe pode listar todos os alvos possíveis (aéreos e terrestres)
+     * e então chamar o método executarAtaque apropriado.
      */
-    private class LancarMissil implements Acao {
+    private class Atacar implements Acao {
         RoboJato robo;
 
-        public LancarMissil(RoboJato robo) {
+        public Atacar(RoboJato robo) {
             this.robo = robo;
         }
 
         @Override
         public String getNome() {
-            return "Lançar míssil";
+            return "Atacar (Jato)";
         }
 
-        /**
-         * Método que executa a ação de ataque de um robô aéreo utilizando um míssil.
-         * O método apresenta uma lista de robôs disponíveis no ambiente para serem
-         * atacados,
-         * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil
-         * no robô escolhido.
-         *
-         * Regras e comportamentos:
-         * - O robô não pode atacar a si mesmo.
-         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e
-         * a execução será encerrada.
-         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso
-         * contrário, uma mensagem de erro será exibida.
-         *
-         */
         @Override
         public void executar() {
-            ArrayList<RoboAereo> robosAlvos = new ArrayList<>();
+            ArrayList<Robo> alvosPossiveis = new ArrayList<>();
+            System.out.println("Alvos disponíveis para " + robo.getNome() + ":");
             int i = 1;
-
-            for (Robo robo : Controlador.getAmbiente().getRobos()) {
-                if (robo != this.robo && robo instanceof RoboAereo) { // Não permitir atacar a si mesmo
-                    robosAlvos.add((RoboAereo) robo);
-                    System.out.printf("\n[%d] %s", i, robo.getNome());
+            for (Robo r : Controlador.getAmbiente().getRobos()) {
+                if (r != robo && robo.podeAtacar(r)) {
+                    alvosPossiveis.add(r);
+                    System.out.printf("[%d] %s (%s)\n", i, r.getNome(), r instanceof RoboAereo ? "Aéreo" : "Terrestre");
                     i++;
                 }
             }
 
-            if (robosAlvos.isEmpty()) {
-                System.out.println("\nNão há robôs para atacar.");
+            if (alvosPossiveis.isEmpty()) {
+                System.out.println("Nenhum alvo disponível para ataque.");
                 return;
             }
 
             Scanner scanner = Controlador.getScanner();
-            System.out.print("\n\nEscolha o índice do robô para atacar com míssil: ");
+            System.out.print("Escolha o índice do robô para atacar: ");
             int indice = scanner.nextInt() - 1;
-
-            if (indice < 0 || indice >= robosAlvos.size()) {
-                System.out.println("Índice inválido.");
-                return;
-            }
-
-            RoboAereo alvo = robosAlvos.get(indice);
-            try {
-                robo.lancarMissil(alvo);
-            } catch (IllegalStateException e) {
-                System.out.println(e.getMessage());
-            }
-
-        }
-    }
-
-    /**
-     * Classe interna que representa a ação de lançar uma rajada por um RoboJato.
-     */
-    private class AtirarRajada implements Acao {
-        RoboJato robo;
-
-        public AtirarRajada(RoboJato robo) {
-            this.robo = robo;
-        }
-
-        @Override
-        public String getNome() {
-            return "Atirar Rajada";
-        }
-
-        /**
-         * Método que executa a ação de ataque de um robô aéreo utilizando uma rajada.
-         * O método apresenta uma lista de robôs disponíveis no ambiente para serem
-         * atacados,
-         * solicita ao usuário que escolha um alvo pelo índice e tenta lançar um míssil
-         * no robô escolhido.
-         *
-         * Regras e comportamentos:
-         * - Caso não existam robôs disponíveis para ataque, uma mensagem será exibida e
-         * a execução será encerrada.
-         * - O usuário deve fornecer um índice válido para selecionar o alvo. Caso
-         * contrário, uma mensagem de erro será exibida.
-         *
-         */
-        @Override
-        public void executar() {
-            ArrayList<RoboTerrestre> robosAlvos = new ArrayList<>();
-            int i = 0;
-
-            for (Robo robo : Controlador.getAmbiente().getRobos()) {
-                if (robo instanceof RoboTerrestre) { // Não permitir atacar a si mesmo
-                    robosAlvos.add((RoboTerrestre) robo);
-                    System.out.printf("[%d] %s\n", (i + 1), robo.getNome());
-                    i++;
-                }
-            }
-
-            if (robosAlvos.isEmpty()) {
-                System.out.println("Não há robôs para atacar.");
-                return;
-            }
-
-            Scanner scanner = Controlador.getScanner();
-            System.out.print("Escolha o índice do robô para atacar com rajada: ");
-            int indice = scanner.nextInt() - 1;
-
             scanner.nextLine(); // Consumir \n
-
-            if (indice < 0 || indice >= robosAlvos.size()) {
+            if (indice < 0 || indice >= alvosPossiveis.size()) {
                 System.out.println("Índice inválido.");
                 return;
             }
 
-            RoboTerrestre alvo = robosAlvos.get(indice);
+            Robo alvoSelecionado = alvosPossiveis.get(indice);
             try {
-                robo.atirarRajada(alvo);
+                robo.executarAtaque(alvoSelecionado);
             } catch (IllegalStateException e) {
-                System.out.println(e.getMessage());
+                System.out.println("Erro ao atacar: " + e.getMessage());
             }
         }
     }

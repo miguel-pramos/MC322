@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.robotsim.Controlador;
+import com.robotsim.environment.entity.Entidade;
 import com.robotsim.etc.Acao;
+import com.robotsim.robots.abilities.Atacante;
+import com.robotsim.robots.abilities.Autonomo; // Adicionado import
 import com.robotsim.util.GeometryMath;
 
 /**
@@ -15,41 +18,22 @@ import com.robotsim.util.GeometryMath;
  *
  * @see RoboTerrestre
  */
-public class RoboAntiAereo extends RoboTerrestre {
+public class RoboAntiAereo extends RoboTerrestre implements Atacante, Autonomo { // Implementa Autonomo
     private int balasRestantes = 10;
     private int dano = 250;
     private int alcance = 35;
     private static int contador = 0;
+    private boolean modoAutonomo = false; // Adicionado campo para modo autônomo
 
     public RoboAntiAereo(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY, 300);
         this.velocidadeMaxima = 0; // Robo AntiAéreo é fixo.
     }
 
-    /**
-     * Método responsável por atirar em um alvo aéreo.
-     * <p>
-     * O ataque só é realizado se houver balas restantes e se o alvo estiver dentro
-     * do alcance.
-     *
-     * @param alvo O alvo aéreo (RoboAereo) que será atacado.
-     * @throws IllegalStateException Se não houver balas restantes.
-     */
-    public void atirar(RoboAereo alvo) {
-        if (balasRestantes <= 0)
-            throw new IllegalStateException("Nenhuma bala restante");
-
-        if (GeometryMath.distanciaEuclidiana(this, alvo.getX(), alvo.getY()) < this.alcance) {
-            alvo.tomarDano(dano);
-            this.balasRestantes--;
-        } else {
-            System.out.println("O inimigo estava longe demais... Não acertou");
-        }
-    }
-
     @Override
     public String getDescricao() {
-        return String.format("RoboAntiAereo não se move, mas tem um longo alcance pelos céus \nNome: %s, HP: %d, Balas Restantes: %d, Dano: %d, Alcance: %d",
+        return String.format(
+                "RoboAntiAereo não se move, mas tem um longo alcance pelos céus \nNome: %s, HP: %d, Balas Restantes: %d, Dano: %d, Alcance: %d",
                 this.nome, this.HP, this.balasRestantes, this.dano, this.alcance);
     }
 
@@ -65,7 +49,55 @@ public class RoboAntiAereo extends RoboTerrestre {
      */
     @Override
     protected void inicializarAcoes() {
+        super.inicializarAcoes(); // Chama o inicializarAcoes do RoboTerrestre e Robo
         acoes.add(new Atirar(this));
+        acoes.add(new AlternarModoAutonomo(this));
+    }
+
+    // Implementação dos métodos da interface Atacante
+    @Override
+    public void executarAtaque(Entidade alvo) {
+        if (!podeAtacar(alvo)) {
+            System.out.println("RoboAntiAereo só pode atacar robôs aéreos.");
+            return;
+        }
+        if (balasRestantes <= 0) {
+            throw new IllegalStateException("Nenhuma bala restante");
+        }
+
+        if (GeometryMath.distanciaEuclidiana(this, alvo.getX(), alvo.getY()) < this.alcance) {
+            ((RoboAereo) alvo).tomarDano(dano);
+            this.balasRestantes--;
+            System.out.println(this.nome + " atingiu " + ((Robo) alvo).getNome() + "!");
+        } else {
+            System.out.println("O inimigo estava longe demais... " + this.nome + " não acertou.");
+        }
+    }
+
+    @Override
+    public boolean podeAtacar(Entidade alvo) {
+        return alvo instanceof RoboAereo;
+    }
+
+    // Implementação dos métodos da interface Autonomo
+    @Override
+    public void setModoAutonomo(boolean ativar) {
+        this.modoAutonomo = ativar;
+        if (this.modoAutonomo) {
+            System.out.println(this.nome + " entrou em modo autônomo.");
+            if (Controlador.getAmbiente().getRobos().stream().anyMatch(r -> r instanceof RoboAereo && r != this)) {
+                System.out.println(this.nome + " detectou alvos aéreos e está pronto para atacar autonomamente.");
+            } else {
+                System.out.println(this.nome + " não detectou alvos aéreos no momento.");
+            }
+        } else {
+            System.out.println(this.nome + " saiu do modo autônomo.");
+        }
+    }
+
+    @Override
+    public boolean isAutonomo() {
+        return this.modoAutonomo;
     }
 
     /**
@@ -129,10 +161,28 @@ public class RoboAntiAereo extends RoboTerrestre {
 
             RoboAereo alvo = robosAlvos.get(indice);
             try {
-                robo.atirar(alvo);
+                robo.executarAtaque(alvo); // Modificado para usar o método da interface
             } catch (IllegalStateException e) {
                 System.out.println(e.getMessage());
             }
+        }
+    }
+
+    private class AlternarModoAutonomo implements Acao {
+        RoboAntiAereo robo;
+
+        public AlternarModoAutonomo(RoboAntiAereo robo) {
+            this.robo = robo;
+        }
+
+        @Override
+        public String getNome() {
+            return "Alternar Modo Autônomo (" + (robo.isAutonomo() ? "ON" : "OFF") + ")";
+        }
+
+        @Override
+        public void executar() {
+            robo.setModoAutonomo(!robo.isAutonomo());
         }
     }
 

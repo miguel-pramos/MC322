@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.robotsim.Controlador;
+import com.robotsim.environment.entity.Entidade;
 import com.robotsim.etc.Acao;
+import com.robotsim.robots.abilities.Atacante;
 import com.robotsim.util.GeometryMath;
 
 /**
@@ -14,7 +16,7 @@ import com.robotsim.util.GeometryMath;
  *
  * @see RoboTerrestre
  */
-public class RoboTanque extends RoboTerrestre {
+public class RoboTanque extends RoboTerrestre implements Atacante {
     private int balasRestantes = 10;
     private final int dano = 200;
     private final int alcance = 25;
@@ -33,11 +35,17 @@ public class RoboTanque extends RoboTerrestre {
      * @param alvo
      * @throws IllegalStateException
      */
-    protected void atirar(RoboTerrestre alvo) {
+    @Override
+    public void executarAtaque(Entidade alvo) {
+        if (!podeAtacar(alvo)) {
+            System.out.println("RoboTanque não pode atacar este tipo de alvo.");
+            return;
+        }
+
         if (this.balasRestantes <= 0)
             throw new IllegalStateException("Nenhuma bala restante");
         else if (GeometryMath.distanciaEuclidiana(this, alvo.getX(), alvo.getY()) < this.alcance) {
-            alvo.tomarDano(this.dano);
+            ((RoboTerrestre) alvo).tomarDano(this.dano);
             this.balasRestantes--;
         } else {
             System.out.println("O inimigo estava longe demais... Não acertou");
@@ -45,8 +53,14 @@ public class RoboTanque extends RoboTerrestre {
     }
 
     @Override
+    public boolean podeAtacar(Entidade alvo) {
+        return alvo instanceof RoboTerrestre;
+    }
+
+    @Override
     public String getDescricao() {
-        return String.format("RoboTanque é robusto e leva consigo grande poder de fogo \nNome: %s, HP: %d, Balas Restantes: %d, Dano: %d, Alcance: %d",
+        return String.format(
+                "RoboTanque é robusto e leva consigo grande poder de fogo \nNome: %s, HP: %d, Balas Restantes: %d, Dano: %d, Alcance: %d",
                 this.nome, this.HP, this.balasRestantes, this.dano, this.alcance);
     }
 
@@ -120,7 +134,7 @@ public class RoboTanque extends RoboTerrestre {
             }
 
             RoboTerrestre alvo = robosTerrestres.get(indice);
-            robo.atirar(alvo);
+            robo.executarAtaque(alvo);
         }
     }
 

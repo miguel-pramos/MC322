@@ -2,9 +2,13 @@ package com.robotsim.robots;
 
 import com.robotsim.Controlador;
 import com.robotsim.environment.entity.Entidade;
+import com.robotsim.robots.abilities.Explorador;
 import com.robotsim.robots.sensors.SensorObstaculo;
 import com.robotsim.robots.sensors.SensorRobo;
 import com.robotsim.util.GeometryMath;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A classe RoboDrone representa um robô aéreo com a capacidade de detectar
@@ -14,7 +18,7 @@ import com.robotsim.util.GeometryMath;
  *
  * @see RoboAereo
  */
-public class RoboDrone extends RoboAereo {
+public class RoboDrone extends RoboAereo implements Explorador {
     private int bateria = 50;
     private static int contador = 0;
 
@@ -69,5 +73,22 @@ public class RoboDrone extends RoboAereo {
     protected int getContador() {
         contador++;
         return contador;
+    }
+
+    @Override
+    public List<Entidade> escanearArea() {
+        System.out.println(this.nome + " escaneando área...");
+        ArrayList<Entidade> entidadesDetectadas = new ArrayList<>();
+        for (Entidade entidade : Controlador.getAmbiente().getEntidades()) {
+            if (entidade != this && GeometryMath.distanciaEuclidiana(this, entidade.getX(), entidade.getY()) <= 30) {
+                entidadesDetectadas.add(entidade);
+                System.out.println("Entidade detectada: " + entidade.getClass().getSimpleName() + " em ("
+                        + entidade.getX() + ", " + entidade.getY() + ")");
+            }
+        }
+        if (entidadesDetectadas.isEmpty()) {
+            System.out.println("Nenhuma entidade detectada na área.");
+        }
+        return entidadesDetectadas;
     }
 }
