@@ -20,22 +20,25 @@ import com.robotsim.robots.sensors.Sensor;
  * Ela define propriedades e comportamentos comuns, como posição, nome e ações.
  */
 public abstract class Robo implements Comunicavel, Entidade {
-    protected boolean ligado = false;
     protected String nome; // Nome do robô.
     protected String id; // Id do robô.
     protected TipoEntidade tipo; // Tipo da entidade.
     protected EstadoRobo estado; // Ligado ou desligado.
     protected int HP; // Pontos de vida do robô.
-    protected int posicaoX; // Posição atual no eixo X.
-    protected int posicaoY; // Posição atual no eixo Y.
-    protected int posicaoZ; // Posição atual no eixo Z.
+    protected int x; // Posição atual no eixo X.
+    protected int y; // Posição atual no eixo Y.
+    protected int z; // Posição atual no eixo Z.
     protected ArrayList<Acao> acoes; // Lista de ações disponíveis para o robô.
     protected ArrayList<Sensor> sensores; // Sensores do robô
 
-    public Robo(String nome, int posicaoX, int posicaoY, int HP) {
+    public Robo(String nome, int x, int y, int HP) {
+        this(nome, x, y, 0, HP);
+    }
+
+    public Robo(String nome, int x, int y, int z, int HP) {
         this.nome = nome;
-        this.posicaoX = posicaoX;
-        this.posicaoY = posicaoY;
+        this.x = x;
+        this.y = y;
         this.HP = HP;
         this.id = criaID(getContador());
         this.tipo = TipoEntidade.ROBO;
@@ -46,8 +49,11 @@ public abstract class Robo implements Comunicavel, Entidade {
     }
 
     public boolean alternarEstado() {
-        this.ligado = !this.ligado;
-        return this.ligado;
+        if (this.estado == EstadoRobo.LIGADO)
+            this.estado = EstadoRobo.DESLIGADO;
+        else
+            this.estado = EstadoRobo.LIGADO;
+        return (this.estado == EstadoRobo.LIGADO);
     }
 
     /**
@@ -72,13 +78,20 @@ public abstract class Robo implements Comunicavel, Entidade {
     /**
      * Tenta executar uma ação.
      *
-     * @param nomeAcao Nome da ação buscada
+     * @param acao A ação a ser executada.
+     * @throws RoboDesligadoException Se o robô estiver desligado.
      */
-    public void executarTarefa(Acao acao) {
+    public void executarTarefa(Acao acao) throws RoboDesligadoException {
+        if (this.estado != EstadoRobo.LIGADO) {
+            throw new RoboDesligadoException("O robô " + this.nome + " está desligado e não pode executar ações.");
+        }
         try {
             acao.executar();
-        } catch (Exception e) {
-            System.out.println("Ação indisponível para este robô: " + acao.getNome());
+        } catch (Exception e) { // Captura outras exceções que podem ocorrer durante a execução da ação
+            System.out.println("Erro ao executar a ação '" + acao.getNome() + "' para o robô " + this.nome + ": "
+                    + e.getMessage());
+            // Opcional: imprimir stack trace para depuração
+            // e.printStackTrace();
         }
     }
 
@@ -90,8 +103,8 @@ public abstract class Robo implements Comunicavel, Entidade {
      */
 
     protected void mover(int deltaX, int deltaY) {
-        int xFinal = this.posicaoX + deltaX;
-        int yFinal = this.posicaoY + deltaY;
+        int xFinal = this.x + deltaX;
+        int yFinal = this.y + deltaY;
 
         try {
             Controlador.getAmbiente()
@@ -99,11 +112,11 @@ public abstract class Robo implements Comunicavel, Entidade {
 
             int[] dadosPossivelColisao = TesteColisao.dadosColisao(this, xFinal, yFinal);
 
-            this.posicaoX = dadosPossivelColisao[0];
-            this.posicaoY = dadosPossivelColisao[1];
+            this.x = dadosPossivelColisao[0];
+            this.y = dadosPossivelColisao[1];
             if (TesteColisao.existeColisao(dadosPossivelColisao)) {
                 System.out.printf(
-                        "Colisão detectada! Parando na posição (%d, %d)\n", posicaoX, posicaoY);
+                        "Colisão detectada! Parando na posição (%d, %d)\n", x, y);
             }
             if (dadosPossivelColisao[2] != 0) {
                 this.tomarDano(dadosPossivelColisao[2]);
@@ -133,13 +146,13 @@ public abstract class Robo implements Comunicavel, Entidade {
      * Método que exibe a posição atual do robô.
      */
     public void exibirPosicao() {
-        System.out.println(nome + " está na posição (" + this.posicaoX + ", " + this.posicaoY + ")");
+        System.out.println(nome + " está na posição (" + this.x + ", " + this.y + ")");
     }
 
     @Override
     public void enviarMensagens(Comunicavel comunicavel, String mensagem)
             throws RoboDesligadoException, ErroComunicacaoException {
-        if (!this.ligado)
+        if (this.estado == EstadoRobo.DESLIGADO)
             throw new RoboDesligadoException("O robô %s está desligado.".formatted(this.nome));
 
         comunicavel.receberMensagens(mensagem);
@@ -148,7 +161,7 @@ public abstract class Robo implements Comunicavel, Entidade {
 
     @Override
     public void receberMensagens(String mensagem) throws RoboDesligadoException, ErroComunicacaoException {
-        if (!this.ligado)
+        if (this.estado == EstadoRobo.DESLIGADO)
             throw new RoboDesligadoException("O robô %s está desligado.".formatted(this.nome));
     }
 
@@ -157,15 +170,15 @@ public abstract class Robo implements Comunicavel, Entidade {
     }
 
     public int getX() {
-        return posicaoX;
+        return x;
     }
 
     public int getY() {
-        return posicaoY;
+        return y;
     }
 
     public int getZ() {
-        return posicaoZ;
+        return z;
     }
 
     public String getNome() {
@@ -186,6 +199,10 @@ public abstract class Robo implements Comunicavel, Entidade {
 
     public EstadoRobo getEstado() {
         return estado;
+    }
+
+    public boolean isLigado() {
+        return this.estado == EstadoRobo.LIGADO;
     }
 
     /**

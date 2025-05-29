@@ -2,8 +2,10 @@ package com.robotsim;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import java.util.Random;
 import java.lang.reflect.InvocationTargetException;
 
@@ -13,13 +15,10 @@ import com.robotsim.environment.obstacle.Obstaculo;
 import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
 import com.robotsim.etc.CentralComunicacao;
+import com.robotsim.exceptions.ErroComunicacaoException;
+import com.robotsim.exceptions.RoboDesligadoException;
 import com.robotsim.robots.*;
 import com.robotsim.util.TesteColisao;
-
-enum GAME_STATUS {
-    GAMEON,
-    GAMEOVER
-}
 
 /**
  * A classe Controlador é responsável por gerenciar a execução principal do
@@ -27,14 +26,6 @@ enum GAME_STATUS {
  * Ela inicializa o ambiente, registra as classes de robôs disponíveis no
  * catálogo e permite
  * que o usuário configure e controle os robôs durante a simulação.
- * <p>
- * A classe Controlador possui o <i>entry point</i> do simulador, no método Main
- * e gerencia
- * o loop principal da execução deste.
- * <p>
- * O simulador funciona em turnos, onde o usuário pode interagir com o sistema
- * para
- * controlar os robôs e visualizar o progresso da simulação.
  */
 public final class Controlador {
     public static final int DELTA_TIME = 1; // Tempo arbitrário de execução em segundos
@@ -47,57 +38,276 @@ public final class Controlador {
         inicializarRobos();
         inicializarSim();
 
-        // Loop principal do simulador
-        while (ambiente.getRobos().size() > 1) {
-            for (Robo robo : ambiente.getRobos()) {
-                if (roboNaoRemovido(robo)) {
-                    interagir(robo);
-                    imprimirAmbiente(robo);
-                }
+        boolean executando = true;
+        while (executando && ambiente.getRobos().size() > 1) {
+            exibirMenuPrincipal();
+            int escolha = lerEscolhaUsuario(5);
+
+            switch (escolha) {
+                case 1:
+                    listarRobosMenu();
+                    break;
+                case 2:
+                    Robo roboSelecionado = selecionarRoboParaInteracao();
+                    if (roboSelecionado != null) {
+                        menuInteracaoRobo(roboSelecionado);
+                    }
+                    break;
+                case 3:
+                    visualizarStatusAmbiente();
+                    break;
+                case 4:
+                    comunicacao.exibirMensagens();
+                    break;
+                case 5:
+                    executando = false;
+                    System.out.println("Encerrando simulação...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
             }
 
+            // Verifica condição de fim de jogo
+            if (ambiente.getRobos().size() <= 1) {
+                executando = false;
+            }
         }
 
-        System.out.printf("\nParabéns, %s! Você foi o único robô a sobreviver!\n",
-                ambiente.getRobos().get(0).getNome());
+        if (ambiente.getRobos().size() == 1) {
+            System.out.printf("\nParabéns, %s! Você foi o único robô a sobreviver!\n",
+                    ambiente.getRobos().get(0).getNome());
+        } else if (ambiente.getRobos().isEmpty()) {
+            System.out.println("\nTodos os robôs foram destruídos. Não há vencedores.");
+        } else {
+            System.out.println("\nSimulação encerrada pelo usuário.");
+        }
         scanner.close();
     }
 
-    // EXECUÇÃO NO LOOP
-
-    private static boolean roboNaoRemovido(Robo roboAnalisado) {
-        for (Entidade entidade : ambiente.getEntidadesRemovidas()) {
-            if (entidade instanceof Robo && roboAnalisado == (Robo) entidade) {
-                return false;
-            }
-        }
-        return true;
+    private static void exibirMenuPrincipal() {
+        System.out.println("\n=============== MENU PRINCIPAL ===============");
+        System.out.println("[1] Listar Robôs");
+        System.out.println("[2] Selecionar Robô para Interagir");
+        System.out.println("[3] Visualizar Status do Ambiente");
+        System.out.println("[4] Listar Mensagens Trocadas");
+        System.out.println("[5] Sair da Simulação");
+        System.out.print("Escolha uma opção: ");
     }
 
-    private static void interagir(Robo robo) {
-        System.out.printf("\nSeu HP: %d\n", robo.getHP());
-        if (robo instanceof RoboAereo) {
-            System.out.printf("Sua posição: (%d, %d, %d)\n", robo.getX(), robo.getY(),
-                    ((RoboAereo) robo).getAltitude());
+    private static void listarRobosMenu() {
+        System.out.println("\n--- Listar Robôs ---");
+        System.out.println("[1] Listar todos");
+        System.out.println("[2] Listar por tipo (Aéreo/Terrestre)");
+        System.out.println("[3] Listar por estado (Ligado/Desligado)");
+        System.out.print("Escolha uma opção de listagem: ");
+        int escolha = lerEscolhaUsuario(3);
+        switch (escolha) {
+            case 1:
+                listarRobos(null, null);
+                break;
+            case 2:
+                System.out.print("Digite o tipo (Aereo/Terrestre): ");
+                String tipo = scanner.nextLine().trim();
+                listarRobos(tipo, null);
+                break;
+            case 3:
+                System.out.print("Digite o estado (Ligado/Desligado): ");
+                String estadoStr = scanner.nextLine().trim();
+                Boolean ligado = null;
+                if ("ligado".equalsIgnoreCase(estadoStr)) {
+                    ligado = true;
+                } else if ("desligado".equalsIgnoreCase(estadoStr)) {
+                    ligado = false;
+                }
+                listarRobos(null, ligado);
+                break;
+            default:
+                System.out.println("Opção inválida.");
+        }
+    }
+
+    private static void listarRobos(String tipoFiltro, Boolean estadoLigadoFiltro) {
+        System.out.println("\n--- Robôs no Ambiente ---");
+        List<Robo> robosFiltrados = ambiente.getRobos().stream()
+                .filter(r -> tipoFiltro == null ||
+                        ("aereo".equalsIgnoreCase(tipoFiltro) && r instanceof RoboAereo) ||
+                        ("terrestre".equalsIgnoreCase(tipoFiltro) && r instanceof RoboTerrestre))
+                .filter(r -> estadoLigadoFiltro == null || r.isLigado() == estadoLigadoFiltro)
+                .collect(Collectors.toList());
+
+        if (robosFiltrados.isEmpty()) {
+            System.out.println("Nenhum robô encontrado com os filtros aplicados.");
+            return;
+        }
+        for (int i = 0; i < robosFiltrados.size(); i++) {
+            Robo r = robosFiltrados.get(i);
+            System.out.printf("[%d] %s (ID: %s, Tipo: %s, Estado: %s, HP: %d, Pos: (%d,%d,%d))\n",
+                    i + 1, r.getNome(), r.getId(), r.getClass().getSimpleName(),
+                    r.isLigado() ? "Ligado" : "Desligado", r.getHP(),
+                    r.getX(), r.getY(), (r instanceof RoboAereo ? ((RoboAereo) r).getAltitude() : 0));
+        }
+    }
+
+    private static Robo selecionarRoboParaInteracao() {
+        listarRobos(null, null); // Lista todos os robôs para seleção
+        if (ambiente.getRobos().isEmpty()) {
+            System.out.println("Não há robôs para selecionar.");
+            return null;
+        }
+        System.out.print("Digite o número do robô para interagir: ");
+        int escolha = lerEscolhaUsuario(ambiente.getRobos().size());
+        if (escolha > 0 && escolha <= ambiente.getRobos().size()) {
+            return ambiente.getRobos().get(escolha - 1);
+        }
+        System.out.println("Seleção inválida.");
+        return null;
+    }
+
+    private static void menuInteracaoRobo(Robo robo) {
+        boolean continuarInteragindo = true;
+        while (continuarInteragindo) {
+            System.out.printf("\n--- Menu de Interação: %s ---\n", robo.getNome().toUpperCase());
+            visualizarStatusRobo(robo, false); // false para não ser verboso toda vez
+            System.out.println("[1] Executar Ação");
+            System.out.println("[2] Visualizar Status Completo do Robô");
+            System.out.println("[3] Alternar Estado (Ligar/Desligar)");
+            System.out.println("[4] Comunicar com outro Robô");
+            System.out.println("[5] Voltar ao Menu Principal");
+            System.out.print("Escolha uma opção: ");
+            int escolha = lerEscolhaUsuario(5);
+
+            try {
+                switch (escolha) {
+                    case 1:
+                        menuExecutarAcao(robo);
+                        break;
+                    case 2:
+                        visualizarStatusRobo(robo, true); // true para ser verboso
+                        break;
+                    case 3:
+                        alternarEstadoRobo(robo);
+                        break;
+                    case 4:
+                        realizarComunicacao(robo);
+                        break;
+                    case 5:
+                        continuarInteragindo = false;
+                        break;
+                    default:
+                        System.out.println("Opção inválida.");
+                }
+            } catch (RoboDesligadoException e) {
+                System.out.println("Erro: " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Ocorreu um erro inesperado: " + e.getMessage());
+                e.printStackTrace();
+            }
+            if (!roboNaoRemovido(robo)) { // Se o robô foi destruído durante a ação
+                System.out.println(robo.getNome() + " foi destruído e não pode mais interagir.");
+                continuarInteragindo = false;
+            }
+        }
+    }
+
+    private static void visualizarStatusRobo(Robo robo, boolean verboso) {
+        if (verboso) {
+            System.out.println("\n--- Status Completo: " + robo.getNome() + " ---");
+            System.out.println("ID: " + robo.getId());
+            System.out.println("Tipo Classe: " + robo.getClass().getName());
+            System.out.println("Estado: " + (robo.isLigado() ? "Ligado" : "Desligado"));
+            System.out.println("HP: " + robo.getHP());
+            if (robo instanceof RoboAereo) {
+                RoboAereo ra = (RoboAereo) robo;
+                System.out.printf("Posição: (%d, %d, %d)\n", ra.getX(), ra.getY(), ra.getAltitude());
+                System.out.println("Altitude Máxima: " + ra.getAltitudeMaxima());
+            } else {
+                System.out.printf("Posição: (%d, %d, %d)\n", robo.getX(), robo.getY(), 0); // RoboTerrestre tem Z=0
+            }
+            // Adicionar mais detalhes específicos se necessário (e.g., balas, bateria)
+            System.out.println(robo.getDescricao()); // Usar getDescricao para detalhes específicos
         } else {
-            System.out.printf("Sua posição: (%d, %d, %d)\n", robo.getX(), robo.getY(), 0);
+            System.out.printf("Status Rápido - %s: HP: %d, Estado: %s, Pos: (%d,%d,%d)\n",
+                    robo.getNome(), robo.getHP(), (robo.isLigado() ? "Ligado" : "Desligado"),
+                    robo.getX(), robo.getY(), (robo instanceof RoboAereo ? ((RoboAereo) robo).getAltitude() : 0));
         }
+    }
 
-        System.out.printf("\nAÇÕES DISPONÍVEIS PARA %s:\n", robo.getNome().toUpperCase());
-        int i = 1;
-        for (Acao acao : robo.getAcoes()) {
-            System.out.printf("[%d] %s\n", i, acao.getNome());
-            i++;
+    private static void visualizarStatusAmbiente() {
+        System.out.println("\n--- Status do Ambiente ---");
+        System.out.println(
+                "Dimensões: " + ambiente.getComprimento() + "x" + ambiente.getLargura() + "x" + ambiente.getAltura());
+        System.out.println("Número de Robôs Ativos: " + ambiente.getRobos().size());
+        System.out.println("Número de Obstáculos: "
+                + ambiente.getEntidades().stream().filter(e -> e instanceof Obstaculo).count());
+        // Adicionar mais informações se necessário
+        imprimirAmbienteGeral();
+    }
+
+    private static void alternarEstadoRobo(Robo robo) {
+        robo.alternarEstado();
+        System.out.println(robo.getNome() + " agora está " + (robo.isLigado() ? "Ligado" : "Desligado") + ".");
+    }
+
+    private static void realizarComunicacao(Robo remetente) throws RoboDesligadoException, ErroComunicacaoException {
+        if (!remetente.isLigado()) {
+            throw new RoboDesligadoException(remetente.getNome() + " está desligado e não pode enviar mensagens.");
         }
+        System.out.println("\n--- Comunicar --- ");
+        System.out.println("Robôs disponíveis para comunicação:");
+        List<Robo> outrosRobos = ambiente.getRobos().stream()
+                .filter(r -> r != remetente && r.isLigado())
+                .collect(Collectors.toList());
+        if (outrosRobos.isEmpty()) {
+            System.out.println("Nenhum outro robô ligado disponível para comunicação.");
+            return;
+        }
+        for (int i = 0; i < outrosRobos.size(); i++) {
+            System.out.printf("[%d] %s\n", i + 1, outrosRobos.get(i).getNome());
+        }
+        System.out.print("Escolha o destinatário: ");
+        int escolhaDest = lerEscolhaUsuario(outrosRobos.size());
+        if (escolhaDest > 0 && escolhaDest <= outrosRobos.size()) {
+            Robo destinatario = outrosRobos.get(escolhaDest - 1);
+            System.out.print("Digite a mensagem: ");
+            String mensagem = scanner.nextLine();
+            remetente.enviarMensagens(destinatario, mensagem);
+            System.out.println("Mensagem enviada de " + remetente.getNome() + " para " + destinatario.getNome());
+        } else {
+            System.out.println("Seleção de destinatário inválida.");
+        }
+    }
 
+    private static void menuExecutarAcao(Robo robo) throws RoboDesligadoException {
+        if (!robo.isLigado()) {
+            throw new RoboDesligadoException(robo.getNome() + " está desligado e não pode executar ações.");
+        }
+        System.out.println("\n--- Ações para " + robo.getNome() + " ---");
+        ArrayList<Acao> acoes = robo.getAcoes();
+        for (int i = 0; i < acoes.size(); i++) {
+            Acao acao = acoes.get(i);
+            String nomeAcao = acao.getNome();
+            // Removida a lógica que renomeia "Mover" para "Mover (Opções Detalhadas)"
+            System.out.printf("[%d] %s\n", i + 1, nomeAcao);
+        }
+        System.out.print("Escolha uma ação: ");
+        int escolhaAcao = lerEscolhaUsuario(acoes.size());
+
+        if (escolhaAcao > 0 && escolhaAcao <= acoes.size()) {
+            Acao acaoSelecionada = acoes.get(escolhaAcao - 1);
+            // Removida a chamada para menuMover. A ação "Mover" será executada diretamente.
+            robo.executarTarefa(acaoSelecionada);
+        } else {
+            System.out.println("Seleção de ação inválida.");
+        }
+    }
+
+    private static int lerEscolhaUsuario(int maxOpcao) {
         int escolha = -1;
-        while (escolha < 1 || escolha > robo.getAcoes().size()) {
-            System.out.printf("O que %s deseja fazer? (Escolha entre 1 e %d): ", robo.getNome(),
-                    robo.getAcoes().size());
+        while (escolha < 1 || escolha > maxOpcao) {
             if (scanner.hasNextInt()) {
                 escolha = scanner.nextInt();
-                if (escolha < 1 || escolha > robo.getAcoes().size()) {
-                    System.out.println("Escolha inválida. Tente novamente.");
+                if (escolha < 1 || escolha > maxOpcao) {
+                    System.out.println("Escolha inválida. Tente novamente entre 1 e " + maxOpcao + ".");
                 }
             } else {
                 System.out.println("Entrada inválida. Por favor, insira um número.");
@@ -105,31 +315,37 @@ public final class Controlador {
             }
         }
         scanner.nextLine(); // Consumir \n
-        robo.executarTarefa(robo.getAcoes().get(escolha - 1));
+        return escolha;
+    }
 
+    private static boolean roboNaoRemovido(Robo roboAnalisado) {
+        if (roboAnalisado == null)
+            return false;
+        // Verifica se o robô ainda está na lista principal do ambiente
+        return ambiente.getRobos().contains(roboAnalisado) &&
+                !ambiente.getEntidadesRemovidas().contains(roboAnalisado);
     }
 
     /**
-     * TODO: documentar
+     * Imprime uma representação textual do ambiente, destacando a posição de todos
+     * os robôs.
      */
-    private static void imprimirAmbiente(Robo robo) {
+    private static void imprimirAmbienteGeral() {
+        // Pausa para melhor visualização
         try {
-            TimeUnit.SECONDS.sleep(2);
+            TimeUnit.MILLISECONDS.sleep(500); // Reduzido para não ser muito lento
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
+            System.err.println("Pausa interrompida: " + e.getMessage());
         }
 
-        System.out.println("\n\n=============== MAPA DO JOGO ===============");
-        for (int i = 0; i < ambiente.getLargura(); i++) {
-            for (int j = 0; j < ambiente.getComprimento(); j++) {
-                if (robo.getX() == j && robo.getY() == i)
-                    System.out.print(robo.getNome().charAt(0));
-                else
-                    System.out.print(".");
-            }
-            System.out.println("");
-        }
+        System.out.println("\n\n=============== MAPA DO JOGO ATUAL ===============");
+        ambiente.visualizarAmbiente();
+        System.out.println("===============================================");
     }
+
+    // Removido imprimirAmbiente(Robo robo) antigo, substituído por
+    // imprimirAmbienteGeral()
 
     // INICIALIZAÇÃO
 
@@ -147,8 +363,8 @@ public final class Controlador {
     private static void inicializarSim() {
         try {
 
-            final int COMPRIMENTO = 80;
-            final int LARGURA = 40;
+            final int COMPRIMENTO = 50;
+            final int LARGURA = 30;
             final int ALTURA = 30;
             ambiente = new Ambiente(COMPRIMENTO, LARGURA, ALTURA);
 
@@ -169,7 +385,7 @@ public final class Controlador {
             Random rand = new Random();
             int numObst = 0;
             for (int loops = 0; loops < 20; loops++) {
-                numObst = rand.nextInt(5);
+                numObst = rand.nextInt(5) + 1;
                 System.out.print("\rSeu ambiente terá " + numObst + " obstáculos");
                 Thread.sleep(85); // Apenas para simular um processo demorado
             }

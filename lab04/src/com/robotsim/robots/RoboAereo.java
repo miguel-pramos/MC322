@@ -42,7 +42,7 @@ public abstract class RoboAereo extends Robo { // Implementa Atacante
     public void subir(int deltaZ) {
         try {
             Controlador.getAmbiente()
-                    .dentroDosLimites(this.posicaoX, this.posicaoY,
+                    .dentroDosLimites(this.x, this.y,
                             this.altitude + deltaZ);
             this.altitude += deltaZ;
         } catch (ColisaoException e) {
@@ -64,7 +64,7 @@ public abstract class RoboAereo extends Robo { // Implementa Atacante
     public void descer(int deltaZ) {
         try {
             Controlador.getAmbiente()
-                    .dentroDosLimites(this.posicaoX, this.posicaoY,
+                    .dentroDosLimites(this.x, this.y,
                             this.altitude - deltaZ);
             this.altitude -= deltaZ;
         } catch (ColisaoException e) {

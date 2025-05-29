@@ -27,23 +27,47 @@ public class Ambiente {
     }
 
     private boolean estaOcupado(int x, int y, int z) {
-        return this.mapa[x][y][z] == TipoEntidade.VAZIO;
+        // Esta verificação agora é redundante aqui se dentroDosLimites for chamada
+        // primeiro,
+        // mas é seguro mantê-la se estaOcupado puder ser chamado de outros lugares.
+        // No entanto, a lógica principal de verificação de limites deve estar em
+        // dentroDosLimites.
+        if (x < 0 || x >= this.comprimento || y < 0 || y >= this.largura || z < 0 || z >= this.altura) {
+            // Se chamado com coordenadas fora dos limites, considera-se "ocupado" no
+            // sentido de inválido.
+            // Ou poderia lançar uma exceção, dependendo da semântica desejada.
+            // Para o contexto atual de dentroDosLimites, esta condição não deveria ser
+            // atingida se a ordem for corrigida.
+            return false; // Ou true, dependendo de como "ocupado" é interpretado para posições inválidas.
+                          // Vamos assumir que uma posição fora dos limites não está "VAZIO".
+        }
+        return this.mapa[x][y][z] != TipoEntidade.VAZIO;
     }
 
     /**
      * Verifica se uma posição tridimensional está dentro dos limites do ambiente.
      *
-     * @param x            Coordenada no eixo X.
-     * @param y            Coordenada no eixo Y.
-     * @param z            Coordenada no eixo Z.
-     * @param alturaMaxima Coordenada máxima para o eixo Z.
-     * @return true se a posição estiver dentro dos limites, false caso contrário.
+     * @param x Coordenada no eixo X.
+     * @param y Coordenada no eixo Y.
+     * @param z Coordenada no eixo Z.
+     * @return true se a posição estiver dentro dos limites E não ocupada, false se
+     *         estiver fora dos limites físicos.
+     * @throws ColisaoException se a posição estiver dentro dos limites físicos MAS
+     *                          ocupada (não vazia).
      */
     public boolean dentroDosLimites(int x, int y, int z) throws ColisaoException {
-        if (estaOcupado(x, y, z))
-            throw new ColisaoException();
-        return (x < this.comprimento && y < this.largura && z < this.altura)
-                && (x >= 0 && y >= 0 && z >= 0);
+        // 1. Primeiro, verificar se as coordenadas estão dentro das dimensões do array
+        if (!(x < this.comprimento && y < this.largura && z < this.altura &&
+                x >= 0 && y >= 0 && z >= 0)) {
+            return false; // Fora dos limites físicos do mapa
+        }
+
+        // 2. Se estiver dentro dos limites físicos, então verificar se está ocupado
+        if (this.estaOcupado(x, y, z)) { // Acessa o mapa somente após garantir que x,y,z são válidos
+            throw new ColisaoException("Posição (" + x + "," + y + "," + z + ") já está ocupada.");
+        }
+
+        return true; // Dentro dos limites e não ocupado (Vazio)
     }
 
     /**
@@ -108,8 +132,6 @@ public class Ambiente {
                     System.out.print(entidadeNoTopo.getRepresentacao());
                 else
                     System.out.print(".");
-
-                System.out.print(" ");
             }
             System.out.println();
         }
@@ -121,6 +143,10 @@ public class Ambiente {
 
     public int getComprimento() {
         return comprimento;
+    }
+
+    public int getAltura() {
+        return altura;
     }
 
     public ArrayList<Entidade> getEntidades() {
