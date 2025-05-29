@@ -107,14 +107,13 @@ public class Obstaculo implements Entidade {
 
     @Override
     public String getDescricao() {
-        // TODO Auto-generated method stub
-        return null;
+        return String.format("Obstáculo: %s na posição (%d, %d)", tipo.toString(), posX, posY);
     }
 
     @Override
     public char getRepresentacao() {
-        // TODO Auto-generated method stub
-        return 0;
+        // Supondo que TipoObstaculo tenha um método getRepresentacao()
+        return tipo.getRepresentacao();
     }
 
     public TipoEntidade getTipo() {
