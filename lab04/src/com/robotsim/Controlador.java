@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 import java.util.Random;
 import java.lang.reflect.InvocationTargetException;
 
+import com.robotsim.comunicacao.CentralComunicacao;
 import com.robotsim.environment.Ambiente;
 import com.robotsim.environment.obstacle.Obstaculo;
 import com.robotsim.etc.Acao;
 import com.robotsim.etc.CatalogoRobos;
-import com.robotsim.etc.CentralComunicacao;
 import com.robotsim.exceptions.ErroComunicacaoException;
 import com.robotsim.exceptions.RoboDesligadoException;
 import com.robotsim.robots.*;

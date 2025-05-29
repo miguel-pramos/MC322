@@ -62,12 +62,12 @@ public class SensorRobo extends Sensor {
 
                     // Calcula a distância considerando a altitude.
                     distancia = GeometryMath.distanciaEuclidiana(this.sensor.getRobo(), outro_robo.getX(),
-                            outro_robo.getY(), ((RoboAereo) outro_robo).getAltitude());
+                            outro_robo.getY(), ((RoboAereo) outro_robo).getZ());
 
                     if (distancia < this.sensor.getRaioDeAlcance())
                         System.out.printf("O robô %s está na posição (%d, %d, %d)%n", outro_robo.getNome(),
                                 outro_robo.getX(), outro_robo.getY(),
-                                ((RoboAereo) outro_robo).getAltitude());
+                                ((RoboAereo) outro_robo).getZ());
 
                 } else if (outro_robo instanceof RoboTerrestre && outro_robo != this.sensor.getRobo()) {
 
