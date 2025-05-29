@@ -33,7 +33,7 @@ public class RoboDrone extends RoboAereo implements Explorador {
     public String getDescricao() {
         return String.format(
                 "RoboDrone se move usando sua pequena bateria... Rumores dizem que sua autodestruição é potente \nNome: %s, HP: %d, Bateria: %d",
-                this.nome, this.HP, this.bateria);
+                this.getNome(), this.getHP(), this.bateria);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class RoboDrone extends RoboAereo implements Explorador {
 
     @Override
     public List<Entidade> escanearArea() {
-        System.out.println(this.nome + " escaneando área...");
+        System.out.println(this.getNome() + " escaneando área...");
         ArrayList<Entidade> entidadesDetectadas = new ArrayList<>();
         for (Entidade entidade : Controlador.getAmbiente().getEntidades()) {
             if (entidade != this && GeometryMath.distanciaEuclidiana(this, entidade.getX(), entidade.getY()) <= 30) {

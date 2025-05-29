@@ -44,7 +44,7 @@ public final class GeometryMath {
         int yRobo = robo.getY();
         int zRobo = 0;
         if (robo instanceof RoboAereo)
-            zRobo = ((RoboAereo) robo).getAltitude();
+            zRobo = ((RoboAereo) robo).getZ();
 
         return Math.sqrt(Math.pow(x - xRobo, 2) + Math.pow(y - yRobo, 2) + Math.pow(z - zRobo, 2));
     }

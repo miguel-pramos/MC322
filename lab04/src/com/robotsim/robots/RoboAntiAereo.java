@@ -34,7 +34,7 @@ public class RoboAntiAereo extends RoboTerrestre implements Atacante, Autonomo {
     public String getDescricao() {
         return String.format(
                 "RoboAntiAereo não se move, mas tem um longo alcance pelos céus \nNome: %s, HP: %d, Balas Restantes: %d, Dano: %d, Alcance: %d",
-                this.nome, this.HP, this.balasRestantes, this.dano, this.alcance);
+                this.getNome(), this.getHP(), this.balasRestantes, this.dano, this.alcance);
     }
 
     @Override
@@ -68,9 +68,9 @@ public class RoboAntiAereo extends RoboTerrestre implements Atacante, Autonomo {
         if (GeometryMath.distanciaEuclidiana(this, alvo.getX(), alvo.getY()) < this.alcance) {
             ((RoboAereo) alvo).tomarDano(dano);
             this.balasRestantes--;
-            System.out.println(this.nome + " atingiu " + ((Robo) alvo).getNome() + "!");
+            System.out.println(this.getNome() + " atingiu " + ((Robo) alvo).getNome() + "!");
         } else {
-            System.out.println("O inimigo estava longe demais... " + this.nome + " não acertou.");
+            System.out.println("O inimigo estava longe demais... " + this.getNome() + " não acertou.");
         }
     }
 
@@ -84,14 +84,14 @@ public class RoboAntiAereo extends RoboTerrestre implements Atacante, Autonomo {
     public void setModoAutonomo(boolean ativar) {
         this.modoAutonomo = ativar;
         if (this.modoAutonomo) {
-            System.out.println(this.nome + " entrou em modo autônomo.");
+            System.out.println(this.getNome() + " entrou em modo autônomo.");
             if (Controlador.getAmbiente().getRobos().stream().anyMatch(r -> r instanceof RoboAereo && r != this)) {
-                System.out.println(this.nome + " detectou alvos aéreos e está pronto para atacar autonomamente.");
+                System.out.println(this.getNome() + " detectou alvos aéreos e está pronto para atacar autonomamente.");
             } else {
-                System.out.println(this.nome + " não detectou alvos aéreos no momento.");
+                System.out.println(this.getNome() + " não detectou alvos aéreos no momento.");
             }
         } else {
-            System.out.println(this.nome + " saiu do modo autônomo.");
+            System.out.println(this.getNome() + " saiu do modo autônomo.");
         }
     }
 

@@ -61,7 +61,7 @@ public class RoboTanque extends RoboTerrestre implements Atacante {
     public String getDescricao() {
         return String.format(
                 "RoboTanque é robusto e leva consigo grande poder de fogo \nNome: %s, HP: %d, Balas Restantes: %d, Dano: %d, Alcance: %d",
-                this.nome, this.HP, this.balasRestantes, this.dano, this.alcance);
+                this.getNome(), this.getHP(), this.balasRestantes, this.dano, this.alcance);
     }
 
     @Override

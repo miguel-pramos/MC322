@@ -44,12 +44,12 @@ public class RoboJato extends RoboAereo implements Atacante {
 
         // A verificação de podeAtacar já garante que alvo é RoboAereo
         if (GeometryMath.distanciaEuclidiana(this, alvo.getX(), alvo.getY(),
-                alvo.getAltitude()) < alcanceMissil) {
+                alvo.getZ()) < alcanceMissil) {
             alvo.tomarDano(danoMissil);
             this.misseisRestantes--;
-            System.out.println(this.nome + " lançou um míssil em " + alvo.getNome() + "!");
+            System.out.println(this.getNome() + " lançou um míssil em " + alvo.getNome() + "!");
         } else {
-            System.out.println("O inimigo estava longe demais... " + this.nome + " errou o míssil.");
+            System.out.println("O inimigo estava longe demais... " + this.getNome() + " errou o míssil.");
         }
     }
 
@@ -69,9 +69,9 @@ public class RoboJato extends RoboAereo implements Atacante {
         if (GeometryMath.distanciaEuclidiana(this, alvo.getX(), alvo.getY(), 0) < alcanceMetralhadora) {
             alvo.tomarDano(danoMetralhadora);
             this.rajadasRestantes--;
-            System.out.println(this.nome + " atirou uma rajada em " + alvo.getNome() + "!");
+            System.out.println(this.getNome() + " atirou uma rajada em " + alvo.getNome() + "!");
         } else {
-            System.out.println("O inimigo estava longe demais... " + this.nome + " errou a rajada.");
+            System.out.println("O inimigo estava longe demais... " + this.getNome() + " errou a rajada.");
         }
     }
 
@@ -79,7 +79,7 @@ public class RoboJato extends RoboAereo implements Atacante {
     public String getDescricao() {
         return String.format(
                 "RoboJato é rápido e perigoso. Especializado em ataques aéreos \nNome: %s, HP: %d, Mísseis Restantes: %d, Rajadas Restantes: %d",
-                this.nome, this.HP, this.misseisRestantes, this.rajadasRestantes);
+                this.getNome(), this.getHP(), this.misseisRestantes, this.rajadasRestantes);
     }
 
     @Override
@@ -106,15 +106,15 @@ public class RoboJato extends RoboAereo implements Atacante {
     @Override
     public void executarAtaque(Entidade alvo) {
         if (!podeAtacar(alvo)) {
-            System.out.println(this.nome + " não pode atacar este tipo de alvo.");
+            System.out.println(this.getNome() + " não pode atacar este tipo de alvo.");
             return;
         }
 
         if (alvo instanceof RoboAereo) {
-            System.out.println(this.nome + " vai tentar lançar um míssil em " + ((Robo) alvo).getNome());
+            System.out.println(this.getNome() + " vai tentar lançar um míssil em " + ((Robo) alvo).getNome());
             lancarMissil((RoboAereo) alvo);
         } else if (alvo instanceof RoboTerrestre) {
-            System.out.println(this.nome + " vai tentar atirar uma rajada em " + ((Robo) alvo).getNome());
+            System.out.println(this.getNome() + " vai tentar atirar uma rajada em " + ((Robo) alvo).getNome());
             atirarRajada((RoboTerrestre) alvo);
         } else {
             System.out.println("Tipo de alvo não suportado para ataque por RoboJato.");

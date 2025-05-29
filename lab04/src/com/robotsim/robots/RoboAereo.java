@@ -16,11 +16,10 @@ import com.robotsim.exceptions.ColisaoException;
  */
 public abstract class RoboAereo extends Robo { // Implementa Atacante
     protected int altitudeMaxima;
-    protected int altitude;
 
     public RoboAereo(String nome, int posicaoX, int posicaoY, int HP, int altitude, int altitudeMaxima) {
         super(nome, posicaoX, posicaoY, HP);
-        this.altitude = altitude;
+        this.setZ(altitude);
         this.altitudeMaxima = altitudeMaxima;
     }
 
@@ -42,9 +41,9 @@ public abstract class RoboAereo extends Robo { // Implementa Atacante
     public void subir(int deltaZ) {
         try {
             Controlador.getAmbiente()
-                    .dentroDosLimites(this.x, this.y,
-                            this.altitude + deltaZ);
-            this.altitude += deltaZ;
+                    .dentroDosLimites(this.getX(), this.getY(),
+                            this.getZ() + deltaZ);
+            this.setZ(this.getZ() + deltaZ);
         } catch (ColisaoException e) {
 
             System.out.printf("\nVocê subiu... E subiu... Até atingir " +
@@ -64,21 +63,12 @@ public abstract class RoboAereo extends Robo { // Implementa Atacante
     public void descer(int deltaZ) {
         try {
             Controlador.getAmbiente()
-                    .dentroDosLimites(this.x, this.y,
-                            this.altitude - deltaZ);
-            this.altitude -= deltaZ;
+                    .dentroDosLimites(this.getX(), this.getY(),
+                            this.getZ() - deltaZ);
+            this.setZ(this.getZ() - deltaZ);
         } catch (ColisaoException e) {
-            this.altitude = 0;
+            this.setZ(0);
         }
-    }
-
-    /**
-     * Método que retorna a altitude atual do robô.
-     *
-     * @return A altitude atual.
-     */
-    public int getAltitude() {
-        return this.altitude;
     }
 
     public int getAltitudeMaxima() {

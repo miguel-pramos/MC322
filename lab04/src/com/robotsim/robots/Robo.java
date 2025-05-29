@@ -20,14 +20,14 @@ import com.robotsim.robots.sensors.Sensor;
  * Ela define propriedades e comportamentos comuns, como posição, nome e ações.
  */
 public abstract class Robo implements Comunicavel, Entidade {
-    protected String nome; // Nome do robô.
-    protected String id; // Id do robô.
-    protected TipoEntidade tipo; // Tipo da entidade.
-    protected EstadoRobo estado; // Ligado ou desligado.
-    protected int HP; // Pontos de vida do robô.
-    protected int x; // Posição atual no eixo X.
-    protected int y; // Posição atual no eixo Y.
-    protected int z; // Posição atual no eixo Z.
+    private String nome; // Nome do robô.
+    private String id; // Id do robô.
+    private TipoEntidade tipo; // Tipo da entidade.
+    private EstadoRobo estado; // Ligado ou desligado.
+    private int HP; // Pontos de vida do robô.
+    private int x; // Posição atual no eixo X.
+    private int y; // Posição atual no eixo Y.
+    private int z; // Posição atual no eixo Z.
     protected ArrayList<Acao> acoes; // Lista de ações disponíveis para o robô.
     protected ArrayList<Sensor> sensores; // Sensores do robô
 
@@ -169,24 +169,48 @@ public abstract class Robo implements Comunicavel, Entidade {
         return new ArrayList<>(acoes);
     }
 
+    public ArrayList<Sensor> getSensores() {
+        return new ArrayList<>(sensores);
+    }
+
     public int getX() {
         return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
     }
 
     public int getY() {
         return y;
     }
 
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public int getZ() {
         return z;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
     }
 
     public String getNome() {
         return nome;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public int getHP() {
         return HP;
+    }
+
+    public void setHP(int HP) {
+        this.HP = HP;
     }
 
     public String getId() {
@@ -199,6 +223,10 @@ public abstract class Robo implements Comunicavel, Entidade {
 
     public EstadoRobo getEstado() {
         return estado;
+    }
+
+    public void setEstado(EstadoRobo estado) {
+        this.estado = estado;
     }
 
     public boolean isLigado() {
