@@ -110,6 +110,12 @@ public class Obstaculo implements Entidade {
             // revisada se for para colisões com robôs.
             // Aqui, o foco é a validade da posição do obstáculo em si.
             return false;
+        } catch (IndexOutOfBoundsException e) { // Adicionado para capturar exceções de limites
+            // Se ocorrer uma IndexOutOfBoundsException (por exemplo, ao chamar dentroDosLimites),
+            // significa que a posição calculada para o obstáculo (considerando seu tamanho)
+            // está fora dos limites físicos do ambiente.
+            // System.err.println("IndexOutOfBoundsException em boaPosicao: " + e.getMessage()); // Opcional: para debug
+            return false; // Posição é inválida se causa esta exceção.
         }
     }
 
