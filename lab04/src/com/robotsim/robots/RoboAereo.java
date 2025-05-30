@@ -7,22 +7,40 @@ import com.robotsim.etc.Acao;
 import com.robotsim.exceptions.ColisaoException;
 
 /**
- * A classe RoboAereo representa um robô aéreo genérico que pode se mover em
- * três dimensões.
- * Robôs aéreos possuem altitude variável e podem subir ou descer dentro de um
- * limite máximo.
+ * Representa um robô aéreo genérico.
+ * Esta classe abstrata estende {@link Robo} e adiciona funcionalidades
+ * específicas para robôs que operam em três dimensões, como controle de
+ * altitude.
  *
  * @see Robo
  */
 public abstract class RoboAereo extends Robo { // Implementa Atacante
+    /**
+     * Altitude máxima que o robô aéreo pode atingir.
+     */
     protected int altitudeMaxima;
 
+    /**
+     * Construtor para RoboAereo.
+     *
+     * @param nome           Nome do robô.
+     * @param posicaoX       Posição inicial no eixo X.
+     * @param posicaoY       Posição inicial no eixo Y.
+     * @param HP             Pontos de vida iniciais.
+     * @param altitude       Altitude inicial do robô.
+     * @param altitudeMaxima Altitude máxima permitida para o robô.
+     */
     public RoboAereo(String nome, int posicaoX, int posicaoY, int HP, int altitude, int altitudeMaxima) {
         super(nome, posicaoX, posicaoY, HP);
         this.setZ(altitude);
         this.altitudeMaxima = altitudeMaxima;
     }
 
+    /**
+     * Inicializa as ações específicas do RoboAereo.
+     * Adiciona as ações de "Subir" e "Descer" à lista de ações do robô.
+     * Chama o método da superclasse para inicializar ações comuns.
+     */
     @Override
     protected void inicializarAcoes() {
         super.inicializarAcoes();
@@ -31,12 +49,10 @@ public abstract class RoboAereo extends Robo { // Implementa Atacante
     }
 
     /**
-     * Método que permite ao robô subir uma determinada altitude.
-     * <p>
-     * O robô não pode ultrapassar a altitude máxima. Caso o incremento ultrapasse o
-     * limite, a altitude será ajustada para o valor máximo.
+     * Permite ao robô subir, aumentando sua altitude (coordenada Z).
+     * A subida é limitada pela {@link #altitudeMaxima} e pelos limites do ambiente.
      *
-     * @param deltaZ Valor a ser incrementado na altitude.
+     * @param deltaZ A quantidade a ser adicionada à altitude atual.
      */
     public void subir(int deltaZ) {
         try {
@@ -71,30 +87,45 @@ public abstract class RoboAereo extends Robo { // Implementa Atacante
         }
     }
 
+    /**
+     * Obtém a altitude máxima que este robô aéreo pode alcançar.
+     *
+     * @return A altitude máxima permitida.
+     */
     public int getAltitudeMaxima() {
         return this.altitudeMaxima;
     }
 
     /**
-     * Classe interna que representa a ação de descer de um RoboAereo.
-     * Implementa a interface Acao, permitindo que o robô execute a ação de descida.
+     * Classe interna que implementa a ação de descer para um {@link RoboAereo}.
      */
     private class Descer implements Acao {
+        /** O robô aéreo que executará a ação de descer. */
         RoboAereo robo;
 
+        /**
+         * Construtor para a ação Descer.
+         * 
+         * @param robo O {@link RoboAereo} associado a esta ação.
+         */
         public Descer(RoboAereo robo) {
             this.robo = robo;
         }
 
+        /**
+         * Obtém o nome da ação.
+         * 
+         * @return O nome da ação ("Descer").
+         */
         @Override
         public String getNome() {
             return "Descer";
         }
 
         /**
-         * Método que executa a ação de descida.
-         * Solicita ao usuário o valor de altitude a ser decrementado e ajusta a
-         * altitude do robô.
+         * Executa a ação de descer.
+         * Solicita ao usuário a quantidade de altitude a ser decrementada e chama o
+         * método {@link RoboAereo#descer(int)}.
          */
         @Override
         public void executar() {
@@ -112,25 +143,35 @@ public abstract class RoboAereo extends Robo { // Implementa Atacante
     }
 
     /**
-     * Classe interna que representa a ação de subir de um RoboAereo.
-     * Implementa a interface Acao, permitindo que o robô execute a ação de subida.
+     * Classe interna que implementa a ação de subir para um {@link RoboAereo}.
      */
     private class Subir implements Acao {
+        /** O robô aéreo que executará a ação de subir. */
         RoboAereo robo;
 
+        /**
+         * Construtor para a ação Subir.
+         * 
+         * @param robo O {@link RoboAereo} associado a esta ação.
+         */
         public Subir(RoboAereo robo) {
             this.robo = robo;
         }
 
+        /**
+         * Obtém o nome da ação.
+         * 
+         * @return O nome da ação ("Subir").
+         */
         @Override
         public String getNome() {
             return "Subir";
         }
 
         /**
-         * Método que executa a ação de subida.
-         * Solicita ao usuário o valor de altitude a ser incrementado e ajusta a
-         * altitude do robô.
+         * Executa a ação de subir.
+         * Solicita ao usuário a quantidade de altitude a ser incrementada e chama o
+         * método {@link RoboAereo#subir(int)}.
          */
         @Override
         public void executar() {

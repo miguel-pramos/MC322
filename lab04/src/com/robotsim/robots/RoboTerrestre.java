@@ -7,34 +7,49 @@ import com.robotsim.etc.Acao;
 import com.robotsim.util.GeometryMath;
 
 /**
- * A classe RoboTerrestre representa um robô terrestre genérico que se move em
- * duas dimensões.
- * Robôs terrestres possuem velocidade máxima e podem ser danificados por
- * ataques.
+ * Representa um robô terrestre genérico, uma subclasse de {@link Robo}.
+ * Define comportamentos e propriedades comuns a todos os robôs que operam
+ * primariamente no solo,
+ * como a limitação de movimento pela {@link #velocidadeMaxima}.
  *
  * @see Robo
  */
 public abstract class RoboTerrestre extends Robo {
+    /**
+     * Velocidade máxima de movimento do robô terrestre, em pixels por unidade de
+     * tempo (definida em {@link Controlador#DELTA_TIME}).
+     */
     protected int velocidadeMaxima; // Pixels por segundo
 
+    /**
+     * Construtor para RoboTerrestre.
+     *
+     * @param nome     Nome do robô.
+     * @param posicaoX Posição inicial no eixo X.
+     * @param posicaoY Posição inicial no eixo Y.
+     * @param HP       Pontos de vida iniciais.
+     */
     public RoboTerrestre(String nome, int posicaoX, int posicaoY, int HP) {
         super(nome, posicaoX, posicaoY, HP);
     }
 
+    /**
+     * Inicializa as ações básicas do RoboTerrestre.
+     * Adiciona a ação "Mover" específica para robôs terrestres.
+     */
     @Override
     protected void inicializarAcoes() {
         acoes.add(new Mover(this));
     }
 
     /**
-     * Método responsável por mover o RoboTerrestre.
-     * <p>
-     * O robô não pode se mover além de sua velocidade máxima.
-     * Caso o deslocamento exceda a velocidade máxima, ele será ajustado para o
-     * limite permitido.
+     * Move o robô terrestre, respeitando sua {@link #velocidadeMaxima}.
+     * Se a distância do movimento solicitado exceder a capacidade de movimento em
+     * um {@link Controlador#DELTA_TIME},
+     * o movimento não é realizado e uma mensagem é exibida.
      *
-     * @param deltaX Deslocamento no eixo X.
-     * @param deltaY Deslocamento no eixo Y.
+     * @param deltaX Deslocamento desejado no eixo X.
+     * @param deltaY Deslocamento desejado no eixo Y.
      */
     @Override
     protected void mover(int deltaX, int deltaY) {
@@ -47,23 +62,36 @@ public abstract class RoboTerrestre extends Robo {
     }
 
     /**
-     * Classe interna que representa a ação de mover o RoboTerrestre.
+     * Classe interna que implementa a ação de mover para o {@link RoboTerrestre}.
+     * Solicita ao usuário os deslocamentos nos eixos X e Y e chama o método
+     * {@link RoboTerrestre#mover(int, int)}.
      */
     private class Mover implements Acao {
+        /** O robô terrestre que executará a ação de mover. */
         RoboTerrestre robo;
 
+        /**
+         * Construtor para a ação Mover.
+         * 
+         * @param robo O {@link RoboTerrestre} associado a esta ação.
+         */
         public Mover(RoboTerrestre robo) {
             this.robo = robo;
         }
 
+        /**
+         * Obtém o nome da ação.
+         * 
+         * @return O nome da ação ("Mover").
+         */
         @Override
         public String getNome() {
             return "Mover";
         }
 
         /**
-         * Executa a ação de mover o RoboTerrestre.
-         * Solicita ao usuário os deslocamentos nos eixos X e Y.
+         * Executa a ação de mover.
+         * Solicita ao usuário os deslocamentos deltaX e deltaY e move o robô terrestre.
          */
         @Override
         public void executar() {

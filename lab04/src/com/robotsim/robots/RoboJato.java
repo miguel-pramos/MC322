@@ -11,22 +11,40 @@ import com.robotsim.robots.abilities.Atacante;
 import com.robotsim.util.GeometryMath;
 
 /**
- * A classe RoboJato representa um robô aéreo especializado que possui a
- * capacidade
- * de lançar mísseis e atirar rajadas de metralhadora, a depender do tipo de
- * alvo.
+ * Representa um robô aéreo do tipo Jato, uma subclasse de {@link RoboAereo}.
+ * O RoboJato é especializado em combate aéreo e terrestre, capaz de lançar
+ * mísseis contra alvos aéreos
+ * e atirar rajadas de metralhadora contra alvos terrestres. Possui munição
+ * limitada para ambas as armas
+ * e alcances de ataque específicos.
  *
  * @see RoboAereo
+ * @see Atacante
  */
 public class RoboJato extends RoboAereo implements Atacante {
+    /** Quantidade de mísseis restantes. */
     private int misseisRestantes = 4;
+    /** Quantidade de rajadas de metralhadora restantes. */
     private int rajadasRestantes = 10;
+    /** Alcance máximo dos mísseis. */
     private final int alcanceMissil = 20;
+    /** Alcance máximo da metralhadora. */
     private final int alcanceMetralhadora = 15;
+    /** Dano causado por cada míssil. */
     private final int danoMissil = 250;
+    /** Dano causado por cada rajada de metralhadora. */
     private final int danoMetralhadora = 180;
+    /** Contador estático para gerar IDs únicos para instâncias de RoboJato. */
     private static int contador = 0;
 
+    /**
+     * Construtor para RoboJato.
+     * Inicializa o robô com nome, posição, HP, altitude inicial e altitude máxima.
+     *
+     * @param nome     Nome do robô.
+     * @param posicaoX Posição inicial no eixo X.
+     * @param posicaoY Posição inicial no eixo Y.
+     */
     public RoboJato(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY, 200, 50, 200);
     }
@@ -75,6 +93,12 @@ public class RoboJato extends RoboAereo implements Atacante {
         }
     }
 
+    /**
+     * Retorna uma descrição textual do RoboJato, incluindo suas estatísticas de
+     * combate como HP, mísseis e rajadas restantes.
+     *
+     * @return String contendo a descrição detalhada do robô.
+     */
     @Override
     public String getDescricao() {
         return String.format(
@@ -82,11 +106,21 @@ public class RoboJato extends RoboAereo implements Atacante {
                 this.getNome(), this.getHP(), this.misseisRestantes, this.rajadasRestantes);
     }
 
+    /**
+     * Retorna o caractere que representa o RoboJato no ambiente do simulador.
+     *
+     * @return O caractere 'J'.
+     */
     @Override
     public char getRepresentacao() {
         return 'J'; // Representação do RoboJato no ambiente.
     }
 
+    /**
+     * Inicializa as ações específicas do RoboJato.
+     * Adiciona a ação genérica "Atacar (Jato)" à lista de ações do robô.
+     * Chama o método da superclasse para inicializar ações comuns herdadas.
+     */
     @Override
     protected void inicializarAcoes() {
         super.inicializarAcoes();
@@ -103,6 +137,15 @@ public class RoboJato extends RoboAereo implements Atacante {
     }
 
     // Implementação dos métodos da interface Atacante
+    /**
+     * Executa um ataque contra uma entidade alvo.
+     * O método determina qual arma utilizar (míssil ou metralhadora) com base no
+     * tipo do alvo.
+     * Lança mísseis contra {@link RoboAereo} e atira rajadas contra
+     * {@link RoboTerrestre}.
+     *
+     * @param alvo A entidade (robô) a ser atacada.
+     */
     @Override
     public void executarAtaque(Entidade alvo) {
         if (!podeAtacar(alvo)) {
@@ -121,28 +164,61 @@ public class RoboJato extends RoboAereo implements Atacante {
         }
     }
 
+    /**
+     * Verifica se o RoboJato pode atacar uma determinada entidade.
+     * O RoboJato pode atacar outras instâncias de {@link RoboAereo} ou
+     * {@link RoboTerrestre}.
+     *
+     * @param alvo A entidade a ser verificada como possível alvo.
+     * @return true se o alvo for um RoboAereo ou RoboTerrestre, false caso
+     *         contrário.
+     */
     @Override
     public boolean podeAtacar(Entidade alvo) {
         return alvo instanceof RoboAereo || alvo instanceof RoboTerrestre;
     }
 
     /**
-     * Classe interna que representa a ação genérica de Atacar para RoboJato.
-     * Esta classe pode listar todos os alvos possíveis (aéreos e terrestres)
-     * e então chamar o método executarAtaque apropriado.
+     * Classe interna que implementa a ação genérica de atacar para o
+     * {@link RoboJato}.
+     * Esta ação permite ao usuário selecionar um alvo dentre os robôs inimigos
+     * (aéreos ou terrestres)
+     * detectados no ambiente e, em seguida, comanda o RoboJato para executar o
+     * ataque apropriado.
      */
     private class Atacar implements Acao {
+        /** O robô jato que executará a ação de atacar. */
         RoboJato robo;
 
+        /**
+         * Construtor para a ação Atacar.
+         * 
+         * @param robo O {@link RoboJato} que realizará esta ação.
+         */
         public Atacar(RoboJato robo) {
             this.robo = robo;
         }
 
+        /**
+         * Obtém o nome da ação, que será exibido ao usuário.
+         * 
+         * @return O nome da ação ("Atacar (Jato)").
+         */
         @Override
         public String getNome() {
             return "Atacar (Jato)";
         }
 
+        /**
+         * Executa a ação de atacar.
+         * Primeiramente, lista todos os robôs inimigos (aéreos e terrestres) que podem
+         * ser atacados pelo RoboJato.
+         * Em seguida, solicita ao usuário que escolha um alvo da lista.
+         * Finalmente, chama o método {@link RoboJato#executarAtaque(Entidade)} para
+         * realizar o ataque contra o alvo selecionado.
+         * Trata possíveis exceções {@link IllegalStateException} que podem ocorrer
+         * durante o ataque (ex: falta de munição).
+         */
         @Override
         public void executar() {
             ArrayList<Robo> alvosPossiveis = new ArrayList<>();
@@ -179,6 +255,15 @@ public class RoboJato extends RoboAereo implements Atacante {
         }
     }
 
+    /**
+     * Obtém o contador estático usado para gerar IDs únicos para instâncias de
+     * {@link RoboJato}.
+     * Este método é chamado durante a criação do ID do robô na classe base
+     * {@link Robo}.
+     * Incrementa o contador a cada chamada para garantir a unicidade do próximo ID.
+     *
+     * @return O valor atualizado do contador específico para RoboJato.
+     */
     @Override
     protected int getContador() {
         contador++;

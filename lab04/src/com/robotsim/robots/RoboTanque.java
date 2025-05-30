@@ -10,18 +10,33 @@ import com.robotsim.robots.abilities.Atacante;
 import com.robotsim.util.GeometryMath;
 
 /**
- * A classe RoboTanque representa um robô terrestre com a capacidade de atirar
- * em outros robôs terrestres.
- * Este robô possui munição limitada e um alcance específico para seus ataques.
+ * Representa um robô do tipo tanque, uma subclasse de {@link RoboTerrestre}.
+ * O RoboTanque é especializado em combate terrestre, possuindo a capacidade de
+ * atirar
+ * em outros robôs terrestres. Ele tem munição limitada e um alcance de ataque
+ * específico.
  *
  * @see RoboTerrestre
+ * @see Atacante
  */
 public class RoboTanque extends RoboTerrestre implements Atacante {
+    /** Quantidade de balas restantes para o ataque. */
     private int balasRestantes = 10;
+    /** Dano causado por cada ataque bem-sucedido. */
     private final int dano = 200;
+    /** Alcance máximo dos ataques. */
     private final int alcance = 25;
+    /** Contador estático para gerar IDs únicos para instâncias de RoboTanque. */
     private static int contador = 0;
 
+    /**
+     * Construtor para RoboTanque.
+     * Inicializa o robô com nome, posição, HP e define sua velocidade máxima.
+     *
+     * @param nome     Nome do robô.
+     * @param posicaoX Posição inicial no eixo X.
+     * @param posicaoY Posição inicial no eixo Y.
+     */
     public RoboTanque(String nome, int posicaoX, int posicaoY) {
         super(nome, posicaoX, posicaoY, 500);
         this.velocidadeMaxima = 15;
@@ -32,8 +47,8 @@ public class RoboTanque extends RoboTerrestre implements Atacante {
      * alvo estiver
      * dentro do alcance do míssil.
      *
-     * @param alvo
-     * @throws IllegalStateException
+     * @param alvo A entidade a ser atacada.
+     * @throws IllegalStateException Se não houver balas restantes.
      */
     @Override
     public void executarAtaque(Entidade alvo) {
@@ -52,11 +67,23 @@ public class RoboTanque extends RoboTerrestre implements Atacante {
         }
     }
 
+    /**
+     * Verifica se o RoboTanque pode atacar uma determinada entidade.
+     * Só pode atacar instâncias de {@link RoboTerrestre}.
+     *
+     * @param alvo A entidade a ser verificada.
+     * @return true se o alvo for um RoboTerrestre, false caso contrário.
+     */
     @Override
     public boolean podeAtacar(Entidade alvo) {
         return alvo instanceof RoboTerrestre;
     }
 
+    /**
+     * Retorna uma descrição textual do RoboTanque, incluindo suas estatísticas.
+     *
+     * @return String contendo a descrição do robô.
+     */
     @Override
     public String getDescricao() {
         return String.format(
@@ -64,11 +91,21 @@ public class RoboTanque extends RoboTerrestre implements Atacante {
                 this.getNome(), this.getHP(), this.balasRestantes, this.dano, this.alcance);
     }
 
+    /**
+     * Retorna o caractere que representa o RoboTanque no ambiente do simulador.
+     *
+     * @return O caractere 'T'.
+     */
     @Override
     public char getRepresentacao() {
         return 'T'; // Representação do RoboTanque no ambiente.
     }
 
+    /**
+     * Inicializa as ações específicas do RoboTanque.
+     * Adiciona a ação "Atirar" e chama o método da superclasse para inicializar
+     * ações comuns.
+     */
     @Override
     protected void inicializarAcoes() {
         acoes.add(new Atirar(this));
@@ -76,15 +113,27 @@ public class RoboTanque extends RoboTerrestre implements Atacante {
     }
 
     /**
-     * Classe interna que representa a ação de atirar de um RoboTanque.
+     * Classe interna que implementa a ação de atirar para o {@link RoboTanque}.
+     * Permite ao robô atacar alvos terrestres selecionados pelo usuário.
      */
     private class Atirar implements Acao {
+        /** O robô tanque que executará a ação de atirar. */
         RoboTanque robo;
 
+        /**
+         * Construtor para a ação Atirar.
+         * 
+         * @param robo O {@link RoboTanque} associado a esta ação.
+         */
         public Atirar(RoboTanque robo) {
             this.robo = robo;
         }
 
+        /**
+         * Obtém o nome da ação.
+         * 
+         * @return O nome da ação ("Atirar").
+         */
         @Override
         public String getNome() {
             return "Atirar";
@@ -138,6 +187,12 @@ public class RoboTanque extends RoboTerrestre implements Atacante {
         }
     }
 
+    /**
+     * Obtém o contador para gerar IDs únicos para {@link RoboTanque}.
+     * Incrementa o contador a cada chamada.
+     *
+     * @return O valor atualizado do contador.
+     */
     @Override
     protected int getContador() {
         contador++;
