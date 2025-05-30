@@ -1,4 +1,4 @@
-package com.robotsim.etc;
+package com.robotsim.robots;
 
 /**
  * Enumeração {@code EstadoRobo} representa os possíveis estados operacionais de

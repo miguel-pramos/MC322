@@ -1,4 +1,4 @@
-package com.robotsim.robots;
+package com.robotsim.robots.terrestrials;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -6,6 +6,7 @@ import java.util.Scanner;
 import com.robotsim.Controlador;
 import com.robotsim.environment.entity.Entidade;
 import com.robotsim.etc.Acao;
+import com.robotsim.robots.Robo;
 import com.robotsim.robots.abilities.Atacante;
 import com.robotsim.util.GeometryMath;
 

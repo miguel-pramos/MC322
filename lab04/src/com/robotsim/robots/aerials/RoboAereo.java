@@ -1,10 +1,11 @@
-package com.robotsim.robots;
+package com.robotsim.robots.aerials;
 
 import java.util.Scanner;
 
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.exceptions.ColisaoException;
+import com.robotsim.robots.Robo;
 
 /**
  * Representa um robô aéreo genérico.

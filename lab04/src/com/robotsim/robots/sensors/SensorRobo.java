@@ -5,8 +5,8 @@ import java.util.concurrent.TimeUnit;
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
 import com.robotsim.robots.Robo;
-import com.robotsim.robots.RoboAereo;
-import com.robotsim.robots.RoboTerrestre;
+import com.robotsim.robots.aerials.RoboAereo;
+import com.robotsim.robots.terrestrials.RoboTerrestre;
 import com.robotsim.util.GeometryMath;
 
 /**

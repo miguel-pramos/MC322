@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
+import com.robotsim.robots.terrestrials.RoboTerrestre;
 import com.robotsim.util.GeometryMath;
 
 /**

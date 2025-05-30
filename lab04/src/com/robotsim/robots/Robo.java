@@ -9,7 +9,6 @@ import com.robotsim.environment.entity.Entidade;
 import com.robotsim.environment.entity.TipoEntidade;
 import com.robotsim.util.TesteColisao;
 import com.robotsim.etc.Acao;
-import com.robotsim.etc.EstadoRobo;
 import com.robotsim.exceptions.ColisaoException;
 import com.robotsim.exceptions.ErroComunicacaoException;
 import com.robotsim.exceptions.RoboDesligadoException;

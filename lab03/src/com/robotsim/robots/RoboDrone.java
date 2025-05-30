@@ -1,6 +1,7 @@
 package com.robotsim.robots;
 
 import com.robotsim.Controlador;
+import com.robotsim.robots.aerials.RoboAereo;
 import com.robotsim.robots.sensors.SensorObstaculo;
 import com.robotsim.robots.sensors.SensorRobo;
 

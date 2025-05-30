@@ -1,7 +1,7 @@
 package com.robotsim.util;
 
 import com.robotsim.robots.Robo;
-import com.robotsim.robots.RoboAereo;
+import com.robotsim.robots.aerials.RoboAereo;
 
 /**
  * A classe GeometryMath fornece métodos utilitários para cálculos geométricos

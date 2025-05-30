@@ -17,6 +17,12 @@ import com.robotsim.etc.CatalogoRobos;
 import com.robotsim.exceptions.ErroComunicacaoException;
 import com.robotsim.exceptions.RoboDesligadoException;
 import com.robotsim.robots.*;
+import com.robotsim.robots.aerials.RoboAereo;
+import com.robotsim.robots.aerials.RoboDrone;
+import com.robotsim.robots.aerials.RoboJato;
+import com.robotsim.robots.terrestrials.RoboAntiAereo;
+import com.robotsim.robots.terrestrials.RoboTanque;
+import com.robotsim.robots.terrestrials.RoboTerrestre;
 import com.robotsim.util.TesteColisao;
 
 /**

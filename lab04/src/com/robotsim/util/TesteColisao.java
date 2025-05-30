@@ -4,8 +4,8 @@ import com.robotsim.Controlador;
 import com.robotsim.environment.obstacle.Obstaculo;
 import com.robotsim.environment.obstacle.TipoObstaculo;
 import com.robotsim.robots.Robo;
-import com.robotsim.robots.RoboAereo;
-import com.robotsim.robots.RoboTerrestre;
+import com.robotsim.robots.aerials.RoboAereo;
+import com.robotsim.robots.terrestrials.RoboTerrestre;
 
 /**
  * A classe {@code TesteColisao} é responsável por detectar colisões entre robôs

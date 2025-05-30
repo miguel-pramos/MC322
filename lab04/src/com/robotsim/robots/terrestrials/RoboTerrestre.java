@@ -1,9 +1,10 @@
-package com.robotsim.robots;
+package com.robotsim.robots.terrestrials;
 
 import java.util.Scanner;
 
 import com.robotsim.Controlador;
 import com.robotsim.etc.Acao;
+import com.robotsim.robots.Robo;
 import com.robotsim.util.GeometryMath;
 
 /**
