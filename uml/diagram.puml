@@ -1,113 +1,161 @@
+@startuml diagram
 ' A linha de raciocínio utilizada para construir o diagrama foi guiada pelo uso de UML
 ' e pela indicação dos relacionamentos.;
 
-@startuml diagram
+' --- Entidades e Tipos ---
+interface Entidade {
+    +getX(): int
+    +getY(): int
+    +getZ(): int
+    +getTipo(): TipoEntidade
+    +getDescricao(): String
+    +getRepresentacao(): char
+}
 
+enum TipoEntidade {
+    VAZIO
+    ROBO
+    OBSTACULO
+    DESCONHECIDO
+}
 
-' Diagrama de Acao
+enum EstadoRobo {
+    LIGADO
+    DESLIGADO
+}
+
+' --- Acao ---
 interface Acao {
     +getNome(): String
     +executar()
 }
 
-Acao "1.." --* Robo
-Acao "1" --* Sensor
-
-' Diagrama de CatalogoRobos
+' --- CatalogoRobos ---
 class CatalogoRobos {
     -catalogo: HashMap<String, HashMap<String, Class<? extends Robo>>>
     {static} +registrarRobo(String categoria, Class<? extends Robo> classeRobo)
     {static} +getCategorias(): ArrayList<String>
     {static} +getRobosPorCategoria(String categoria): ArrayList<String>
-    {static} +criarRobo(String categoria, String nomeClasse, String nome, int posicaoX, int posicaoY): Robo
+    {static} +criarRobo(String categoria, String nomeClasse, String nome, int posicaoX, int posicaoY, int posicaoZ): Robo
     {static} +getTodasClasses(): ArrayList<Class<? extends Robo>>
 }
 
-CatalogoRobos "1" o-- "0.." Robo
-
-' Diagrama de GeometryMath
+' --- GeometryMath ---
 class GeometryMath {
-    {static} +distanciaEuclidiana(Robo robo, int x, int y): double
-    {static} +distanciaEuclidiana(Robo robo, int x, int y, int z): double
+    {static} +distanciaEuclidiana(Entidade e1, int x, int y, int z): double
+    {static} +distanciaEuclidiana(Entidade e1, Entidade e2): double
 }
 
-GeometryMath ..> Robo
-GeometryMath ..> RoboAereo
-
-' Diagrama de Ambiente
+' --- Ambiente ---
 class Ambiente {
     -comprimento: int
     -largura: int
-    -robos: ArrayList<Robo>
-    -obstaculos: ArrayList<Obstaculo>
-    +Ambiente(int comprimento, int largura)
-    +dentroDosLimites(int x, int y): boolean
-    +dentroDosLimites(int x, int y, int z, int alturaMaxima): boolean
-    +adicionarRobo(Robo robo)
-    +destruirRobo(Robo robo): void
-    +adicionarObstaculo(Obstaculo obstaculo)
-    +destruirObstaculo(Obstaculo obstaculo): void
+    -altura: int
+    -entidades: ArrayList<Entidade>
+    -entidadesRemovidas: ArrayList<Entidade>
+    -mapa: TipoEntidade[][][]
+    +Ambiente(int comprimento, int largura, int altura)
+    +dentroDosLimites(int x, int y, int z): boolean
+    +adicionarEntidade(Entidade entidade)
+    +removerEntidade(Entidade entidade): void
+    +moverEntidade(Entidade entidade, int novoX, int novoY, int novoZ): void
+    +visualizarAmbiente(): void
     +getLargura(): int
     +getComprimento(): int
+    +getAltura(): int
+    +getEntidades(): ArrayList<Entidade>
+    +getEntidadesRemovidas(): ArrayList<Entidade>
     +getRobos(): ArrayList<Robo>
     +getObstaculos(): ArrayList<Obstaculo>
 }
 
-Ambiente "1" *-- "1.." Robo
-Ambiente "1" *-- "0.." Obstaculo
-
-' Diagrama de Obstaculo e TipoObstaculo
-class Obstaculo {
+' --- Obstaculo e TipoObstaculo ---
+class Obstaculo implements Entidade {
     -posX: int
     -posY: int
-    #tipo: TipoObstaculo
+    #tipoObstaculo: TipoObstaculo // Renomeado para clareza, era 'tipo'
     -tipos: TipoObstaculo[]
     +Obstaculo()
     +getPosX(): int
     +getPosY(): int
-    +getTipo(): TipoObstaculo
+    +getTipoObstaculo(): TipoObstaculo
     +getNome(): String
+    --
+    +getX(): int
+    +getY(): int
+    +getZ(): int
+    +getTipo(): TipoEntidade
+    +getDescricao(): String
+    +getRepresentacao(): char
 }
 
-class TipoObstaculo {
+enum TipoObstaculo {
+    PEDRA
+    ARVORE
+    MURO
     #largura: int
     #comprimento: int
-    -altura: int
-    -dano: int
+    #altura: int
+    #dano: int
     +getLargura(): int
     +getComprimento(): int
     +getAltura(): int
     +getDano(): int
+    +getRepresentacao(): char
 }
 
-Obstaculo "1" o-- "1" TipoObstaculo
-
-' Diagrama de Robo e suas subclasses
-abstract class Robo {
+' --- Robo e suas subclasses ---
+abstract class Robo implements Entidade, Comunicavel {
     #nome: String
+    #id: String
     #HP: int
-    #posicaoX: int
-    #posicaoY: int
+    #x: int
+    #y: int
+    #z: int
+    #tipoEntidade: TipoEntidade // Renomeado para clareza, era 'tipo'
+    #estado: EstadoRobo
     #acoes: ArrayList<Acao>
     #sensores: ArrayList<Sensor>
     #inicializarAcoes(): void
     #inicializarSensores(): void
-    +Robo(String nome, int posicaoX, int posicaoY, int HP)
-    +executarAcao(Acao acao)
+    +Robo(String nome, int x, int y, int HP)
+    +Robo(String nome, int x, int y, int z, int HP)
+    +alternarEstado(): boolean
+    +executarTarefa(Acao acao)
     +tomarDano(int dano)
     +exibirPosicao()
     +getAcoes(): ArrayList<Acao>
-    +getPosicaoX(): int
-    +getPosicaoY(): int
+    +getSensores(): ArrayList<Sensor>
+    +getX(): int
+    +setX(int x)
+    +getY(): int
+    +setY(int y)
+    +getZ(): int
+    +setZ(int z)
     +getNome(): String
+    +getID(): String
+    +getHP(): int
+    +getEstado(): EstadoRobo
+    --
+    +getTipo(): TipoEntidade
+    +getDescricao(): String
+    +getRepresentacao(): char
+    --
+    +enviarMensagens(Comunicavel comunicavel, String mensagem)
+    +receberMensagens(String mensagem)
 }
 
-abstract class RoboTerrestre {
+interface Comunicavel {
+    +enviarMensagens(Comunicavel comunicavel, String mensagem)
+    +receberMensagens(String mensagem)
+}
+
+abstract class RoboTerrestre extends Robo {
     -velocidadeMaxima: int
     +RoboTerrestre(String nome, int posicaoX, int posicaoY, int HP)
 }
 
-class RoboTanque {
+class RoboTanque extends RoboTerrestre {
     -balasRestantes: int
     -dano: int
     -alcance: int
@@ -115,7 +163,7 @@ class RoboTanque {
     +atirar(RoboTerrestre alvo)
 }
 
-class RoboAntiAereo {
+class RoboAntiAereo extends RoboTerrestre {
     -balasRestantes: int
     -dano: int
     -alcance: int
@@ -123,16 +171,16 @@ class RoboAntiAereo {
     +atirar(RoboAereo alvo)
 }
 
-abstract class RoboAereo {
+abstract class RoboAereo extends Robo {
     -altitudeMaxima: int
-    -altitude: int
+    -altitudeAtual: int // Renomeado para clareza, era 'altitude'
     +RoboAereo(String nome, int posicaoX, int posicaoY, int HP, int altitude, int altitudeMaxima)
     +subir(int deltaZ)
     +descer(int deltaZ)
-    +getAltitude(): int
+    +getAltitudeAtual(): int
 }
 
-class RoboJato {
+class RoboJato extends RoboAereo {
     -misseisRestantes: int
     -rajadasRestantes: int
     -alcanceMissil: int
@@ -144,20 +192,13 @@ class RoboJato {
     +atirarRajada(RoboTerrestre alvo)
 }
 
-class RoboDrone {
+class RoboDrone extends RoboAereo {
     -bateria: int
     +RoboDrone(String nome, int posicaoX, int posicaoY)
-    +mover(int deltaX, int deltaY)
+    +mover(int deltaX, int deltaY) ' Este mover é específico do Drone? Robo já tem mover.
 }
 
-Robo <|-- RoboTerrestre
-Robo <|-- RoboAereo
-RoboTerrestre <|-- RoboTanque
-RoboTerrestre <|-- RoboAntiAereo
-RoboAereo <|-- RoboJato
-RoboAereo <|-- RoboDrone
-
-' Diagrama de Sensor e suas subclasses
+' --- Sensor e suas subclasses ---
 abstract class Sensor {
     -raioDeAlcance: double
     -acao: Acao
@@ -169,20 +210,15 @@ abstract class Sensor {
     +getRaioDeAlcance(): double
 }
 
-class SensorRobo {
+class SensorRobo extends Sensor {
     +SensorRobo(double raioDeAlcance, Robo robo)
 }
 
-class SensorObstaculo {
+class SensorObstaculo extends Sensor {
     +SensorObstaculo(double raioDeAlcance, Robo robo)
 }
 
-Sensor <|-- SensorRobo
-Sensor <|-- SensorObstaculo
-
-Sensor "0.." --* Robo
-
-' Diagrama de Controlador
+' --- Controlador ---
 class Controlador {
     {static} +main(String[] args)
     {static} -inicializarRobos()
@@ -191,15 +227,58 @@ class Controlador {
     {static} -imprimirAmbiente(Robo robo)
     {static} +getScanner(): Scanner
     {static} +getAmbiente(): Ambiente
+    {static} +getComunicacao(): CentralComunicacao
 }
 
-enum GAME_STATUS {
-    GAMEON
-    GAMEOVER
+' --- CentralComunicacao e Mensagem (assumindo que existem no lab04) ---
+class CentralComunicacao {
+    -mensagens: ArrayList<Mensagem>
+    +registrarMensagem(String remetente, String texto)
+    +exibirLogMensagens()
 }
 
-Controlador "1" *-- "1" GAME_STATUS
-Controlador "1" *-- "1" Ambiente
-Controlador "1" *-- "1" CatalogoRobos
+class Mensagem {
+    -remetente: String
+    -texto: String
+    -timestamp: LocalDateTime
+    +Mensagem(String remetente, String texto)
+    +getRemetente(): String
+    +getTexto(): String
+    +getTimestamp(): LocalDateTime
+}
+
+
+' --- Relacionamentos ---
+
+' Ambiente
+Ambiente "1" *-- "0..*" Entidade : contém >
+Ambiente ..> TipoEntidade : usa para mapa
+
+' Robo
+Robo "1" *-- "1" EstadoRobo
+Robo ..> TipoEntidade : usa para tipoEntidade
+Robo "1" *-- "0..*" Acao : possui >
+Robo "1" *-- "0..*" Sensor : possui >
+
+' Obstaculo
+Obstaculo "1" o-- "1" TipoObstaculo : é do tipo >
+
+' Sensor
+Sensor "1" -- "1" Acao : dispara >
+
+' CatalogoRobos
+CatalogoRobos ..> Robo : cria
+
+' GeometryMath
+GeometryMath ..> Entidade : calcula distância
+
+' Controlador
+Controlador ..> Ambiente : gerencia
+Controlador ..> CatalogoRobos : usa para criar robos
+Controlador ..> CentralComunicacao : usa
+Controlador ..> GAME_STATUS
+
+' CentralComunicacao
+CentralComunicacao "1" *-- "0..*" Mensagem : registra >
 
 @enduml
