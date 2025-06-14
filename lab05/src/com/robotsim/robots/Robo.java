@@ -57,6 +57,12 @@ public abstract class Robo implements Comunicavel, Entidade {
      */
     public Robo(String nome, int x, int y, int HP) {
         this(nome, x, y, 0, HP);
+        this.id = criaID(getContador());
+        this.tipo = TipoEntidade.ROBO;
+        this.estado = EstadoRobo.LIGADO;
+        this.acoes = new ArrayList<>();
+        this.sensores = new ArrayList<>();
+        inicializarAcoes();
     }
 
     /**
@@ -396,6 +402,7 @@ public abstract class Robo implements Comunicavel, Entidade {
          * 
          * @return O nome da ação ("Mover").
          */
+        
         @Override
         public String getNome() {
             return "Mover";
@@ -441,14 +448,13 @@ public abstract class Robo implements Comunicavel, Entidade {
         Class<?> classeAtual = this.getClass();
         while (true) {
             String specs = classeAtual.getSimpleName();
-            id = specs.charAt(4) + id;
             classeAtual = classeAtual.getSuperclass();
             if (classeAtual == Robo.class) {
                 id = specs.charAt(0) + id;
                 break;
             }
+            id = specs.charAt(4) + specs.charAt(5) + id;
         }
-
         return id;
     }
 
