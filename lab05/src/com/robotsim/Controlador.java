@@ -20,9 +20,8 @@ import com.robotsim.robots.*;
 import com.robotsim.robots.aerials.RoboAereo;
 import com.robotsim.robots.aerials.RoboDrone;
 import com.robotsim.robots.aerials.RoboJato;
-import com.robotsim.robots.intelligent.AgenteInteligente;
 import com.robotsim.robots.intelligent.types.RoboAtacante;
-import com.robotsim.robots.intelligent.types.RoboAutonomo;
+import com.robotsim.robots.intelligent.types.RoboDesconstruido;
 import com.robotsim.robots.intelligent.types.RoboExplorador;
 import com.robotsim.robots.terrestrials.RoboAntiAereo;
 import com.robotsim.robots.terrestrials.RoboTanque;
@@ -415,7 +414,8 @@ public final class Controlador {
 
             Random random = new Random();
             int i = 0;
-            while (i < 3) {
+            int numRobos = 6;
+            while (i < numRobos) {
                 Class<? extends Robo> classeEscolhida = todasClasses.get(i);
                 String nome = classeEscolhida.getSimpleName();
 
@@ -466,7 +466,7 @@ public final class Controlador {
         CatalogoRobos.registrarRobo("Robô Aéreo", RoboDrone.class);
         CatalogoRobos.registrarRobo("Robô Terrestre", RoboTanque.class);
         CatalogoRobos.registrarRobo("Robô Terrestre", RoboAntiAereo.class);
-        CatalogoRobos.registrarRobo("Robô Inteligente", RoboAutonomo.class);
+        CatalogoRobos.registrarRobo("Robô Inteligente", RoboDesconstruido.class);
         CatalogoRobos.registrarRobo("Robô Inteligente", RoboAtacante.class);
         CatalogoRobos.registrarRobo("Robô Inteligente", RoboExplorador.class);
     }

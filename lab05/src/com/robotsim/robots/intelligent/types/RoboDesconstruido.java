@@ -1,35 +1,32 @@
 package com.robotsim.robots.intelligent.types;
 
+import com.robotsim.environment.Ambiente;
+import com.robotsim.etc.Acao;
+import com.robotsim.missions.missionTypes.MissaoDestruirObstaculo;
+import com.robotsim.robots.intelligent.AgenteInteligente;
+
 import java.util.Scanner;
 
 import com.robotsim.Controlador;
-import com.robotsim.environment.Ambiente;
-import com.robotsim.etc.Acao;
-import com.robotsim.missions.missionTypes.MissaoDanoGlobal;
-import com.robotsim.missions.missionTypes.MissaoExploracao;
-import com.robotsim.robots.intelligent.AgenteInteligente;
-import com.robotsim.robots.sensors.SensorObstaculo;
 
-public class RoboExplorador  extends AgenteInteligente {
+public class RoboDesconstruido extends AgenteInteligente {
     private static int contador = 0;
-
-    public RoboExplorador(String nome, int posicaoX, int posicaoY) {
-        super(nome, posicaoX, posicaoY, 100); // Inicializando com energia e vida máximas
-        this.sensores.add(new SensorObstaculo(10, this));
-        this.inicializarSensores();
+    
+    public RoboDesconstruido(String nome, int posicaoX, int posicaoY) {
+        super(nome, posicaoX, posicaoY, 50); // Inicializando com energia e vida máximas
     }
 
     @Override
     public void executarMissao(Ambiente a) {
         if (temMissao()) {
-            System.out.println("Executando missão exploratória...");
+            System.out.println("Executando missão autônoma...");
             missao.executar(this, a); // Polimorfismo em ação!
         }
     }
 
     @Override
     public String getDescricao() {
-        return "Robô Explorador: " + getNome();
+        return "Robô Autônomo: " + getNome();
     }
 
     @Override
@@ -50,15 +47,15 @@ public class RoboExplorador  extends AgenteInteligente {
     }
 
     private class FazerMissao implements Acao {
-        /** O robô explorador que executará a ação de fazer missão. */
-        RoboExplorador robo;
+        /** O robô autônomo que executará a ação de fazer missão. */
+        RoboDesconstruido robo;
 
         /**
          * Construtor para a ação FazerMissao.
          *
-         * @param robo O {@link RoboExplorador} que realizará esta ação.
+         * @param robo O {@link RoboDesconstruido} que realizará esta ação.
          */
-        public FazerMissao(RoboExplorador robo) {
+        public FazerMissao(RoboDesconstruido robo) {
             this.robo = robo;
         }
 
@@ -69,7 +66,7 @@ public class RoboExplorador  extends AgenteInteligente {
          */
         @Override
         public String getNome() {
-            return "FazerMissao (Explorador)";
+            return "FazerMissao (Destruir Obstáculo)";
         }
 
         @Override
@@ -78,7 +75,7 @@ public class RoboExplorador  extends AgenteInteligente {
             Scanner scanner = Controlador.getScanner();
 
             if(robo.missao == null) {
-                System.out.println("[1] Definir Missão de Exploração");
+                System.out.println("[1] Definir Missão de Destruir Obstáculo");
                 System.out.println("[2] Pular rodada");
 
                 boolean acaoInvalida = true;
@@ -88,9 +85,9 @@ public class RoboExplorador  extends AgenteInteligente {
                     scanner.nextLine(); // Consumir \n
 
                     if (indice == 1) {
-                        System.out.println("Definindo missão de exploração...");
-                        robo.definirMissao(new MissaoExploracao());
-                        System.out.println("Missão de exploração definida com sucesso!");
+                        System.out.println("Definindo missão de destruir obstáculo...");
+                        robo.definirMissao(new MissaoDestruirObstaculo());
+                        System.out.println("Missão de destruir obstáculo definida com sucesso!");
                         acaoInvalida = false;
                     } else if (indice == 2) {
                         System.out.println("Rodada pulada.");
@@ -100,7 +97,7 @@ public class RoboExplorador  extends AgenteInteligente {
                     }
                 }
         } else {
-            System.out.println("[1] Executar Missão de Exploração");
+            System.out.println("[1] Executar Missão de Destruir Obstáculo");
             System.out.println("[2] Pular rodada");  
 
             boolean acaoInvalida = true;
