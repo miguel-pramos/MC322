@@ -1,9 +1,12 @@
 package com.robotsim.robots.sensors;
 
 import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.robotsim.Controlador;
 import com.robotsim.environment.obstacle.Obstaculo;
+import com.robotsim.missions.Logger;
 import com.robotsim.robots.Robo;
 import com.robotsim.util.GeometryMath;
 import com.robotsim.etc.Acao;
@@ -71,11 +74,20 @@ public class SensorObstaculo extends Sensor {
         @Override
         public void executar() {
             int counter = 0;
+            List<Obstaculo> obstaculosDetectados = new ArrayList<>();
+
+            // Registrar ativação do sensor
+            Logger.registrarSensorAtivado("SENSOR_ATIVIDADE", this.sensor.getRobo(),
+                    "SensorObstaculo", this.sensor.getRaioDeAlcance());
+
             System.out.println("Iniciando o processo de detecção...");
+
             for (Obstaculo obstaculo : Controlador.getAmbiente().getObstaculos()) {
                 if (GeometryMath.distanciaEuclidiana(this.sensor.getRobo(), obstaculo.getX(),
                         obstaculo.getY()) <= this.sensor.getRaioDeAlcance()) {
                     counter++;
+                    obstaculosDetectados.add(obstaculo);
+
                     try {
                         TimeUnit.MILLISECONDS.sleep(1600); // Simula o tempo necessário para detecção.
                     } catch (InterruptedException e) {
@@ -85,9 +97,15 @@ public class SensorObstaculo extends Sensor {
 
                     System.out.printf("O obstáculo %s está na posição (%d, %d, %d)%n", obstaculo.getNome(),
                             obstaculo.getX(), obstaculo.getY(), 0);
-                }
 
+                    // Registrar cada obstáculo detectado
+                    Logger.registrarObstaculoDetectado("SENSOR_ATIVIDADE", this.sensor.getRobo(), obstaculo);
+                }
             }
+
+            // Registrar resultado geral da detecção
+            Logger.registrarObstaculosDetectados("SENSOR_ATIVIDADE", this.sensor.getRobo(), obstaculosDetectados);
+
             if (counter == 0)
                 System.out.println("Nenhum obstáculo encontrado.");
         }

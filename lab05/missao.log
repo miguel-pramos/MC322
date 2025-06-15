@@ -1,0 +1,15 @@
+[2025-06-15 16:30:43] [MISSAO_EXPLORACAO] INÍCIO - Robô RoboExplorador (RoboExplorador) iniciou missão na posição (32, 0, 0)
+[2025-06-15 16:30:47] [MISSAO_EXPLORACAO] PLANEJAMENTO - Robô RoboExplorador planeja rota de (32,0) para (19,14)
+[2025-06-15 16:30:47] [MISSAO_EXPLORACAO] MOVIMENTO - Robô RoboExplorador moveu de (32, 0, 0) para (32, 0, 0)
+[2025-06-15 16:30:48] [MISSAO_EXPLORACAO] FIM - Robô RoboExplorador finalizou missão na posição (19, 14, 0) - Resultado: Sucesso - Exploração completada
+[2025-06-15 16:31:40] [MISSAO_DANO_GLOBAL] INÍCIO - Robô RoboAtacante (RoboAtacante) iniciou missão na posição (33, 10, 0)
+[2025-06-15 16:31:41] [MISSAO_DANO_GLOBAL] ROBÔ DETECTADO - Robô RoboAtacante detectou RoboDesconstruido (RoboDesconstruido) em (59, 6, 0) - Distância: 26,31
+[2025-06-15 16:31:44] [MISSAO_DANO_GLOBAL] ATAQUE - Robô RoboAtacante atacou RoboDesconstruido causando 10 de dano na posição (59, 6, 0)
+[2025-06-15 16:31:44] [MISSAO_DANO_GLOBAL] ROBÔ DETECTADO - Robô RoboAtacante detectou RoboDrone (RoboDrone) em (35, 1, 10) - Distância: 9,22
+[2025-06-15 16:31:47] [MISSAO_DANO_GLOBAL] ATAQUE - Robô RoboAtacante atacou RoboDrone causando 10 de dano na posição (35, 1, 10)
+[2025-06-15 16:31:47] [MISSAO_DANO_GLOBAL] ROBÔ DETECTADO - Robô RoboAtacante detectou RoboExplorador (RoboExplorador) em (19, 14, 0) - Distância: 14,56
+[2025-06-15 16:31:50] [MISSAO_DANO_GLOBAL] ATAQUE - Robô RoboAtacante atacou RoboExplorador causando 10 de dano na posição (19, 14, 0)
+[2025-06-15 16:31:50] [MISSAO_DANO_GLOBAL] ROBÔ DETECTADO - Robô RoboAtacante detectou RoboExplorador (RoboExplorador) em (31, 14, 0) - Distância: 4,47
+[2025-06-15 16:31:53] [MISSAO_DANO_GLOBAL] ATAQUE - Robô RoboAtacante atacou RoboExplorador causando 10 de dano na posição (31, 14, 0)
+[2025-06-15 16:31:54] [MISSAO_DANO_GLOBAL] MOVIMENTO - Robô RoboAtacante moveu de (33, 10, 0) para (33, 10, 0)
+[2025-06-15 16:31:54] [MISSAO_DANO_GLOBAL] FIM - Robô RoboAtacante finalizou missão na posição (7, 19, 0) - Resultado: Sucesso - Ataques globais completados
