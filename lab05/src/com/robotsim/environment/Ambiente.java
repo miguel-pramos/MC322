@@ -176,18 +176,22 @@ public class Ambiente {
             for (int x = 0; x < comprimento; x++) {
                 Entidade entidadeNoTopo = null;
                 // Procura a entidade com a maior coordenada Z para a posição (x,y) atual.
-                for (int z = altura - 1; z >= 0; z--) { // Começa do topo (maior Z) para baixo.
-                    for (Entidade entidade : entidades) {
-                        // Verifica se a entidade está na posição (x,y,z) atual.
-                        if (entidade.getX() == x && entidade.getY() == y && entidade.getZ() == z) {
-                            entidadeNoTopo = entidade; // Encontrou a entidade mais alta nesta coluna (x,y).
-                            break; // Para de procurar em altitudes menores nesta coluna.
+                int zMaior = 0; // Começa do topo (maior Z) e desce.
+                
+                for (Entidade entidade : entidades) {
+                    // Verifica se a entidade está na posição (x,y,z) atual.
+                    if(entidade instanceof Obstaculo) {
+                        if (entidade.getZ() > zMaior && Obstaculo.IsOccupied((Obstaculo) entidade, x, y)){
+                            entidadeNoTopo = entidade;
+                            zMaior = entidade.getZ(); // Atualiza a maior altura encontrada.         
                         }
                     }
-                    if (entidadeNoTopo != null) {
-                        break; // Já encontrou a entidade do topo para esta coluna (x,y).
+                    else if (entidade.getX() == x && entidade.getY() == y && entidade.getZ() >= zMaior) {
+                        entidadeNoTopo = entidade; // Encontrou a entidade mais alta nesta coluna (x,y).
+                        zMaior = entidade.getZ(); // Atualiza a maior altura encontrada.
                     }
                 }
+                
                 // Imprime a representação da entidade no topo ou "." se a coluna estiver vazia.
                 if (entidadeNoTopo != null) {
                     System.out.print(entidadeNoTopo.getRepresentacao());

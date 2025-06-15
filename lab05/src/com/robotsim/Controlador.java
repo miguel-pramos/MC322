@@ -397,6 +397,8 @@ public final class Controlador {
                 System.out.print("\rSeu ambiente terá " + numObst + " obstáculos");
                 Thread.sleep(85); // Apenas para simular um processo demorado
             }
+            System.out.println();
+
 
             // Adição do obstáculo ao ambiente
             for (int i = 0; i < numObst; i++) {
@@ -416,7 +418,7 @@ public final class Controlador {
             int i = 0;
             int numRobos = 6;
             while (i < numRobos) {
-                Class<? extends Robo> classeEscolhida = todasClasses.get(i);
+                Class<? extends Robo> classeEscolhida = todasClasses.get(random.nextInt(todasClasses.size()));
                 String nome = classeEscolhida.getSimpleName();
 
                 int x = random.nextInt(ambiente.getComprimento());

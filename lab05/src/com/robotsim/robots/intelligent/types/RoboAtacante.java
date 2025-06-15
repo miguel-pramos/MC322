@@ -6,6 +6,7 @@ import com.robotsim.etc.Acao;
 import com.robotsim.missions.missionTypes.MissaoDanoGlobal;
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import com.robotsim.Controlador;
 
@@ -71,7 +72,7 @@ public class RoboAtacante extends AgenteInteligente {
          */
         @Override
         public String getNome() {
-            return "FazerMissao (Dano Global)";
+            return "Verificar missões";
         }
 
         @Override
@@ -93,6 +94,12 @@ public class RoboAtacante extends AgenteInteligente {
                     if (indice == 1) {
                         System.out.println("Definindo missão de dano global...");
                         robo.definirMissao(new MissaoDanoGlobal());
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(1000);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt(); // Restore interrupted status
+                            System.err.println("A espera foi interrompida: " + e.getMessage());
+                        }
                         System.out.println("Missão de dano global definida com sucesso!");
                         acaoInvalida = false;
                     } else if (indice == 2) {

@@ -6,6 +6,7 @@ import com.robotsim.missions.missionTypes.MissaoDestruirObstaculo;
 import com.robotsim.robots.intelligent.AgenteInteligente;
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import com.robotsim.Controlador;
 
@@ -66,7 +67,7 @@ public class RoboDesconstruido extends AgenteInteligente {
          */
         @Override
         public String getNome() {
-            return "FazerMissao (Destruir Obstáculo)";
+            return "Verificar missões";
         }
 
         @Override
@@ -87,6 +88,12 @@ public class RoboDesconstruido extends AgenteInteligente {
                     if (indice == 1) {
                         System.out.println("Definindo missão de destruir obstáculo...");
                         robo.definirMissao(new MissaoDestruirObstaculo());
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(1000);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt(); // Restore interrupted status
+                            System.err.println("A espera foi interrompida: " + e.getMessage());
+                        }
                         System.out.println("Missão de destruir obstáculo definida com sucesso!");
                         acaoInvalida = false;
                     } else if (indice == 2) {

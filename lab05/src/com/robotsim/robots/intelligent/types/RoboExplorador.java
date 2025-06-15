@@ -1,11 +1,11 @@
 package com.robotsim.robots.intelligent.types;
 
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 import com.robotsim.Controlador;
 import com.robotsim.environment.Ambiente;
 import com.robotsim.etc.Acao;
-import com.robotsim.missions.missionTypes.MissaoDanoGlobal;
 import com.robotsim.missions.missionTypes.MissaoExploracao;
 import com.robotsim.robots.intelligent.AgenteInteligente;
 import com.robotsim.robots.sensors.SensorObstaculo;
@@ -69,7 +69,7 @@ public class RoboExplorador  extends AgenteInteligente {
          */
         @Override
         public String getNome() {
-            return "FazerMissao (Explorador)";
+            return "Verificar missões";
         }
 
         @Override
@@ -90,6 +90,12 @@ public class RoboExplorador  extends AgenteInteligente {
                     if (indice == 1) {
                         System.out.println("Definindo missão de exploração...");
                         robo.definirMissao(new MissaoExploracao());
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(1000);
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt(); // Restore interrupted status
+                            System.err.println("A espera foi interrompida: " + e.getMessage());
+                        }
                         System.out.println("Missão de exploração definida com sucesso!");
                         acaoInvalida = false;
                     } else if (indice == 2) {

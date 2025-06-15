@@ -5,6 +5,8 @@ import com.robotsim.missions.Missao;
 import com.robotsim.robots.Robo;
 import com.robotsim.robots.EstadoRobo;
 import com.robotsim.robots.intelligent.types.RoboAtacante;
+
+import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,8 +31,10 @@ public class MissaoDanoGlobal implements Missao {
             System.out.println("Robô " + robo.getNome() + " está desligado. MissaoDanoGlobal cancelada.");
             return;
         }
-
+        
+        try{
         System.out.println("Robô " + robo.getNome() + " iniciando MissaoDanoGlobal.");
+        TimeUnit.MILLISECONDS.sleep(1000);
         RoboAtacante roboAtacante = (RoboAtacante) robo; // Renamed variable to avoid shadowing class name
 
         // Criar uma cópia da lista de robôs para evitar problemas se a lista original for modificada
@@ -48,11 +52,14 @@ public class MissaoDanoGlobal implements Missao {
             }
 
             System.out.println(roboAtacante.getNome() + " tentando se mover para atacar " + alvo.getNome() + " em (" + alvo.getX() + ", " + alvo.getY() + ").");
-
+            TimeUnit.MILLISECONDS.sleep(1000);
+            
             try {
                 System.out.println(roboAtacante.getNome() + " chegou em (" + alvo.getX() + ", " + alvo.getY() + ") para atacar " + alvo.getNome());
-            } catch (Exception e) {
-                System.out.println("Erro inesperado durante o movimento do robô " + roboAtacante.getNome() + ": " + e.getMessage());
+                TimeUnit.MILLISECONDS.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Restore interrupted status
+                System.err.println("A espera foi interrompida: " + e.getMessage());
             }
 
             // Verificar novamente o estado do robô executor antes de atacar
@@ -68,6 +75,7 @@ public class MissaoDanoGlobal implements Missao {
 
 
             System.out.println(roboAtacante.getNome() + " tentando atacar " + alvo.getNome() + ".");
+            TimeUnit.MILLISECONDS.sleep(1000);
             try {
                 alvo.tomarDano(RoboAtacante.getDanoAtacante());
                 // A mensagem de sucesso/falha do ataque específico deve vir do método executarAtaque
@@ -84,6 +92,7 @@ public class MissaoDanoGlobal implements Missao {
         }
 
         System.out.println(roboAtacante.getNome() + " completou a fase de ataques. Movendo para uma posição aleatória.");
+        TimeUnit.MILLISECONDS.sleep(1000);
 
         int larguraMapa = ambiente.getLargura();
         int alturaMapa = ambiente.getAltura();
@@ -96,5 +105,10 @@ public class MissaoDanoGlobal implements Missao {
         System.out.println(roboAtacante.getNome() + " se moveu para a posição final (" + xAleatorio + ", " + yAleatorio + ").");
 
         System.out.println("MissaoDanoGlobal concluída para " + roboAtacante.getNome() + ".");
+    }
+    catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupted status
+            System.err.println("Ocorreu um erro: " + e.getMessage());
+        }
     }
 }

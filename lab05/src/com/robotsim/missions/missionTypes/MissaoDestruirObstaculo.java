@@ -8,6 +8,7 @@ import com.robotsim.robots.EstadoRobo;
 import com.robotsim.util.GeometryMath; // Certifique-se que esta classe e o método de distância estão acessíveis
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MissaoDestruirObstaculo implements Missao {
 
@@ -23,7 +24,9 @@ public class MissaoDestruirObstaculo implements Missao {
             return;
         }
 
+        try {
         System.out.println("Robô " + robo.getNome() + " iniciando MissaoDestruirObstaculo.");
+        TimeUnit.MILLISECONDS.sleep(1000);
 
         List<Obstaculo> obstaculos = ambiente.getObstaculos();
 
@@ -55,6 +58,7 @@ public class MissaoDestruirObstaculo implements Missao {
         System.out.println("Obstáculo mais próximo encontrado: " + obstaculoMaisProximo.getNome() +
                            " em (" + obstaculoMaisProximo.getX() + ", " + obstaculoMaisProximo.getY() +
                            ") a uma distância de " + String.format("%.2f", menorDistancia) + ".");
+        TimeUnit.MILLISECONDS.sleep(1000);
 
         int xAlvoObstaculo = obstaculoMaisProximo.getX();
         int yAlvoObstaculo = obstaculoMaisProximo.getY();
@@ -68,14 +72,22 @@ public class MissaoDestruirObstaculo implements Missao {
 
         System.out.println(robo.getNome() + " tentando destruir o obstáculo " + obstaculoMaisProximo.getNome() + ".");
         ambiente.removerEntidade(obstaculoMaisProximo);
+        TimeUnit.MILLISECONDS.sleep(1000);
         System.out.println("Obstáculo " + obstaculoMaisProximo.getNome() + " destruído completamente!");
-
+        TimeUnit.MILLISECONDS.sleep(1000);
+        
         robo.setX(xAlvoObstaculo);
         robo.setY(yAlvoObstaculo);
         // O robô finaliza sua ação na posição em que está agora, que idealmente é o antigo centro do obstáculo.
         System.out.println(robo.getNome() + " finalizou a ação na posição (" + robo.getX() + ", " + robo.getY() +
                            "), que era o local do obstáculo " + obstaculoMaisProximo.getNome() + ".");
-
+        TimeUnit.MILLISECONDS.sleep(1000);
         System.out.println("MissaoDestruirObstaculo concluída para " + robo.getNome() + ".");
+        TimeUnit.MILLISECONDS.sleep(1000);
+        } 
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Restore interrupted status
+            System.err.println("A espera foi interrompida: " + e.getMessage());
+        }
     }
 }

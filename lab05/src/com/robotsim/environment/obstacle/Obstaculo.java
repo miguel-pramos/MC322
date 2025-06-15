@@ -95,7 +95,7 @@ public class Obstaculo implements Entidade {
                                                                                                                     // obstáculos
 
             // Verifica se não há colisão com outros obstáculos existentes
-            boolean semColisEntreObst = !testColisEntreObst(superiorX, superiorY, inferiorX, inferiorY);
+            boolean semColisEntreObst = !IsColidido(superiorX, superiorY, inferiorX, inferiorY);
 
             // A posição é boa se estiver dentro dos limites e não colidir com outros
             // obstáculos
@@ -138,7 +138,7 @@ public class Obstaculo implements Entidade {
      * @return {@code true} se houver colisão com algum obstáculo existente;
      *         {@code false} caso contrário.
      */
-    private static boolean testColisEntreObst(int ret1SuperiorX, int ret1SuperiorY, int ret1InferiorX,
+    private static boolean IsColidido(int ret1SuperiorX, int ret1SuperiorY, int ret1InferiorX,
             int ret1InferiorY) {
         // Itera sobre todos os obstáculos já presentes no ambiente
         for (Obstaculo obstaculoExistente : Controlador.getAmbiente().getObstaculos()) {
@@ -235,7 +235,22 @@ public class Obstaculo implements Entidade {
      */
     @Override
     public int getZ() {
-        return 0; // Obstáculos são sempre terrestres, no nível Z = 0
+        return this.tipo.getAltura(); // Obstáculos são sempre terrestres, no nível Z = 0
+    }
+
+    public static boolean IsOccupied(Obstaculo obs, int x, int y) {
+        int metadeCompExistente = (obs.getTipoObstaculo().comprimento - 1) / 2;
+        int metadeLargExistente = (obs.getTipoObstaculo().largura - 1) / 2;
+        
+        int SuperiorX = obs.getX() + metadeCompExistente;
+        int SuperiorY = obs.getY() + metadeLargExistente;
+        int InferiorX = obs.getX() - metadeCompExistente;
+        int InferiorY = obs.getY() - metadeLargExistente;
+
+        boolean dentroDosLimitesX = x >= InferiorX && x <= SuperiorX;
+        boolean dentroDosLimitesY = y >= InferiorY && y <= SuperiorY;
+
+        return dentroDosLimitesX && dentroDosLimitesY; // Retorna true se a posição (x, y) está dentro dos limites do obstáculo
     }
 
     /**

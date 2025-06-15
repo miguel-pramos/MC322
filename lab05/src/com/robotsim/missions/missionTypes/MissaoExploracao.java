@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Missão que faz o robô tentar andar em uma direção aleatória até um ponto final,
@@ -29,8 +30,10 @@ public class MissaoExploracao implements Missao {
             System.out.println("Robô ou Ambiente nulo. Missão cancelada.");
             return;
         }
-
+        
+        try{ 
         System.out.println("Robô " + robo.getNome() + " iniciando Missão de Exploração Direta com Lista de Obstáculos.");
+        TimeUnit.MILLISECONDS.sleep(1000);
 
         double anguloAleatorio = random.nextDouble() * 2 * Math.PI; // Ângulo em radianos
 
@@ -41,10 +44,16 @@ public class MissaoExploracao implements Missao {
         int xDestinoFinal = xInicial + (int) (DISTANCIA_MAX_EXPLORACAO * Math.cos(anguloAleatorio));
         int yDestinoFinal = yInicial + (int) (DISTANCIA_MAX_EXPLORACAO * Math.sin(anguloAleatorio));
 
+        //Garante não ultrapassar os limites do ambiente
+        xDestinoFinal = Math.max(0, Math.min(xDestinoFinal, ambiente.getComprimento()));
+        yDestinoFinal = Math.max(0, Math.min(yDestinoFinal, ambiente.getLargura()));
+
         System.out.println("Trajetória reta planejada de (" + xInicial + "," + yInicial + ") para (" + xDestinoFinal + "," + yDestinoFinal + ").");
+        TimeUnit.MILLISECONDS.sleep(1000);
 
         // 1. Listar obstáculos na reta da direção aleatória (até DISTANCIA_MAX_EXPLORACAO)
         System.out.println("Verificando obstáculos na trajetória reta...");
+        TimeUnit.MILLISECONDS.sleep(1000);
         List<Obstaculo> obstaculosNaReta = new ArrayList<>();
         Set<Obstaculo> obstaculosJaAdicionados = new HashSet<>();
 
@@ -100,11 +109,14 @@ public class MissaoExploracao implements Missao {
 
         if (obstaculosNaReta.isEmpty()) {
             System.out.println("Nenhum obstáculo interceptaria a trajetória reta.");
+            TimeUnit.MILLISECONDS.sleep(1000);
         } else {
             System.out.println("Obstáculos que interceptariam a trajetória reta:");
+            TimeUnit.MILLISECONDS.sleep(1000);
             for (Obstaculo obs : obstaculosNaReta) {
                 System.out.println("- Obstáculo: " + obs.getNome() + " (" + obs.getTipoObstaculo().name() + ") em (" + obs.getX() + ", " + obs.getY() + ")");
             }
+            TimeUnit.MILLISECONDS.sleep(1000);
         }
 
         // 2. Mover o robô para o destino final, ignorando colisões no planejamento da missão.
@@ -116,9 +128,17 @@ public class MissaoExploracao implements Missao {
             robo.setX(xDestinoFinal);
             robo.setY(yDestinoFinal);
         }
+        TimeUnit.MILLISECONDS.sleep(1000);
+
         System.out.println("Missão de Exploração concluída para " + robo.getNome() + ".");
+        TimeUnit.MILLISECONDS.sleep(1000);
         System.out.println("Posição final do robô: (" + robo.getX() + ", " + robo.getY() + ")");
+        TimeUnit.MILLISECONDS.sleep(1000);
+    } 
+    catch (Exception e) {
+        System.err.println("Erro ao executar Missão de Exploração: " + e.getMessage());
     }
+}
 
     /**
      * Verifica se um ponto (pontoX, pontoY) está dentro dos limites de um obstáculo,
