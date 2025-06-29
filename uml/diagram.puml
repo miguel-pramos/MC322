@@ -248,6 +248,67 @@ class Mensagem {
 }
 
 
+' --- Habilidades ---
+package abilities {
+    interface Atacante {
+        +executarAtaque(Entidade alvo)
+        +podeAtacar(Entidade alvo): boolean
+    }
+    interface Explorador {
+        +escanearArea(): List<Entidade>
+    }
+    interface Autonomo {
+        +setModoAutonomo(boolean ativar)
+        +isAutonomo(): boolean
+    }
+}
+
+' --- Agentes Inteligentes ---
+package intelligent {
+    abstract class AgenteInteligente extends Robo {
+        #missao: Missao
+        +AgenteInteligente(String nome, int x, int y, int HP)
+        +definirMissao(Missao m)
+        +temMissao(): boolean
+        +executarMissao(Ambiente a)
+    }
+
+    class RoboAtacante extends AgenteInteligente {
+        +RoboAtacante(String nome, int x, int y)
+    }
+    class RoboDesconstruido extends AgenteInteligente {
+        +RoboDesconstruido(String nome, int x, int y)
+    }
+    class RoboExplorador extends AgenteInteligente {
+        +RoboExplorador(String nome, int x, int y)
+    }
+}
+
+' --- Missões ---
+package missions {
+    abstract class Missao {
+        #objetivo: String
+        #concluida: boolean
+        +Missao(String objetivo)
+        +executar(Robo robo, Ambiente ambiente)
+        +isConcluida(): boolean
+    }
+
+    class MissaoDestruirObstaculo extends Missao {
+        +MissaoDestruirObstaculo()
+    }
+    class MissaoExploracao extends Missao {
+        +MissaoExploracao()
+    }
+    class MissaoDanoGlobal extends Missao {
+        +MissaoDanoGlobal()
+    }
+
+    class Logger {
+        {static} +log(String mensagem)
+    }
+}
+
 ' --- Relacionamentos ---
 
 ' Ambiente
@@ -280,5 +341,19 @@ Controlador ..> GAME_STATUS
 
 ' CentralComunicacao
 CentralComunicacao "1" *-- "0..*" Mensagem : registra >
+
+' Habilidades
+RoboJato ..|> Atacante
+RoboTanque ..|> Atacante
+RoboAntiAereo ..|> Atacante
+RoboAntiAereo ..|> Autonomo
+RoboDrone ..|> Explorador
+
+' Agentes Inteligentes
+AgenteInteligente "1" o-- "0..1" Missao : executa >
+RoboAtacante ..> MissaoDanoGlobal : usa
+RoboDesconstruido ..> MissaoDestruirObstaculo : usa
+RoboExplorador ..> MissaoExploracao : usa
+Missao ..> Logger : usa para log
 
 @enduml

@@ -1,4 +1,4 @@
-# RoboSim - Simulador de Robôs [Lab04]
+# RoboSim - Simulador de Robôs [Lab05]
 
 ## Descrição
 
@@ -17,28 +17,32 @@ O projeto está organizado em pacotes para facilitar a manutenção e a escalabi
     -   **`com.robotsim.robots.abilities`**: Interfaces que definem capacidades especiais dos robôs, como `Atacante`, `Autonomo`, `Explorador`.
     -   **`com.robotsim.robots.aerials`**: Classes para robôs aéreos como `RoboAereo`, `RoboDrone`, `RoboJato`.
     -   **`com.robotsim.robots.terrestrials`**: Classes para robôs terrestres como `RoboTerrestre`, `RoboTanque`, `RoboAntiAereo`.
+    -   **`com.robotsim.robots.intelligent`**: Classes para os novos agentes inteligentes.
     -   **`com.robotsim.robots.sensors`**: Classes de sensores como `Sensor`, `SensorObstaculo`, `SensorRobo`.
+-   **`com.robotsim.missions`**: Contém as classes para gerenciar as missões e seus tipos.
 -   **`com.robotsim.etc`**: Contém interfaces e classes auxiliares, como `Acao` e `CatalogoRobos`.
 -   **`com.robotsim.exceptions`**: Contém classes de exceções customizadas como `ColisaoException`, `ErroComunicacaoException`, `ForasDosLimitesException`, `RoboDesligadoException`.
 -   **`com.robotsim.util`**: Contém utilitários, como `GeometryMath` e `RefreshScreen`.
 
-## Funcionalidades adicionadas no Lab 04
+## Funcionalidades adicionadas no Lab 05
 
--   **Sistema de Comunicação**: Implementação de um sistema de comunicação entre robôs utilizando uma `CentralComunicacao`.
-    -   Robôs agora podem enviar e receber mensagens através da interface `Comunicavel`.
--   **Tratamento de Exceções Aprimorado**: Introdução de um pacote `exceptions` com exceções customizadas para melhor controle de erros e situações específicas do simulador.
--   **Refatoração e Organização de Pacotes**: Melhoria na estrutura de pacotes para maior clareza e manutenibilidade, incluindo:
-    -   Separação de entidades do ambiente (`com.robotsim.environment.entity`).
-    -   Separação de obstáculos (`com.robotsim.environment.obstacle`).
-    -   Categorização mais clara de tipos de robôs (aéreos e terrestres em subpacotes).
-    -   Introdução do pacote `com.robotsim.robots.abilities` para definir capacidades especiais dos robôs.
--   **Documentação Abrangente**: Adição de Javadoc e comentários explicativos em todas as classes e métodos importantes do projeto, melhorando a legibilidade e o entendimento do código.
--   **Atualização da Lógica de Sensores e Obstáculos**: Revisão e melhoria na interação dos sensores com o ambiente e na lógica de posicionamento e detecção de obstáculos.
+-   **Agentes Inteligentes**: Introdução de uma nova categoria de robôs, os `AgenteInteligente`, que operam com base em missões.
+    -   Esses agentes são capazes de executar tarefas complexas de forma autônoma, como exploração e destruição de alvos.
+-   **Sistema de Missões**: Implementação de um sistema de missões (`com.robotsim.missions`) que permite atribuir objetivos aos agentes inteligentes.
+    -   **`MissaoExploracao`**: O robô explora o ambiente de forma autônoma.
+    -   **`MissaoDestruirObstaculo`**: O robô procura e destrói um obstáculo específico.
+    -   **`MissaoDanoGlobal`**: O robô causa dano a todas as outras entidades no ambiente.
+-   **Novos Tipos de Robôs Inteligentes**:
+    -   `RoboExplorador`: Especializado em missões de exploração.
+    -   `RoboDesconstruido`: Focado em destruir obstáculos.
+    -   `RoboAtacante`: Causa dano em área.
+-   **Sistema de Log**: Adição de uma classe `Logger` que registra os eventos importantes das missões no arquivo `missao.log`.
+-   **Refatoração e Expansão da Estrutura**:
+    -   Criação do pacote `com.robotsim.robots.intelligent` para os novos agentes.
+    -   Criação do pacote `com.robotsim.missions` para gerenciar as missões e seus tipos.
 
 ## Como executar o programa
 
 Execute o script `run.sh` se estiver no Linux ou no Mac e `run.bat` se estiver no Windows.
 
-O simulador vai indicar as instruções de uso, que se limitam ao controle de robôs já instanciados.
-Para testar o uso de um `Sensor`, espere até que esteja controlando um `RoboDrone`, de forma que
-as funções dos sensores serão listadas no menu de ações.
+O simulador vai indicar as instruções de uso. Agora, além de controlar os robôs manualmente, você pode atribuir missões aos novos **Agentes Inteligentes** (`RoboExplorador`, `RoboDesconstruido`, `RoboAtacante`). Selecione um desses robôs e escolha a ação de executar a missão para vê-los operar de forma autônoma. Os resultados e eventos da missão serão registrados no arquivo `missao.log`.
